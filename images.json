@@ -1,0 +1,6 @@
+[
+  { "file": "ai_001.jpg",   "label": "ai" },
+  { "file": "ai_002.jpg",   "label": "ai" },
+  { "file": "real_001.jpg", "label": "real" },
+  { "file": "real_002.jpg", "label": "real" }
+]
