@@ -528,6 +528,190 @@ html, body {
   border-color: var(--accent);
   color: var(--accent);
 }
+
+/* ================= SETTINGS / VERSION ================= */
+.gear-btn {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  width: 44px;
+  height: 44px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--fg-muted);
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+  z-index: 20;
+}
+.gear-btn:active { transform: scale(0.92); color: var(--accent); border-color: var(--accent); }
+.gear-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 15, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 24px;
+}
+.modal-overlay.shown { display: flex; }
+
+.modal {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 28px 32px;
+  min-width: 340px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+  letter-spacing: 6px;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0 8px;
+  line-height: 1;
+  font-weight: 700;
+}
+.modal-close:active { color: var(--accent); }
+
+.settings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.settings-row:last-child { border-bottom: none; }
+
+.settings-label {
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: var(--fg);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.toggle-pill {
+  background: transparent;
+  color: var(--fg-muted);
+  border: 2px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  min-width: 80px;
+  transition: all var(--transition);
+}
+.toggle-pill.on {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+.toggle-pill:active { transform: scale(0.95); }
+
+.lang-group { display: flex; gap: 6px; }
+.lang-btn {
+  background: transparent;
+  color: var(--fg-muted);
+  border: 2px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.lang-btn.active {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+.lang-btn:active { transform: scale(0.95); }
+
+.credits-btn {
+  background: transparent;
+  color: var(--fg);
+  border: 2px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  padding: 10px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.credits-btn:active { transform: scale(0.96); border-color: var(--accent); color: var(--accent); }
+
+.credits-content { display: none; }
+.credits-content.shown { display: block; }
+.credits-content .row {
+  padding: 8px 0;
+  font-size: 13px;
+  color: var(--fg-muted);
+  letter-spacing: 1px;
+  border-bottom: 1px dashed var(--border);
+}
+.credits-content .row:last-child { border-bottom: none; }
+.credits-content .row strong {
+  color: var(--accent);
+  display: block;
+  font-size: 11px;
+  letter-spacing: 4px;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.settings-content.hidden { display: none; }
+
+/* version tag — sağ alt köşede minicik */
+.version-tag {
+  position: fixed;
+  bottom: 6px;
+  right: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--fg-muted);
+  opacity: 0.35;
+  letter-spacing: 1px;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
 </style>
 </head>
 <body>
@@ -536,11 +720,14 @@ html, body {
 
   <!-- ============ WELCOME ============ -->
   <section id="welcome" class="screen active">
+    <button class="gear-btn" id="btn-settings" aria-label="settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
     <div class="logo">AI <span class="or">or</span> NOT</div>
-    <div class="tagline">YAPAY ZEKA mı &nbsp;·&nbsp; GERÇEK mi</div>
-    <button class="btn-primary" id="btn-start">BAŞLA</button>
+    <div class="tagline" data-i18n="tagline">YAPAY ZEKA mı &nbsp;·&nbsp; GERÇEK mi</div>
+    <button class="btn-primary" id="btn-start" data-i18n="start">BAŞLA</button>
     <div class="leaderboard-mini">
-      <h3>TOP 5</h3>
+      <h3 data-i18n="top5">TOP 5</h3>
       <div id="leaderboard-list"></div>
     </div>
   </section>
@@ -549,9 +736,9 @@ html, body {
   <section id="game" class="screen">
     <div class="game-frame">
       <div class="hud">
-        <div class="timer" id="timer-box"><span id="timer">60</span><span class="unit">sn</span></div>
+        <div class="timer" id="timer-box"><span id="timer">60</span><span class="unit" data-i18n="sec">sn</span></div>
         <div class="score-display">
-          <span class="label">SKOR</span>
+          <span class="label" data-i18n="score">SKOR</span>
           <span class="value" id="score">0</span>
         </div>
       </div>
@@ -564,24 +751,61 @@ html, body {
         <div class="countdown" id="countdown"></div>
       </div>
       <div class="choice-row">
-        <button class="btn-choice" data-choice="ai">YAPAY ZEKA</button>
-        <button class="btn-choice" data-choice="real">GERÇEK</button>
+        <button class="btn-choice" data-choice="ai" data-i18n="choice_ai">YAPAY ZEKA</button>
+        <button class="btn-choice" data-choice="real" data-i18n="choice_real">GERÇEK</button>
       </div>
     </div>
   </section>
 
   <!-- ============ END ============ -->
   <section id="end" class="screen">
-    <div class="end-label">SÜRE BİTTİ</div>
+    <div class="end-label" data-i18n="timeUp">SÜRE BİTTİ</div>
     <div class="final-score" id="final-score">0</div>
     <div class="name-input-row" id="name-row">
-      <div class="end-label">TOP 5'E GİRDİN · İSMİNİ GİR</div>
+      <div class="end-label" data-i18n="enterName">TOP 5'E GİRDİN · İSMİNİ GİR</div>
       <input class="name-input" id="name-input" maxlength="3" autocomplete="off" inputmode="text">
     </div>
-    <button class="btn-secondary" id="btn-restart">TEKRAR OYNA</button>
+    <button class="btn-secondary" id="btn-restart" data-i18n="playAgain">TEKRAR OYNA</button>
   </section>
 
 </div>
+
+<!-- ============ SETTINGS MODAL ============ -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modal-title" data-i18n="settings">AYARLAR</span>
+      <button class="modal-close" id="modal-close" aria-label="close">×</button>
+    </div>
+    <div class="settings-content" id="settings-content">
+      <div class="settings-row">
+        <span class="settings-label" data-i18n="sound">SES</span>
+        <button class="toggle-pill on" id="toggle-sound"><span data-i18n="on">AÇIK</span></button>
+      </div>
+      <div class="settings-row">
+        <span class="settings-label" data-i18n="lang">DİL</span>
+        <div class="lang-group">
+          <button class="lang-btn" data-lang="tr">TR</button>
+          <button class="lang-btn" data-lang="en">EN</button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <span class="settings-label" data-i18n="credits">KREDİLER</span>
+        <button class="credits-btn" id="open-credits" data-i18n="view">GÖSTER</button>
+      </div>
+    </div>
+    <div class="credits-content" id="credits-content">
+      <div class="row"><strong data-i18n="cr_game">OYUN</strong>Koray</div>
+      <div class="row"><strong data-i18n="cr_code">KOD</strong>Claude (Anthropic)</div>
+      <div class="row"><strong data-i18n="cr_ai_img">AI GÖRSELLER</strong>Pollinations.ai</div>
+      <div class="row"><strong data-i18n="cr_real_img">GERÇEK GÖRSELLER</strong>Picsum.photos / Unsplash photographers</div>
+      <div class="row"><strong data-i18n="cr_sound">SES</strong>WebAudio synthesis</div>
+      <div class="row"><strong data-i18n="cr_font">FONT</strong>JetBrains Mono</div>
+    </div>
+  </div>
+</div>
+
+<div class="version-tag" id="version-tag"></div>
 
 <script>
 (() => {
@@ -593,6 +817,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
+const BUILD = 'b008';       // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -605,6 +830,84 @@ const COMBO_TIER_SIZE       = 5;
 const COMBO_MAX_MULT        = 4;
 const LEADERBOARD_SIZE      = 5;
 const LB_STORAGE_KEY        = 'aiornot_leaderboard_v1';
+const SETTINGS_STORAGE_KEY  = 'aiornot_settings_v1';
+
+// =========================================================
+// I18N
+// =========================================================
+const I18N = {
+  tr: {
+    tagline:    'YAPAY ZEKA mı &nbsp;·&nbsp; GERÇEK mi',
+    start:      'BAŞLA',
+    top5:       'TOP 5',
+    choice_ai:  'YAPAY ZEKA',
+    choice_real:'GERÇEK',
+    score:      'SKOR',
+    sec:        'sn',
+    timeUp:     'SÜRE BİTTİ',
+    enterName:  "TOP 5'E GİRDİN · İSMİNİ GİR",
+    playAgain:  'TEKRAR OYNA',
+    settings:   'AYARLAR',
+    sound:      'SES',
+    on:         'AÇIK',
+    off:        'KAPALI',
+    lang:       'DİL',
+    credits:    'KREDİLER',
+    view:       'GÖSTER',
+    cr_game:    'OYUN',
+    cr_code:    'KOD',
+    cr_ai_img:  'AI GÖRSELLER',
+    cr_real_img:'GERÇEK GÖRSELLER',
+    cr_sound:   'SES',
+    cr_font:    'FONT',
+    dbg_ai:     'YAPAY ZEKA GÖRSELİ',
+    dbg_real:   'GERÇEK GÖRSEL',
+  },
+  en: {
+    tagline:    'AI &nbsp;·&nbsp; OR REAL',
+    start:      'START',
+    top5:       'TOP 5',
+    choice_ai:  'AI',
+    choice_real:'REAL',
+    score:      'SCORE',
+    sec:        's',
+    timeUp:     'TIME UP',
+    enterName:  'MADE TOP 5 · ENTER NAME',
+    playAgain:  'PLAY AGAIN',
+    settings:   'SETTINGS',
+    sound:      'SOUND',
+    on:         'ON',
+    off:        'OFF',
+    lang:       'LANGUAGE',
+    credits:    'CREDITS',
+    view:       'VIEW',
+    cr_game:    'GAME',
+    cr_code:    'CODE',
+    cr_ai_img:  'AI IMAGES',
+    cr_real_img:'REAL IMAGES',
+    cr_sound:   'SOUND',
+    cr_font:    'FONT',
+    dbg_ai:     'AI IMAGE',
+    dbg_real:   'REAL IMAGE',
+  }
+};
+
+function applyLang() {
+  const dict = I18N[state.lang] || I18N.tr;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+  document.documentElement.lang = state.lang;
+  // language toggle visual state
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === state.lang);
+  });
+}
+
+function t(key) {
+  return (I18N[state.lang] && I18N[state.lang][key]) || I18N.tr[key] || key;
+}
 const FEEDBACK_HOLD_MS      = 380;
 const LOW_TIME_THRESHOLD_S  = 10;
 
@@ -635,7 +938,29 @@ const state = {
   busy:          false,
   pendingNextId: null,
   leaderboard:   [],
+  lang:          'tr',
+  soundEnabled:  true,
 };
+
+// =========================================================
+// SETTINGS PERSISTENCE
+// =========================================================
+function loadSettings() {
+  try {
+    const s = JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) || '{}');
+    if (s.lang === 'tr' || s.lang === 'en') state.lang = s.lang;
+    if (typeof s.soundEnabled === 'boolean') state.soundEnabled = s.soundEnabled;
+  } catch (e) {}
+}
+
+function saveSettings() {
+  try {
+    localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({
+      lang: state.lang,
+      soundEnabled: state.soundEnabled,
+    }));
+  } catch (e) {}
+}
 
 // =========================================================
 // SOUND (WebAudio — dış dosya yok)
@@ -643,6 +968,7 @@ const state = {
 const sfx = (() => {
   let ctx = null;
   function ensure() {
+    if (!state.soundEnabled) return null;
     if (!ctx) {
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return null;
@@ -817,7 +1143,7 @@ function updateDebugLabel() {
     el.classList.remove('shown');
     return;
   }
-  el.textContent = state.current.label === 'ai' ? 'YAPAY ZEKA GÖRSELİ' : 'GERÇEK GÖRSEL';
+  el.textContent = state.current.label === 'ai' ? t('dbg_ai') : t('dbg_real');
   el.classList.add('shown');
 }
 
@@ -1183,6 +1509,59 @@ document.addEventListener('visibilitychange', () => {
 });
 
 // =========================================================
+// SETTINGS UI
+// =========================================================
+function updateSoundToggle() {
+  const btn = document.getElementById('toggle-sound');
+  const labelSpan = btn.querySelector('span');
+  btn.classList.toggle('on', state.soundEnabled);
+  labelSpan.textContent = state.soundEnabled ? t('on') : t('off');
+  labelSpan.setAttribute('data-i18n', state.soundEnabled ? 'on' : 'off');
+}
+
+function openSettings() {
+  document.getElementById('settings-modal').classList.add('shown');
+  document.getElementById('settings-content').classList.remove('hidden');
+  document.getElementById('credits-content').classList.remove('shown');
+  document.getElementById('modal-title').setAttribute('data-i18n', 'settings');
+  applyLang();
+  updateSoundToggle();
+}
+
+function closeSettings() {
+  document.getElementById('settings-modal').classList.remove('shown');
+}
+
+function showCredits() {
+  document.getElementById('settings-content').classList.add('hidden');
+  document.getElementById('credits-content').classList.add('shown');
+  document.getElementById('modal-title').setAttribute('data-i18n', 'credits');
+  applyLang();
+}
+
+document.getElementById('btn-settings').addEventListener('click', () => { sfx.click(); openSettings(); });
+document.getElementById('modal-close').addEventListener('click', () => { sfx.click(); closeSettings(); });
+document.getElementById('settings-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'settings-modal') closeSettings();
+});
+document.getElementById('toggle-sound').addEventListener('click', () => {
+  state.soundEnabled = !state.soundEnabled;
+  saveSettings();
+  updateSoundToggle();
+  if (state.soundEnabled) sfx.click();
+});
+document.querySelectorAll('.lang-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    sfx.click();
+    state.lang = b.dataset.lang;
+    saveSettings();
+    applyLang();
+    updateSoundToggle();  // re-apply sound label
+  });
+});
+document.getElementById('open-credits').addEventListener('click', () => { sfx.click(); showCredits(); });
+
+// =========================================================
 // INIT + SW
 // =========================================================
 if ('serviceWorker' in navigator) {
@@ -1192,6 +1571,9 @@ if ('serviceWorker' in navigator) {
 }
 
 (async function init() {
+  loadSettings();
+  applyLang();
+  document.getElementById('version-tag').textContent = BUILD;
   await loadLeaderboard();
   renderLeaderboard();
   // arka planda görselleri çek — etkinlikte offline da çalışsın

@@ -1,6 +1,6 @@
 // AI or Not — service worker
 // Strateji: stale-while-revalidate; JSONBin çağrıları network-only
-const CACHE = 'ai-or-not-v2';
+const CACHE = 'ai-or-not-v3';
 const APP_SHELL = [
   './',
   './index.html',
