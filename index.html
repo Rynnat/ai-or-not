@@ -379,6 +379,8 @@ html, body {
   white-space: nowrap;
   z-index: 5;
 }
+.streak-banner.size-mid { font-size: clamp(32px, 12cqi, 96px); }
+.streak-banner.size-big { font-size: clamp(36px, 14cqi, 110px); text-shadow: 0 0 0.5em var(--gold), 0 0 1em rgba(255, 210, 63, 0.7); }
 .streak-banner.fire { animation: streakBanner 1000ms cubic-bezier(.22,1,.36,1) forwards; }
 @keyframes streakBanner {
   0%   { transform: translate(-50%, -50%) scale(0.3) rotate(-10deg); opacity: 0; }
@@ -985,7 +987,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v14';        // her push'ta bump et
+const BUILD = 'v15';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -995,7 +997,7 @@ const SPEED_BONUS_WINDOW_MS = 2000;
 const WRONG_SCORE_PENALTY   = -50;
 const WRONG_TIME_PENALTY_MS = 3000;
 const COMBO_TIER_SIZE       = 5;
-const COMBO_MAX_MULT        = 4;
+const COMBO_TIERS           = [1, 2, 4, 8];  // streak/5 → çarpan
 const LEADERBOARD_SIZE      = 5;
 const LB_STORAGE_KEY        = 'aiornot_leaderboard_v1';
 const SETTINGS_STORAGE_KEY  = 'aiornot_settings_v1';
@@ -1235,10 +1237,30 @@ const sfx = (() => {
     click()    { tone(720, 0.05, 'square', 0.07); },
     correct()  { sweep(520, 920, 0.16, 'triangle', 0.18); },
     wrong()    { sweep(260, 90, 0.30, 'sawtooth', 0.18); },
-    streak()   {
+    // ×2: kıvılcım
+    streakSmall() {
       sweep(660, 990,  0.10, 'square', 0.14);
       setTimeout(() => sweep(990, 1320, 0.10, 'square', 0.14), 70);
       setTimeout(() => sweep(1320, 1980, 0.16, 'square', 0.16), 140);
+    },
+    // ×4: bass + arpejyo + climax
+    streakMid() {
+      tone(110, 0.45, 'triangle', 0.20);
+      const notes = [392, 523, 659, 784, 1047];
+      notes.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.13, 'square', 0.17), i * 65));
+      setTimeout(() => sweep(1318, 1976, 0.28, 'square', 0.20), 360);
+    },
+    // ×8: sub + bass + 7-nota tırmanış + büyük finale
+    streakBig() {
+      tone(65, 0.75, 'sine', 0.22);
+      setTimeout(() => tone(130, 0.55, 'triangle', 0.18), 30);
+      const notes = [261, 329, 392, 523, 659, 784, 1047];
+      notes.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.13, 'square', 0.18), 60 + i * 55));
+      setTimeout(() => {
+        sweep(1568, 2349, 0.55, 'sawtooth', 0.22);
+        tone(784, 0.55, 'triangle', 0.14);
+        tone(1047, 0.55, 'triangle', 0.12);
+      }, 500);
     },
     tick()     { tone(1100, 0.05, 'sine', 0.10); },
     countdown(){ tone(620, 0.08, 'triangle', 0.14); },
@@ -1341,8 +1363,8 @@ function showScreen(name) {
 // COMBO
 // =========================================================
 function comboMultiplier() {
-  if (state.streak < COMBO_TIER_SIZE) return 1;
-  return Math.min(COMBO_MAX_MULT, Math.floor(state.streak / COMBO_TIER_SIZE) + 1);
+  const tier = Math.min(COMBO_TIERS.length - 1, Math.floor(state.streak / COMBO_TIER_SIZE));
+  return COMBO_TIERS[tier];
 }
 
 function updateComboBadge(bump) {
@@ -1378,7 +1400,9 @@ function hideDebugLabel() {
 function fireStreakBanner(mult) {
   const b = document.getElementById('streak-banner');
   b.textContent = 'STREAK ×' + mult;
-  b.classList.remove('fire');
+  b.classList.remove('fire', 'size-mid', 'size-big');
+  if      (mult >= 8) b.classList.add('size-big');
+  else if (mult >= 4) b.classList.add('size-mid');
   void b.offsetWidth;
   b.classList.add('fire');
 }
@@ -1532,7 +1556,9 @@ function handleChoice(choice) {
 
     if (tierUp && newMult > 1) {
       fireStreakBanner(newMult);
-      sfx.streak();
+      if      (newMult >= 8) sfx.streakBig();
+      else if (newMult >= 4) sfx.streakMid();
+      else                   sfx.streakSmall();
     } else {
       sfx.correct();
     }
