@@ -694,6 +694,15 @@ const sfx = (() => {
     countdown(){ tone(620, 0.08, 'triangle', 0.14); },
     go()       { sweep(440, 880, 0.22, 'triangle', 0.20); },
     end()      { sweep(440, 110, 0.55, 'sawtooth', 0.18); },
+    highScore(){
+      // C major ascending arpejyo + sustained finale
+      const notes = [523, 659, 784, 1047, 1318];
+      notes.forEach((f, i) => setTimeout(() => tone(f, 0.16, 'triangle', 0.16), i * 95));
+      setTimeout(() => {
+        tone(1568, 0.55, 'triangle', 0.18);
+        tone(2093, 0.55, 'sine', 0.10);
+      }, 540);
+    },
   };
 })();
 
@@ -1034,17 +1043,19 @@ function endGame() {
   state.busy = false;
   setChoicesDisabled(false);
 
-  sfx.end();
-
   document.getElementById('final-score').textContent = state.score;
 
+  const qualifies = leaderboardQualifies(state.score) && state.score > 0;
   const nameRow = document.getElementById('name-row');
-  if (leaderboardQualifies(state.score) && state.score > 0) {
+
+  if (qualifies) {
+    sfx.highScore();
     nameRow.classList.add('shown');
     const ni = document.getElementById('name-input');
     ni.value = '';
     setTimeout(() => ni.focus(), 350);
   } else {
+    sfx.end();
     nameRow.classList.remove('shown');
   }
   showScreen('end');
