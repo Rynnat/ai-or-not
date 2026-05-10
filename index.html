@@ -508,6 +508,37 @@ html, body {
   text-shadow: 0 0 0.22em rgba(var(--accent-rgb), 0.35);
 }
 
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 520px;
+  width: 100%;
+  margin-top: 4px;
+}
+.stat-card {
+  text-align: center;
+}
+.stat-value {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.stat-value.gold { color: var(--gold); text-shadow: 0 0 0.3em rgba(255, 210, 63, 0.4); }
+.stat-value .sep { color: var(--fg-muted); font-weight: 400; margin: 0 2px; }
+.stat-value .small { font-size: 0.6em; color: var(--fg-muted); font-weight: 700; }
+.stat-label {
+  font-size: 11px;
+  color: var(--fg-muted);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
 .name-input-row {
   display: none;
   flex-direction: column;
@@ -861,6 +892,20 @@ html, body {
   <section id="end" class="screen">
     <div class="end-label" data-i18n="timeUp">SÜRE BİTTİ</div>
     <div class="final-score" id="final-score">0</div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value"><span id="stat-correct">0</span><span class="sep">/</span><span class="small" id="stat-total">0</span></div>
+        <div class="stat-label" data-i18n="statCorrect">DOĞRU</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value gold" id="stat-streak">0</div>
+        <div class="stat-label" data-i18n="statStreak">EN UZUN SERİ</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-accuracy">0%</div>
+        <div class="stat-label" data-i18n="statAccuracy">DOĞRULUK</div>
+      </div>
+    </div>
     <div class="name-input-row" id="name-row">
       <div class="end-label" data-i18n="enterName">TOP 5'E GİRDİN · İSMİNİ GİR</div>
       <input class="name-input" id="name-input" maxlength="3" autocomplete="off" inputmode="text">
@@ -907,7 +952,6 @@ html, body {
     </div>
     <div class="credits-content" id="credits-content">
       <div class="row"><strong data-i18n="cr_game">OYUN</strong>Koray</div>
-      <div class="row"><strong data-i18n="cr_code">KOD</strong>Claude (Anthropic)</div>
       <div class="row"><strong data-i18n="cr_ai_img">AI GÖRSELLER</strong>Pollinations.ai</div>
       <div class="row"><strong data-i18n="cr_real_img">GERÇEK GÖRSELLER</strong>Picsum.photos / Unsplash photographers</div>
       <div class="row"><strong data-i18n="cr_sound">SES</strong>WebAudio synthesis</div>
@@ -941,7 +985,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v13';        // her push'ta bump et
+const BUILD = 'v14';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -1015,6 +1059,9 @@ const I18N = {
     resetTitle: 'LEADERBOARD SIFIRLANSIN MI?',
     yes:        'EVET',
     no:         'HAYIR',
+    statCorrect:'DOĞRU',
+    statStreak: 'EN UZUN SERİ',
+    statAccuracy:'DOĞRULUK',
   },
   en: {
     tagline:    'AI &nbsp;·&nbsp; OR REAL',
@@ -1047,6 +1094,9 @@ const I18N = {
     resetTitle: 'RESET THE LEADERBOARD?',
     yes:        'YES',
     no:         'NO',
+    statCorrect:'CORRECT',
+    statStreak: 'BEST STREAK',
+    statAccuracy:'ACCURACY',
   }
 };
 
@@ -1089,6 +1139,9 @@ const state = {
   questionStart: 0,
   score:         0,
   streak:        0,
+  maxStreak:     0,
+  correctCount:  0,
+  wrongCount:    0,
   timeLeftMs:    ROUND_DURATION_MS,
   prevSec:       Math.ceil(ROUND_DURATION_MS / 1000),
   rafId:         null,
@@ -1342,9 +1395,12 @@ async function startGame() {
   state.rafId = null;
   state.pendingNextId = null;
 
-  state.score       = 0;
-  state.streak      = 0;
-  state.timeLeftMs  = ROUND_DURATION_MS;
+  state.score        = 0;
+  state.streak       = 0;
+  state.maxStreak    = 0;
+  state.correctCount = 0;
+  state.wrongCount   = 0;
+  state.timeLeftMs   = ROUND_DURATION_MS;
   state.prevSec     = Math.ceil(ROUND_DURATION_MS / 1000);
   state.busy        = false;
 
@@ -1466,6 +1522,8 @@ function handleChoice(choice) {
     const base = BASE_SCORE + bonus;
     const prevMult = comboMultiplier();
     state.streak++;
+    state.correctCount++;
+    if (state.streak > state.maxStreak) state.maxStreak = state.streak;
     const newMult = comboMultiplier();
     delta = Math.round(base * newMult);
 
@@ -1484,6 +1542,7 @@ function handleChoice(choice) {
     state.timeLeftMs = Math.max(0, state.timeLeftMs - WRONG_TIME_PENALTY_MS);
     state.prevSec = Math.ceil(state.timeLeftMs / 1000);
     state.streak = 0;
+    state.wrongCount++;
     updateComboBadge(false);
     updateTimer();
     sfx.wrong();
@@ -1541,6 +1600,14 @@ function endGame() {
   setChoicesDisabled(false);
 
   document.getElementById('final-score').textContent = state.score;
+
+  // istatistikler
+  const total = state.correctCount + state.wrongCount;
+  const acc = total > 0 ? Math.round(state.correctCount / total * 100) : 0;
+  document.getElementById('stat-correct').textContent  = state.correctCount;
+  document.getElementById('stat-total').textContent    = total;
+  document.getElementById('stat-streak').textContent   = state.maxStreak;
+  document.getElementById('stat-accuracy').textContent = acc + '%';
 
   const qualifies = leaderboardQualifies(state.score) && state.score > 0;
   const nameRow = document.getElementById('name-row');
