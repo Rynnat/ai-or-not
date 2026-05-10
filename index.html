@@ -535,6 +535,56 @@ html, body {
 }
 
 .name-input:focus { border-color: var(--accent); }
+.name-input.blocked { border-color: var(--danger); color: var(--danger); }
+
+.name-error {
+  display: none;
+  color: var(--danger);
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-top: 2px;
+  font-weight: 700;
+  text-align: center;
+  max-width: 340px;
+}
+.name-error.shown { display: block; }
+
+/* reset confirm modal */
+.reset-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 8px;
+}
+.btn-danger {
+  background: var(--danger);
+  color: var(--bg);
+  border: none;
+  padding: 16px 32px;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  min-height: 56px;
+}
+.btn-danger:active { transform: scale(0.96); }
+.btn-cancel {
+  background: transparent;
+  color: var(--fg);
+  border: 2px solid var(--border);
+  padding: 14px 32px;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  min-height: 56px;
+}
+.btn-cancel:active { transform: scale(0.96); border-color: var(--accent); color: var(--accent); }
 
 .btn-secondary {
   background: transparent;
@@ -814,6 +864,7 @@ html, body {
     <div class="name-input-row" id="name-row">
       <div class="end-label" data-i18n="enterName">TOP 5'E GİRDİN · İSMİNİ GİR</div>
       <input class="name-input" id="name-input" maxlength="3" autocomplete="off" inputmode="text">
+      <div class="name-error" id="name-error" data-i18n="nameBlocked">Bu isim leaderboard'a eklenemez</div>
     </div>
     <button class="btn-secondary" id="btn-restart" data-i18n="playAgain">TEKRAR OYNA</button>
   </section>
@@ -865,6 +916,19 @@ html, body {
   </div>
 </div>
 
+<!-- ============ RESET CONFIRM MODAL ============ -->
+<div class="modal-overlay" id="reset-modal">
+  <div class="modal">
+    <div class="modal-header" style="justify-content: center; color: var(--danger);">
+      <span data-i18n="resetTitle">LEADERBOARD SIFIRLANSIN MI?</span>
+    </div>
+    <div class="reset-actions">
+      <button class="btn-cancel" id="reset-cancel" data-i18n="no">HAYIR</button>
+      <button class="btn-danger" id="reset-confirm" data-i18n="yes">EVET</button>
+    </div>
+  </div>
+</div>
+
 <div class="version-tag" id="version-tag"></div>
 
 <script>
@@ -877,7 +941,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v11';        // her push'ta bump et
+const BUILD = 'v12';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -891,6 +955,30 @@ const COMBO_MAX_MULT        = 4;
 const LEADERBOARD_SIZE      = 5;
 const LB_STORAGE_KEY        = 'aiornot_leaderboard_v1';
 const SETTINGS_STORAGE_KEY  = 'aiornot_settings_v1';
+
+// =========================================================
+// NAME BLOCKLIST (top-5 ekran adı sansürü)
+// =========================================================
+const BLOCKED_NAMES = new Set([
+  // TR
+  'AMK','AMQ','AMA','AMI','AMO','AKM','KYO','KOY','ANN','OSP','IBN',
+  'GOT','GOO','SIK','S1K','SKM','SKR','BOK','KIC','4MK','4MQ',
+  // EN sexual
+  'SEX','S3X','5EX','SXY','FUK','FCK','FUQ','ASS','A55','AZZ',
+  'TIT','T1T','DIK','DCK','D1K','COC','CCK','ANL','VAG','CUM',
+  'ORG','POR','PRN','XXX',
+  // slurs
+  'FAG','F4G','NIG','NGR','N1G','KKK','NAZ','KIK','JEW','GAY',
+  // drugs/violence
+  'LSD','THC','GHB','DMT','TNT','GUN','KIL','DIE',
+  // ambiguous (kullanıcı onayladı)
+  'TSK','HOM','ANA'
+]);
+
+function isBlockedName(s) {
+  if (!s) return false;
+  return BLOCKED_NAMES.has(s.toUpperCase());
+}
 
 // =========================================================
 // I18N
@@ -923,6 +1011,10 @@ const I18N = {
     cr_font:    'FONT',
     dbg_ai:     'YAPAY ZEKA GÖRSELİ',
     dbg_real:   'GERÇEK GÖRSEL',
+    nameBlocked:"Bu isim leaderboard'a eklenemez",
+    resetTitle: 'LEADERBOARD SIFIRLANSIN MI?',
+    yes:        'EVET',
+    no:         'HAYIR',
   },
   en: {
     tagline:    'AI &nbsp;·&nbsp; OR REAL',
@@ -951,6 +1043,10 @@ const I18N = {
     cr_font:    'FONT',
     dbg_ai:     'AI IMAGE',
     dbg_real:   'REAL IMAGE',
+    nameBlocked:'This name cannot be added to the leaderboard',
+    resetTitle: 'RESET THE LEADERBOARD?',
+    yes:        'YES',
+    no:         'NO',
   }
 };
 
@@ -1538,13 +1634,32 @@ function renderLeaderboard() {
 
 async function submitScoreIfNeeded() {
   const nameRow = document.getElementById('name-row');
-  if (!nameRow.classList.contains('shown')) return;
+  if (!nameRow.classList.contains('shown')) return true;
 
-  const clean = sanitizeName(document.getElementById('name-input').value);
+  const raw = document.getElementById('name-input').value;
+  const clean = sanitizeName(raw);
+
+  if (clean.length > 0 && isBlockedName(clean)) {
+    showNameError(true);
+    return false;
+  }
+
   const name = clean.length > 0 ? clean.padEnd(3, '-') : '---';
   state.leaderboard.push({ name, score: state.score });
   state.leaderboard = sortAndCut(state.leaderboard);
   await saveLeaderboard();
+  return true;
+}
+
+function showNameError(on) {
+  document.getElementById('name-error').classList.toggle('shown', on);
+  document.getElementById('name-input').classList.toggle('blocked', on);
+}
+
+async function resetLeaderboard() {
+  state.leaderboard = [];
+  await saveLeaderboard();
+  renderLeaderboard();
 }
 
 // =========================================================
@@ -1558,13 +1673,42 @@ document.querySelectorAll('.btn-choice').forEach(btn => {
 
 document.getElementById('btn-restart').addEventListener('click', async () => {
   sfx.click();
-  await submitScoreIfNeeded();
+  const ok = await submitScoreIfNeeded();
+  if (!ok) return;  // blocked name, kal end ekranında
   renderLeaderboard();
   showScreen('welcome');
 });
 
 document.getElementById('name-input').addEventListener('input', (e) => {
   e.target.value = sanitizeName(e.target.value);
+  // live blocklist feedback
+  showNameError(e.target.value.length > 0 && isBlockedName(e.target.value));
+});
+
+// reset: logo'ya 5 tıkla (3sn içinde) → onay → temizle
+let _logoTaps = 0;
+let _logoTapTimer = null;
+document.querySelector('.logo').addEventListener('click', () => {
+  _logoTaps++;
+  clearTimeout(_logoTapTimer);
+  _logoTapTimer = setTimeout(() => { _logoTaps = 0; }, 3000);
+  if (_logoTaps >= 5) {
+    _logoTaps = 0;
+    sfx.click();
+    document.getElementById('reset-modal').classList.add('shown');
+  }
+});
+document.getElementById('reset-cancel').addEventListener('click', () => {
+  sfx.click();
+  document.getElementById('reset-modal').classList.remove('shown');
+});
+document.getElementById('reset-confirm').addEventListener('click', async () => {
+  sfx.click();
+  await resetLeaderboard();
+  document.getElementById('reset-modal').classList.remove('shown');
+});
+document.getElementById('reset-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'reset-modal') document.getElementById('reset-modal').classList.remove('shown');
 });
 
 document.addEventListener('gesturestart', e => e.preventDefault());
