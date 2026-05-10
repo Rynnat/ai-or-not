@@ -20,13 +20,41 @@
   --fg: #e8e8f0;
   --fg-muted: #6a6a7a;
   --accent: #00ff88;
+  --accent-rgb: 0, 255, 136;
   --accent-dim: #00cc6a;
   --danger: #ff3860;
-  --success: #00ff88;
+  --success: var(--accent);
   --gold: #ffd23f;
   --border: #2a2a3a;
   --font-mono: 'JetBrains Mono', 'Space Mono', ui-monospace, monospace;
   --transition: 200ms;
+}
+
+/* ============ TEMALAR ============ */
+body.theme-apple {
+  --accent: #00ff88;
+  --accent-rgb: 0, 255, 136;
+  --accent-dim: #00cc6a;
+}
+body.theme-grape {
+  --accent: #b675ff;
+  --accent-rgb: 182, 117, 255;
+  --accent-dim: #9355d6;
+}
+body.theme-cherry {
+  --accent: #ff4565;
+  --accent-rgb: 255, 69, 101;
+  --accent-dim: #d62e4d;
+}
+body.theme-blueberry {
+  --accent: #4a8cff;
+  --accent-rgb: 74, 140, 255;
+  --accent-dim: #2e6fd6;
+}
+body.theme-lemon {
+  --accent: #ffe04a;
+  --accent-rgb: 255, 224, 74;
+  --accent-dim: #d6b82e;
 }
 
 * {
@@ -82,7 +110,7 @@ html, body {
   font-weight: 800;
   letter-spacing: -2px;
   color: var(--accent);
-  text-shadow: 0 0 0.25em rgba(0, 255, 136, 0.35);
+  text-shadow: 0 0 0.25em rgba(var(--accent-rgb), 0.35);
   line-height: 1;
 }
 
@@ -117,7 +145,7 @@ html, body {
 
 .btn-primary:active {
   transform: scale(0.97);
-  box-shadow: 0 0 32px rgba(0, 255, 136, 0.55);
+  box-shadow: 0 0 32px rgba(var(--accent-rgb), 0.55);
 }
 
 .leaderboard-mini {
@@ -274,7 +302,7 @@ html, body {
   transform: scale(0.4);
   transition: opacity 200ms, transform 200ms;
   pointer-events: none;
-  box-shadow: 0 0 28px rgba(0, 255, 136, 0.55);
+  box-shadow: 0 0 28px rgba(var(--accent-rgb), 0.55);
   z-index: 3;
 }
 .combo-badge.shown { opacity: 1; transform: scale(1); }
@@ -402,7 +430,7 @@ html, body {
   font-size: clamp(96px, 30cqi, 240px);
   font-weight: 800;
   color: var(--accent);
-  text-shadow: 0 0 0.2em rgba(0, 255, 136, 0.7);
+  text-shadow: 0 0 0.2em rgba(var(--accent-rgb), 0.7);
   font-variant-numeric: tabular-nums;
   animation: cdNum 720ms ease-out forwards;
 }
@@ -416,7 +444,7 @@ html, body {
   font-size: clamp(56px, 18cqi, 140px);
   font-weight: 800;
   color: var(--accent);
-  text-shadow: 0 0 0.3em rgba(0, 255, 136, 0.8);
+  text-shadow: 0 0 0.3em rgba(var(--accent-rgb), 0.8);
   animation: cdGo 720ms ease-out forwards;
 }
 @keyframes cdGo {
@@ -477,7 +505,7 @@ html, body {
   letter-spacing: -4px;
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  text-shadow: 0 0 0.22em rgba(0, 255, 136, 0.35);
+  text-shadow: 0 0 0.22em rgba(var(--accent-rgb), 0.35);
 }
 
 .name-input-row {
@@ -639,6 +667,28 @@ html, body {
 }
 .toggle-pill:active { transform: scale(0.95); }
 
+.theme-group { display: flex; gap: 8px; }
+.theme-btn {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  font-size: 22px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all var(--transition);
+  line-height: 1;
+}
+.theme-btn.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.28);
+}
+.theme-btn:active { transform: scale(0.92); }
+
 .lang-group { display: flex; gap: 6px; }
 .lang-btn {
   background: transparent;
@@ -783,6 +833,16 @@ html, body {
         <button class="toggle-pill on" id="toggle-sound"><span data-i18n="on">AÇIK</span></button>
       </div>
       <div class="settings-row">
+        <span class="settings-label" data-i18n="theme">TEMA</span>
+        <div class="theme-group">
+          <button class="theme-btn" data-theme="apple"     title="Yeşil Elma">🍏</button>
+          <button class="theme-btn" data-theme="grape"     title="Üzüm">🍇</button>
+          <button class="theme-btn" data-theme="cherry"    title="Kiraz">🍒</button>
+          <button class="theme-btn" data-theme="blueberry" title="Yaban Mersini">🫐</button>
+          <button class="theme-btn" data-theme="lemon"     title="Limon">🍋</button>
+        </div>
+      </div>
+      <div class="settings-row">
         <span class="settings-label" data-i18n="lang">DİL</span>
         <div class="lang-group">
           <button class="lang-btn" data-lang="tr">TR</button>
@@ -817,7 +877,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'b009';       // her push'ta bump et
+const BUILD = 'b010';       // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -852,6 +912,7 @@ const I18N = {
     on:         'AÇIK',
     off:        'KAPALI',
     lang:       'DİL',
+    theme:      'TEMA',
     credits:    'KREDİLER',
     view:       'GÖSTER',
     cr_game:    'OYUN',
@@ -879,6 +940,7 @@ const I18N = {
     on:         'ON',
     off:        'OFF',
     lang:       'LANGUAGE',
+    theme:      'THEME',
     credits:    'CREDITS',
     view:       'VIEW',
     cr_game:    'GAME',
@@ -940,7 +1002,10 @@ const state = {
   leaderboard:   [],
   lang:          'tr',
   soundEnabled:  true,
+  theme:         'apple',
 };
+
+const VALID_THEMES = ['apple', 'grape', 'cherry', 'blueberry', 'lemon'];
 
 // =========================================================
 // SETTINGS PERSISTENCE
@@ -950,6 +1015,7 @@ function loadSettings() {
     const s = JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) || '{}');
     if (s.lang === 'tr' || s.lang === 'en') state.lang = s.lang;
     if (typeof s.soundEnabled === 'boolean') state.soundEnabled = s.soundEnabled;
+    if (VALID_THEMES.includes(s.theme)) state.theme = s.theme;
   } catch (e) {}
 }
 
@@ -958,8 +1024,17 @@ function saveSettings() {
     localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({
       lang: state.lang,
       soundEnabled: state.soundEnabled,
+      theme: state.theme,
     }));
   } catch (e) {}
+}
+
+function applyTheme() {
+  VALID_THEMES.forEach(t => document.body.classList.remove('theme-' + t));
+  document.body.classList.add('theme-' + state.theme);
+  document.querySelectorAll('.theme-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.theme === state.theme);
+  });
 }
 
 // =========================================================
@@ -1559,6 +1634,14 @@ document.querySelectorAll('.lang-btn').forEach(b => {
     updateSoundToggle();  // re-apply sound label
   });
 });
+document.querySelectorAll('.theme-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    state.theme = b.dataset.theme;
+    saveSettings();
+    applyTheme();
+    sfx.click();
+  });
+});
 document.getElementById('open-credits').addEventListener('click', () => { sfx.click(); showCredits(); });
 
 // =========================================================
@@ -1572,6 +1655,7 @@ if ('serviceWorker' in navigator) {
 
 (async function init() {
   loadSettings();
+  applyTheme();
   applyLang();
   document.getElementById('version-tag').textContent = BUILD;
   await loadLeaderboard();
