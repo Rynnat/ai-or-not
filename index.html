@@ -270,38 +270,6 @@ html, body {
   100% { transform: scale(1) rotate(0); }
 }
 
-/* skip butonu — sol üst */
-.skip-btn {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  background: rgba(20, 20, 28, 0.78);
-  color: var(--fg);
-  border: 2px solid var(--border);
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 4px;
-  padding: 10px 18px;
-  border-radius: 4px;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: transform var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
-  z-index: 3;
-}
-.skip-btn .count {
-  display: inline-block;
-  margin-left: 8px;
-  background: var(--accent);
-  color: var(--bg);
-  padding: 2px 8px;
-  border-radius: 3px;
-  font-size: 13px;
-}
-.skip-btn:active { transform: scale(0.95); border-color: var(--accent); color: var(--accent); }
-.skip-btn:disabled { opacity: 0.3; cursor: default; }
-
 .flash {
   position: absolute;
   inset: 0;
@@ -572,7 +540,6 @@ html, body {
     </div>
     <div class="image-stage" id="image-stage">
       <img id="image" alt="">
-      <button class="skip-btn" id="skip-btn">SKIP<span class="count" id="skip-count">2</span></button>
       <div class="combo-badge" id="combo-badge"></div>
       <div class="streak-banner" id="streak-banner"></div>
       <div class="debug-label" id="debug-label"></div>
@@ -616,7 +583,6 @@ const SPEED_BONUS_MAX       = 100;
 const SPEED_BONUS_WINDOW_MS = 1000;
 const WRONG_SCORE_PENALTY   = -50;
 const WRONG_TIME_PENALTY_MS = 3000;
-const SKIP_LIMIT            = 2;
 const COMBO_TIER_SIZE       = 5;
 const COMBO_MAX_MULT        = 4;
 const LEADERBOARD_SIZE      = 5;
@@ -644,7 +610,6 @@ const state = {
   questionStart: 0,
   score:         0,
   streak:        0,
-  skipsLeft:     SKIP_LIMIT,
   timeLeftMs:    ROUND_DURATION_MS,
   prevSec:       Math.ceil(ROUND_DURATION_MS / 1000),
   rafId:         null,
@@ -711,7 +676,6 @@ const sfx = (() => {
     countdown(){ tone(620, 0.08, 'triangle', 0.14); },
     go()       { sweep(440, 880, 0.22, 'triangle', 0.20); },
     end()      { sweep(440, 110, 0.55, 'sawtooth', 0.18); },
-    skip()     { sweep(500, 700, 0.10, 'sine', 0.10); },
   };
 })();
 
@@ -843,38 +807,6 @@ function fireStreakBanner(mult) {
 }
 
 // =========================================================
-// SKIP
-// =========================================================
-function updateSkipBtn() {
-  const btn = document.getElementById('skip-btn');
-  const cnt = document.getElementById('skip-count');
-  cnt.textContent = state.skipsLeft;
-  btn.disabled = state.skipsLeft <= 0 || state.busy || state.screen !== 'game' || state.timeLeftMs <= 0;
-}
-
-function handleSkip() {
-  if (state.skipsLeft <= 0 || state.busy || state.screen !== 'game' || state.timeLeftMs <= 0) return;
-  state.skipsLeft--;
-  sfx.skip();
-  state.busy = true;
-  setChoicesDisabled(true);
-  updateSkipBtn();
-
-  // fade-out mevcut görseli kısaca, sonra sonraki
-  const img = document.getElementById('image');
-  img.style.opacity = '0.3';
-
-  state.pendingNextId = setTimeout(() => {
-    state.pendingNextId = null;
-    state.busy = false;
-    if (state.screen !== 'game' || state.timeLeftMs <= 0) return;
-    setChoicesDisabled(false);
-    updateSkipBtn();
-    showNextQuestion();
-  }, 180);
-}
-
-// =========================================================
 // GAME LOOP
 // =========================================================
 async function startGame() {
@@ -888,7 +820,6 @@ async function startGame() {
 
   state.score       = 0;
   state.streak      = 0;
-  state.skipsLeft   = SKIP_LIMIT;
   state.timeLeftMs  = ROUND_DURATION_MS;
   state.prevSec     = Math.ceil(ROUND_DURATION_MS / 1000);
   state.busy        = false;
@@ -914,7 +845,6 @@ async function startGame() {
   updateTimer();
   updateComboBadge(false);
   setChoicesDisabled(true);
-  updateSkipBtn();
 
   showScreen('game');
 
@@ -926,7 +856,6 @@ async function startGame() {
   state.questionStart = performance.now();
   updateDebugLabel();
   setChoicesDisabled(false);
-  updateSkipBtn();
 
   state.lastFrameTime = performance.now();
   state.rafId = requestAnimationFrame(tick);
@@ -1048,14 +977,12 @@ function handleChoice(choice) {
 
   state.busy = true;
   setChoicesDisabled(true);
-  updateSkipBtn();
 
   state.pendingNextId = setTimeout(() => {
     state.pendingNextId = null;
     state.busy = false;
     if (state.screen !== 'game' || state.timeLeftMs <= 0) return;
     setChoicesDisabled(false);
-    updateSkipBtn();
     showNextQuestion();
   }, FEEDBACK_HOLD_MS);
 }
@@ -1085,7 +1012,6 @@ function endGame() {
   state.pendingNextId = null;
   state.busy = false;
   setChoicesDisabled(false);
-  updateSkipBtn();
 
   sfx.end();
 
@@ -1196,8 +1122,6 @@ document.getElementById('btn-start').addEventListener('click', startGame);
 document.querySelectorAll('.btn-choice').forEach(btn => {
   btn.addEventListener('click', () => handleChoice(btn.dataset.choice));
 });
-
-document.getElementById('skip-btn').addEventListener('click', handleSkip);
 
 document.getElementById('btn-restart').addEventListener('click', async () => {
   sfx.click();
