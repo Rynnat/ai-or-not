@@ -78,11 +78,11 @@ html, body {
 }
 
 .logo {
-  font-size: 96px;
+  font-size: clamp(48px, 12vw, 96px);
   font-weight: 800;
   letter-spacing: -2px;
   color: var(--accent);
-  text-shadow: 0 0 24px rgba(0, 255, 136, 0.35);
+  text-shadow: 0 0 0.25em rgba(0, 255, 136, 0.35);
   line-height: 1;
 }
 
@@ -90,7 +90,7 @@ html, body {
   color: var(--fg);
   font-weight: 400;
   opacity: 0.55;
-  font-size: 64px;
+  font-size: 0.66em;
 }
 
 .tagline {
@@ -236,6 +236,7 @@ html, body {
   border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--bg-elevated);
+  container-type: inline-size;  /* cqi → stage genişliğine göre ölçek */
 }
 
 .image-stage img {
@@ -264,7 +265,7 @@ html, body {
   background: var(--accent);
   color: var(--bg);
   font-family: var(--font-mono);
-  font-size: 36px;
+  font-size: clamp(22px, 5.5cqi, 36px);
   font-weight: 800;
   letter-spacing: -1px;
   padding: 6px 18px;
@@ -340,13 +341,13 @@ html, body {
   left: 50%; top: 50%;
   transform: translate(-50%, -50%);
   font-family: var(--font-mono);
-  font-size: 84px;
+  font-size: clamp(28px, 10cqi, 84px);
   font-weight: 800;
   color: var(--gold);
   letter-spacing: -2px;
   pointer-events: none;
   opacity: 0;
-  text-shadow: 0 0 32px var(--gold), 0 0 64px rgba(255, 210, 63, 0.6);
+  text-shadow: 0 0 0.4em var(--gold), 0 0 0.8em rgba(255, 210, 63, 0.5);
   white-space: nowrap;
   z-index: 5;
 }
@@ -398,10 +399,10 @@ html, body {
 }
 .countdown.shown { display: flex; }
 .countdown .num {
-  font-size: 240px;
+  font-size: clamp(96px, 30cqi, 240px);
   font-weight: 800;
   color: var(--accent);
-  text-shadow: 0 0 48px rgba(0, 255, 136, 0.7);
+  text-shadow: 0 0 0.2em rgba(0, 255, 136, 0.7);
   font-variant-numeric: tabular-nums;
   animation: cdNum 720ms ease-out forwards;
 }
@@ -412,10 +413,10 @@ html, body {
   100% { transform: scale(0.6); opacity: 0; }
 }
 .countdown .go {
-  font-size: 140px;
+  font-size: clamp(56px, 18cqi, 140px);
   font-weight: 800;
   color: var(--accent);
-  text-shadow: 0 0 48px rgba(0, 255, 136, 0.8);
+  text-shadow: 0 0 0.3em rgba(0, 255, 136, 0.8);
   animation: cdGo 720ms ease-out forwards;
 }
 @keyframes cdGo {
@@ -470,13 +471,13 @@ html, body {
 }
 
 .final-score {
-  font-size: 144px;
+  font-size: clamp(72px, 18vh, 144px);
   font-weight: 800;
   color: var(--accent);
   letter-spacing: -4px;
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  text-shadow: 0 0 32px rgba(0, 255, 136, 0.35);
+  text-shadow: 0 0 0.22em rgba(0, 255, 136, 0.35);
 }
 
 .name-input-row {
@@ -1014,9 +1015,12 @@ function flashFeedback(correct, delta, popClass) {
   const pop = document.createElement('div');
   pop.className = 'score-pop ' + popClass;
   pop.textContent = (delta >= 0 ? '+' : '') + delta;
-  // dopamin: puan büyüdükçe font da büyür (80–280 arası)
+  // dopamin: puan büyüdükçe font da büyür, ama stage genişliğini aşmasın
   const absD = Math.abs(delta);
-  const size = Math.max(80, Math.min(280, 90 + absD * 0.32));
+  const stageW = stage.clientWidth || 600;
+  const desired = 90 + absD * 0.32;
+  const cap = stageW * 0.32;  // stage'in %32'sinden büyük olmasın
+  const size = Math.max(40, Math.min(280, desired, cap));
   pop.style.fontSize = size + 'px';
   stage.appendChild(pop);
   setTimeout(() => pop.remove(), 850);
