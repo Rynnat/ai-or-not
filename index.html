@@ -15,7 +15,6 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* renkler */
   --bg: #0a0a0f;
   --bg-elevated: #14141c;
   --fg: #e8e8f0;
@@ -24,12 +23,9 @@
   --accent-dim: #00cc6a;
   --danger: #ff3860;
   --success: #00ff88;
+  --gold: #ffd23f;
   --border: #2a2a3a;
-
-  /* tipografi */
   --font-mono: 'JetBrains Mono', 'Space Mono', ui-monospace, monospace;
-
-  /* hareket */
   --transition: 200ms;
 }
 
@@ -152,20 +148,9 @@ html, body {
   font-variant-numeric: tabular-nums;
 }
 
-.leaderboard-mini .rank {
-  color: var(--accent);
-  width: 32px;
-}
-
-.leaderboard-mini .name {
-  flex: 1;
-  letter-spacing: 6px;
-  color: var(--fg);
-}
-
-.leaderboard-mini .score {
-  color: var(--fg);
-}
+.leaderboard-mini .rank { color: var(--accent); width: 32px; }
+.leaderboard-mini .name { flex: 1; letter-spacing: 6px; color: var(--fg); }
+.leaderboard-mini .score { color: var(--fg); }
 
 /* ================= GAME ================= */
 #game {
@@ -209,10 +194,7 @@ html, body {
   50% { opacity: 0.55; }
 }
 
-.score-display {
-  text-align: right;
-}
-
+.score-display { text-align: right; }
 .score-display .label {
   color: var(--fg-muted);
   font-size: 12px;
@@ -221,7 +203,6 @@ html, body {
   text-transform: uppercase;
   margin-bottom: 4px;
 }
-
 .score-display .value {
   font-size: 36px;
   font-weight: 700;
@@ -249,27 +230,93 @@ html, body {
   transition: opacity 150ms ease;
 }
 
+.image-stage.shake {
+  animation: shake 320ms cubic-bezier(.36,.07,.19,.97);
+}
+
+@keyframes shake {
+  10%, 90% { transform: translateX(-4px); }
+  20%, 80% { transform: translateX(6px); }
+  30%, 50%, 70% { transform: translateX(-8px); }
+  40%, 60% { transform: translateX(8px); }
+}
+
+/* combo badge — sağ üst */
+.combo-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  padding: 6px 18px;
+  border-radius: 6px;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 200ms, transform 200ms;
+  pointer-events: none;
+  box-shadow: 0 0 28px rgba(0, 255, 136, 0.55);
+  z-index: 3;
+}
+.combo-badge.shown { opacity: 1; transform: scale(1); }
+.combo-badge.bump  { animation: comboBump 480ms cubic-bezier(.22,1,.36,1); }
+@keyframes comboBump {
+  0%   { transform: scale(1) rotate(0); }
+  25%  { transform: scale(1.5) rotate(-6deg); }
+  60%  { transform: scale(1.05) rotate(2deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* skip butonu — sol üst */
+.skip-btn {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(20, 20, 28, 0.78);
+  color: var(--fg);
+  border: 2px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  padding: 10px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
+  z-index: 3;
+}
+.skip-btn .count {
+  display: inline-block;
+  margin-left: 8px;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+.skip-btn:active { transform: scale(0.95); border-color: var(--accent); color: var(--accent); }
+.skip-btn:disabled { opacity: 0.3; cursor: default; }
+
 .flash {
   position: absolute;
   inset: 0;
   pointer-events: none;
   opacity: 0;
+  z-index: 2;
 }
-
-.flash.flash-correct {
-  animation: flashGreen 420ms ease-out;
-}
-
-.flash.flash-wrong {
-  animation: flashRed 420ms ease-out;
-}
+.flash.flash-correct { animation: flashGreen 420ms ease-out; }
+.flash.flash-wrong   { animation: flashRed   420ms ease-out; }
 
 @keyframes flashGreen {
   0%   { opacity: 0;    background: var(--success); }
   20%  { opacity: 0.42; background: var(--success); }
   100% { opacity: 0;    background: var(--success); }
 }
-
 @keyframes flashRed {
   0%   { opacity: 0;   background: var(--danger); }
   20%  { opacity: 0.5; background: var(--danger); }
@@ -289,16 +336,82 @@ html, body {
   pointer-events: none;
   text-shadow: 0 0 24px currentColor, 0 2px 16px rgba(0,0,0,0.5);
   animation: scorePop 820ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  z-index: 4;
 }
-
 .score-pop.pop-good { color: var(--success); }
 .score-pop.pop-bad  { color: var(--danger); }
+.score-pop.pop-combo { color: var(--gold); text-shadow: 0 0 32px var(--gold), 0 2px 16px rgba(0,0,0,0.5); }
 
 @keyframes scorePop {
-  0%   { transform: translate(-50%, -40%) scale(0.5); opacity: 0; }
-  15%  { transform: translate(-50%, -50%) scale(1.18); opacity: 1; }
-  35%  { transform: translate(-50%, -55%) scale(1.0);  opacity: 1; }
+  0%   { transform: translate(-50%, -40%)  scale(0.5); opacity: 0; }
+  15%  { transform: translate(-50%, -50%)  scale(1.18); opacity: 1; }
+  35%  { transform: translate(-50%, -55%)  scale(1.0);  opacity: 1; }
   100% { transform: translate(-50%, -120%) scale(0.95); opacity: 0; }
+}
+
+/* tier-up streak banner */
+.streak-banner {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-mono);
+  font-size: 84px;
+  font-weight: 800;
+  color: var(--gold);
+  letter-spacing: -2px;
+  pointer-events: none;
+  opacity: 0;
+  text-shadow: 0 0 32px var(--gold), 0 0 64px rgba(255, 210, 63, 0.6);
+  white-space: nowrap;
+  z-index: 5;
+}
+.streak-banner.fire { animation: streakBanner 1000ms cubic-bezier(.22,1,.36,1) forwards; }
+@keyframes streakBanner {
+  0%   { transform: translate(-50%, -50%) scale(0.3) rotate(-10deg); opacity: 0; }
+  20%  { transform: translate(-50%, -50%) scale(1.35) rotate(-6deg); opacity: 1; }
+  45%  { transform: translate(-50%, -50%) scale(1.0)  rotate(-2deg); opacity: 1; }
+  100% { transform: translate(-50%, -120%) scale(1.1) rotate(0);     opacity: 0; }
+}
+
+/* 3-2-1 countdown */
+.countdown {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 10, 15, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 10;
+  font-family: var(--font-mono);
+}
+.countdown.shown { display: flex; }
+.countdown .num {
+  font-size: 240px;
+  font-weight: 800;
+  color: var(--accent);
+  text-shadow: 0 0 48px rgba(0, 255, 136, 0.7);
+  font-variant-numeric: tabular-nums;
+  animation: cdNum 720ms ease-out forwards;
+}
+@keyframes cdNum {
+  0%   { transform: scale(0.4); opacity: 0; }
+  20%  { transform: scale(1.2); opacity: 1; }
+  60%  { transform: scale(1.0); opacity: 1; }
+  100% { transform: scale(0.6); opacity: 0; }
+}
+.countdown .go {
+  font-size: 140px;
+  font-weight: 800;
+  color: var(--accent);
+  text-shadow: 0 0 48px rgba(0, 255, 136, 0.8);
+  animation: cdGo 720ms ease-out forwards;
+}
+@keyframes cdGo {
+  0%   { transform: scale(0.4); opacity: 0; letter-spacing: 0; }
+  20%  { transform: scale(1.2); opacity: 1; letter-spacing: 16px; }
+  100% { transform: scale(1.8); opacity: 0; letter-spacing: 40px; }
 }
 
 .choice-row {
@@ -336,7 +449,7 @@ html, body {
 #end {
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 18px;
 }
 
 .end-label {
@@ -363,9 +476,7 @@ html, body {
   gap: 12px;
 }
 
-.name-input-row.shown {
-  display: flex;
-}
+.name-input-row.shown { display: flex; }
 
 .name-input {
   background: var(--bg-elevated);
@@ -384,9 +495,7 @@ html, body {
   caret-color: var(--accent);
 }
 
-.name-input:focus {
-  border-color: var(--accent);
-}
+.name-input:focus { border-color: var(--accent); }
 
 .btn-secondary {
   background: transparent;
@@ -428,15 +537,19 @@ html, body {
   <!-- ============ GAME ============ -->
   <section id="game" class="screen">
     <div class="hud">
-      <div class="timer" id="timer-box"><span id="timer">45</span><span class="unit">sn</span></div>
+      <div class="timer" id="timer-box"><span id="timer">60</span><span class="unit">sn</span></div>
       <div class="score-display">
         <span class="label">SKOR</span>
         <span class="value" id="score">0</span>
       </div>
     </div>
-    <div class="image-stage">
+    <div class="image-stage" id="image-stage">
       <img id="image" alt="">
+      <button class="skip-btn" id="skip-btn">SKIP<span class="count" id="skip-count">2</span></button>
+      <div class="combo-badge" id="combo-badge"></div>
+      <div class="streak-banner" id="streak-banner"></div>
       <div class="flash" id="flash"></div>
+      <div class="countdown" id="countdown"></div>
     </div>
     <div class="choice-row">
       <button class="btn-choice" data-choice="ai">YAPAY ZEKA</button>
@@ -461,21 +574,24 @@ html, body {
 // =========================================================
 // CONFIG
 // =========================================================
-const BIN_URL  = '';   // örn: 'https://api.jsonbin.io/v3/b/XXXXXXXX'
-const API_KEY  = '';   // X-Master-Key
+const BIN_URL = '';
+const API_KEY = '';
 
-const ROUND_DURATION_MS    = 45000;
-const BASE_SCORE           = 50;
-const SPEED_BONUS_MAX      = 100;
-const SPEED_BONUS_WINDOW_MS = 1000;   // 1 sn içinde lineer sıfırlanır
-const WRONG_SCORE_PENALTY  = -50;
+const ROUND_DURATION_MS     = 60000;
+const COUNTDOWN_STEP_MS     = 700;
+const BASE_SCORE            = 50;
+const SPEED_BONUS_MAX       = 100;
+const SPEED_BONUS_WINDOW_MS = 1000;
+const WRONG_SCORE_PENALTY   = -50;
 const WRONG_TIME_PENALTY_MS = 3000;
-const LEADERBOARD_SIZE     = 5;
-const LB_STORAGE_KEY       = 'aiornot_leaderboard_v1';
-const FEEDBACK_HOLD_MS     = 380;     // doğru/yanlış flash sırasında bekleme
-const LOW_TIME_THRESHOLD_S = 10;      // timer'ın pulse moduna girdiği eşik
+const SKIP_LIMIT            = 2;
+const COMBO_TIER_SIZE       = 5;
+const COMBO_MAX_MULT        = 4;
+const LEADERBOARD_SIZE      = 5;
+const LB_STORAGE_KEY        = 'aiornot_leaderboard_v1';
+const FEEDBACK_HOLD_MS      = 380;
+const LOW_TIME_THRESHOLD_S  = 10;
 
-// görseller eklenene kadar oynanabilir kalsın diye fallback
 const FALLBACK_IMAGES = [
   { file: 'https://picsum.photos/seed/ainot-ai-1/1000/700',   label: 'ai'   },
   { file: 'https://picsum.photos/seed/ainot-real-1/1000/700', label: 'real' },
@@ -494,13 +610,77 @@ const state = {
   current:       null,
   questionStart: 0,
   score:         0,
+  streak:        0,
+  skipsLeft:     SKIP_LIMIT,
   timeLeftMs:    ROUND_DURATION_MS,
+  prevSec:       Math.ceil(ROUND_DURATION_MS / 1000),
   rafId:         null,
   lastFrameTime: 0,
   busy:          false,
   pendingNextId: null,
   leaderboard:   [],
 };
+
+// =========================================================
+// SOUND (WebAudio — dış dosya yok)
+// =========================================================
+const sfx = (() => {
+  let ctx = null;
+  function ensure() {
+    if (!ctx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      ctx = new AC();
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  function tone(freq, dur, type, vol) {
+    const c = ensure(); if (!c) return;
+    const t0 = c.currentTime;
+    const osc = c.createOscillator();
+    const g = c.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.setValueAtTime(freq, t0);
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(vol, t0 + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(g).connect(c.destination);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.02);
+  }
+  function sweep(f1, f2, dur, type, vol) {
+    const c = ensure(); if (!c) return;
+    const t0 = c.currentTime;
+    const osc = c.createOscillator();
+    const g = c.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.setValueAtTime(f1, t0);
+    osc.frequency.exponentialRampToValueAtTime(Math.max(40, f2), t0 + dur);
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(vol, t0 + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(g).connect(c.destination);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.02);
+  }
+  return {
+    prime()    { ensure(); },
+    click()    { tone(720, 0.05, 'square', 0.07); },
+    correct()  { sweep(520, 920, 0.16, 'triangle', 0.18); },
+    wrong()    { sweep(260, 90, 0.30, 'sawtooth', 0.18); },
+    streak()   {
+      sweep(660, 990,  0.10, 'square', 0.14);
+      setTimeout(() => sweep(990, 1320, 0.10, 'square', 0.14), 70);
+      setTimeout(() => sweep(1320, 1980, 0.16, 'square', 0.16), 140);
+    },
+    tick()     { tone(1100, 0.05, 'sine', 0.10); },
+    countdown(){ tone(620, 0.08, 'triangle', 0.14); },
+    go()       { sweep(440, 880, 0.22, 'triangle', 0.20); },
+    end()      { sweep(440, 110, 0.55, 'sawtooth', 0.18); },
+    skip()     { sweep(500, 700, 0.10, 'sine', 0.10); },
+  };
+})();
 
 // =========================================================
 // UTIL
@@ -519,14 +699,13 @@ function resolveImageSrc(entry) {
 }
 
 function sanitizeName(raw) {
-  return (raw || '')
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, '')
-    .slice(0, 3);
+  return (raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3);
 }
 
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
 // =========================================================
-// IMAGE LOADING
+// IMAGES
 // =========================================================
 async function loadImages() {
   try {
@@ -541,13 +720,20 @@ async function loadImages() {
   }
 }
 
-function nextImage() {
+function pickNext() {
   if (state.deckIndex >= state.images.length) {
     state.images = shuffle(state.images);
     state.deckIndex = 0;
   }
   state.current = state.images[state.deckIndex++];
   return state.current;
+}
+
+function preloadAll() {
+  state.images.forEach(entry => {
+    const im = new Image();
+    im.src = resolveImageSrc(entry);
+  });
 }
 
 // =========================================================
@@ -560,34 +746,139 @@ function showScreen(name) {
 }
 
 // =========================================================
+// COMBO
+// =========================================================
+function comboMultiplier() {
+  if (state.streak < COMBO_TIER_SIZE) return 1;
+  return Math.min(COMBO_MAX_MULT, Math.floor(state.streak / COMBO_TIER_SIZE) + 1);
+}
+
+function updateComboBadge(bump) {
+  const badge = document.getElementById('combo-badge');
+  const mult = comboMultiplier();
+  if (mult > 1) {
+    badge.textContent = '×' + mult;
+    badge.classList.add('shown');
+    if (bump) {
+      badge.classList.remove('bump');
+      void badge.offsetWidth;
+      badge.classList.add('bump');
+    }
+  } else {
+    badge.classList.remove('shown', 'bump');
+  }
+}
+
+function fireStreakBanner(mult) {
+  const b = document.getElementById('streak-banner');
+  b.textContent = 'STREAK ×' + mult;
+  b.classList.remove('fire');
+  void b.offsetWidth;
+  b.classList.add('fire');
+}
+
+// =========================================================
+// SKIP
+// =========================================================
+function updateSkipBtn() {
+  const btn = document.getElementById('skip-btn');
+  const cnt = document.getElementById('skip-count');
+  cnt.textContent = state.skipsLeft;
+  btn.disabled = state.skipsLeft <= 0 || state.busy || state.screen !== 'game' || state.timeLeftMs <= 0;
+}
+
+function handleSkip() {
+  if (state.skipsLeft <= 0 || state.busy || state.screen !== 'game' || state.timeLeftMs <= 0) return;
+  state.skipsLeft--;
+  sfx.skip();
+  state.busy = true;
+  setChoicesDisabled(true);
+  updateSkipBtn();
+
+  // fade-out mevcut görseli kısaca, sonra sonraki
+  const img = document.getElementById('image');
+  img.style.opacity = '0.3';
+
+  state.pendingNextId = setTimeout(() => {
+    state.pendingNextId = null;
+    state.busy = false;
+    if (state.screen !== 'game' || state.timeLeftMs <= 0) return;
+    setChoicesDisabled(false);
+    updateSkipBtn();
+    showNextQuestion();
+  }, 180);
+}
+
+// =========================================================
 // GAME LOOP
 // =========================================================
 async function startGame() {
-  // mevcut pending işlemleri temizle
+  sfx.prime();
+  sfx.click();
+
   if (state.rafId) cancelAnimationFrame(state.rafId);
   if (state.pendingNextId) clearTimeout(state.pendingNextId);
   state.rafId = null;
   state.pendingNextId = null;
 
-  state.score      = 0;
-  state.timeLeftMs = ROUND_DURATION_MS;
-  state.busy       = false;
+  state.score       = 0;
+  state.streak      = 0;
+  state.skipsLeft   = SKIP_LIMIT;
+  state.timeLeftMs  = ROUND_DURATION_MS;
+  state.prevSec     = Math.ceil(ROUND_DURATION_MS / 1000);
+  state.busy        = false;
 
-  // ilk oyunda yükle, sonra her seferinde yeniden karıştır
   if (state.images.length === 0) {
     state.images = await loadImages();
   }
   state.images    = shuffle(state.images);
   state.deckIndex = 0;
 
-  setChoicesDisabled(false);
+  preloadAll();
+
+  // ilk soruyu seç ve gizliyken yükle
+  pickNext();
+  const firstImg = new Image();
+  firstImg.src = resolveImageSrc(state.current);
+
+  const imgEl = document.getElementById('image');
+  imgEl.style.opacity = '0';
+  imgEl.removeAttribute('src');
+
   updateScore();
   updateTimer();
+  updateComboBadge(false);
+  setChoicesDisabled(true);
+  updateSkipBtn();
+
   showScreen('game');
-  showNextQuestion();
+
+  await runCountdown();
+
+  // ilk soruyu göster
+  imgEl.src = firstImg.src;
+  imgEl.style.opacity = '1';
+  state.questionStart = performance.now();
+  setChoicesDisabled(false);
+  updateSkipBtn();
 
   state.lastFrameTime = performance.now();
   state.rafId = requestAnimationFrame(tick);
+}
+
+async function runCountdown() {
+  const cd = document.getElementById('countdown');
+  cd.classList.add('shown');
+  for (const step of ['3', '2', '1']) {
+    cd.innerHTML = '<div class="num">' + step + '</div>';
+    sfx.countdown();
+    await sleep(COUNTDOWN_STEP_MS);
+  }
+  cd.innerHTML = '<div class="go">GO</div>';
+  sfx.go();
+  await sleep(COUNTDOWN_STEP_MS);
+  cd.classList.remove('shown');
+  cd.innerHTML = '';
 }
 
 function tick(now) {
@@ -601,6 +892,13 @@ function tick(now) {
     endGame();
     return;
   }
+
+  const secs = Math.ceil(state.timeLeftMs / 1000);
+  if (secs !== state.prevSec) {
+    if (secs > 0 && secs <= 5) sfx.tick();
+    state.prevSec = secs;
+  }
+
   updateTimer();
   state.rafId = requestAnimationFrame(tick);
 }
@@ -616,8 +914,8 @@ function updateScore() {
 }
 
 function showNextQuestion() {
-  const entry = nextImage();
-  const img   = document.getElementById('image');
+  pickNext();
+  const img = document.getElementById('image');
   img.style.opacity = '0';
 
   const preload = new Image();
@@ -627,8 +925,8 @@ function showNextQuestion() {
     state.questionStart = performance.now();
   };
   preload.onload  = swap;
-  preload.onerror = swap;  // bozuk olsa bile devam
-  preload.src = resolveImageSrc(entry);
+  preload.onerror = swap;
+  preload.src = resolveImageSrc(state.current);
 }
 
 function setChoicesDisabled(disabled) {
@@ -641,42 +939,68 @@ function handleChoice(choice) {
   const correct = choice === state.current.label;
   const elapsed = performance.now() - state.questionStart;
 
-  let delta;
+  let delta, popClass;
   if (correct) {
     const bonus = Math.max(0, SPEED_BONUS_MAX - elapsed / (SPEED_BONUS_WINDOW_MS / SPEED_BONUS_MAX));
-    delta = Math.round(BASE_SCORE + bonus);
+    const base = BASE_SCORE + bonus;
+    const prevMult = comboMultiplier();
+    state.streak++;
+    const newMult = comboMultiplier();
+    delta = Math.round(base * newMult);
+
+    const tierUp = newMult > prevMult;
+    updateComboBadge(tierUp || newMult > 1);
+
+    if (tierUp && newMult > 1) {
+      fireStreakBanner(newMult);
+      sfx.streak();
+    } else {
+      sfx.correct();
+    }
+    popClass = newMult > 1 ? 'pop-combo' : 'pop-good';
   } else {
     delta = WRONG_SCORE_PENALTY;
     state.timeLeftMs = Math.max(0, state.timeLeftMs - WRONG_TIME_PENALTY_MS);
+    state.prevSec = Math.ceil(state.timeLeftMs / 1000);
+    state.streak = 0;
+    updateComboBadge(false);
     updateTimer();
+    sfx.wrong();
+
+    const stage = document.getElementById('image-stage');
+    stage.classList.remove('shake');
+    void stage.offsetWidth;
+    stage.classList.add('shake');
+    popClass = 'pop-bad';
   }
 
   state.score += delta;
   updateScore();
-  flashFeedback(correct, delta);
+  flashFeedback(correct, delta, popClass);
 
   state.busy = true;
   setChoicesDisabled(true);
+  updateSkipBtn();
 
   state.pendingNextId = setTimeout(() => {
     state.pendingNextId = null;
     state.busy = false;
-    if (state.screen !== 'game') return;
-    if (state.timeLeftMs <= 0) return;  // raf will/has end(ed) the game
+    if (state.screen !== 'game' || state.timeLeftMs <= 0) return;
     setChoicesDisabled(false);
+    updateSkipBtn();
     showNextQuestion();
   }, FEEDBACK_HOLD_MS);
 }
 
-function flashFeedback(correct, delta) {
+function flashFeedback(correct, delta, popClass) {
   const flash = document.getElementById('flash');
   flash.classList.remove('flash-correct', 'flash-wrong');
-  void flash.offsetWidth; // reflow
+  void flash.offsetWidth;
   flash.classList.add(correct ? 'flash-correct' : 'flash-wrong');
 
-  const stage = document.querySelector('.image-stage');
+  const stage = document.getElementById('image-stage');
   const pop = document.createElement('div');
-  pop.className = 'score-pop ' + (correct ? 'pop-good' : 'pop-bad');
+  pop.className = 'score-pop ' + popClass;
   pop.textContent = (delta >= 0 ? '+' : '') + delta;
   stage.appendChild(pop);
   setTimeout(() => pop.remove(), 850);
@@ -689,6 +1013,9 @@ function endGame() {
   state.pendingNextId = null;
   state.busy = false;
   setChoicesDisabled(false);
+  updateSkipBtn();
+
+  sfx.end();
 
   document.getElementById('final-score').textContent = state.score;
 
@@ -713,7 +1040,6 @@ function leaderboardQualifies(score) {
 }
 
 async function loadLeaderboard() {
-  // önce JSONBin dene
   if (BIN_URL && API_KEY) {
     try {
       const res = await fetch(BIN_URL + '/latest', {
@@ -721,12 +1047,10 @@ async function loadLeaderboard() {
       });
       if (res.ok) {
         const data = await res.json();
-        // jsonbin /latest dönüşü: { record: {...}, metadata: ... } veya X-Bin-Meta:false ile direkt kayıt
         const record = data && (data.record !== undefined ? data.record : data);
         const entries = Array.isArray(record) ? record : (Array.isArray(record?.entries) ? record.entries : null);
         if (Array.isArray(entries)) {
           state.leaderboard = sortAndCut(entries);
-          // localStorage'a da senkronize tut
           try { localStorage.setItem(LB_STORAGE_KEY, JSON.stringify(state.leaderboard)); } catch (e) {}
           return;
         }
@@ -735,7 +1059,6 @@ async function loadLeaderboard() {
       console.warn('JSONBin okuma başarısız, localStorage\'a düşüyor:', e.message);
     }
   }
-  // localStorage fallback
   try {
     const local = JSON.parse(localStorage.getItem(LB_STORAGE_KEY) || '[]');
     state.leaderboard = sortAndCut(Array.isArray(local) ? local : []);
@@ -745,24 +1068,15 @@ async function loadLeaderboard() {
 }
 
 async function saveLeaderboard() {
-  // her zaman localStorage'a yaz
-  try {
-    localStorage.setItem(LB_STORAGE_KEY, JSON.stringify(state.leaderboard));
-  } catch (e) {}
-
+  try { localStorage.setItem(LB_STORAGE_KEY, JSON.stringify(state.leaderboard)); } catch (e) {}
   if (BIN_URL && API_KEY) {
     try {
       await fetch(BIN_URL, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Master-Key': API_KEY
-        },
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
         body: JSON.stringify({ entries: state.leaderboard })
       });
-    } catch (e) {
-      console.warn('JSONBin yazma başarısız:', e.message);
-    }
+    } catch (e) { console.warn('JSONBin yazma başarısız:', e.message); }
   }
 }
 
@@ -795,10 +1109,8 @@ async function submitScoreIfNeeded() {
   const nameRow = document.getElementById('name-row');
   if (!nameRow.classList.contains('shown')) return;
 
-  const raw = document.getElementById('name-input').value;
-  const clean = sanitizeName(raw);
+  const clean = sanitizeName(document.getElementById('name-input').value);
   const name = clean.length > 0 ? clean.padEnd(3, '-') : '---';
-
   state.leaderboard.push({ name, score: state.score });
   state.leaderboard = sortAndCut(state.leaderboard);
   await saveLeaderboard();
@@ -813,24 +1125,24 @@ document.querySelectorAll('.btn-choice').forEach(btn => {
   btn.addEventListener('click', () => handleChoice(btn.dataset.choice));
 });
 
+document.getElementById('skip-btn').addEventListener('click', handleSkip);
+
 document.getElementById('btn-restart').addEventListener('click', async () => {
+  sfx.click();
   await submitScoreIfNeeded();
   renderLeaderboard();
   showScreen('welcome');
 });
 
-// isim input'unu A-Z 0-9 ile sınırla
 document.getElementById('name-input').addEventListener('input', (e) => {
   e.target.value = sanitizeName(e.target.value);
 });
 
-// tablet hijyeni
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('touchmove', e => {
   if (e.touches.length > 1) e.preventDefault();
 }, { passive: false });
 
-// sayfa görünmez olunca raf'ı bozma (timer drift'i önle)
 document.addEventListener('visibilitychange', () => {
   if (state.screen !== 'game') return;
   if (document.hidden) {
@@ -843,11 +1155,19 @@ document.addEventListener('visibilitychange', () => {
 });
 
 // =========================================================
-// INIT
+// INIT + SW
 // =========================================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW register fail:', err));
+  });
+}
+
 (async function init() {
   await loadLeaderboard();
   renderLeaderboard();
+  // arka planda görselleri çek — etkinlikte offline da çalışsın
+  loadImages().then(list => { state.images = list; preloadAll(); });
 })();
 </script>
 
