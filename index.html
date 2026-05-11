@@ -689,15 +689,32 @@ html, body {
 }
 
 .modal-header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 32px 1fr 32px;
   align-items: center;
+  gap: 12px;
   margin-bottom: 20px;
   font-size: 14px;
   letter-spacing: 6px;
   color: var(--fg-muted);
   text-transform: uppercase;
 }
+.modal-header > span { text-align: center; }
+
+.modal-back {
+  background: transparent;
+  border: none;
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  font-weight: 700;
+  visibility: hidden;
+}
+.modal-back.shown { visibility: visible; }
+.modal-back:active { color: var(--accent); }
 
 .modal-close {
   background: transparent;
@@ -808,17 +825,17 @@ html, body {
 }
 .credits-btn:active { transform: scale(0.96); border-color: var(--accent); color: var(--accent); }
 
-.credits-content { display: none; }
-.credits-content.shown { display: block; }
-.credits-content .row {
+.credits-content, .tech-content { display: none; }
+.credits-content.shown, .tech-content.shown { display: block; }
+.credits-content .row, .tech-content .row {
   padding: 8px 0;
   font-size: 13px;
   color: var(--fg-muted);
   letter-spacing: 1px;
   border-bottom: 1px dashed var(--border);
 }
-.credits-content .row:last-child { border-bottom: none; }
-.credits-content .row strong {
+.credits-content .row:last-child, .tech-content .row:last-child { border-bottom: none; }
+.credits-content .row strong, .tech-content .row strong {
   color: var(--accent);
   display: block;
   font-size: 11px;
@@ -827,6 +844,23 @@ html, body {
   text-transform: uppercase;
   font-weight: 700;
 }
+
+.tech-cta {
+  width: 100%;
+  margin-top: 14px;
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  padding: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.tech-cta:active { transform: scale(0.97); border-color: var(--accent); }
 
 .settings-content.hidden { display: none; }
 
@@ -922,6 +956,7 @@ html, body {
 <div class="modal-overlay" id="settings-modal">
   <div class="modal">
     <div class="modal-header">
+      <button class="modal-back" id="modal-back" aria-label="back">←</button>
       <span id="modal-title" data-i18n="settings">AYARLAR</span>
       <button class="modal-close" id="modal-close" aria-label="close">×</button>
     </div>
@@ -953,11 +988,27 @@ html, body {
       </div>
     </div>
     <div class="credits-content" id="credits-content">
-      <div class="row"><strong data-i18n="cr_game">OYUN</strong>Koray</div>
+      <div class="row"><strong data-i18n="cr_game">OYUN</strong>Galip Koray Şahin</div>
       <div class="row"><strong data-i18n="cr_ai_img">AI GÖRSELLER</strong>Pollinations.ai</div>
       <div class="row"><strong data-i18n="cr_real_img">GERÇEK GÖRSELLER</strong>Picsum.photos / Unsplash photographers</div>
       <div class="row"><strong data-i18n="cr_sound">SES</strong>WebAudio synthesis</div>
       <div class="row"><strong data-i18n="cr_font">FONT</strong>JetBrains Mono</div>
+      <button class="tech-cta" id="open-tech" data-i18n="tech">TEKNİK</button>
+    </div>
+    <div class="tech-content" id="tech-content">
+      <div class="row"><strong>HTML5 + CSS3</strong><span data-i18n="tech_html">Tek dosya, gömülü stil ve script</span></div>
+      <div class="row"><strong>CSS Container Queries</strong><span data-i18n="tech_cq">Sahne genişliğine göre yazı tipinin adaptif ölçeklenmesi</span></div>
+      <div class="row"><strong>CSS Custom Properties</strong><span data-i18n="tech_vars">5 meyve teması için değişken tabanlı renk sistemi</span></div>
+      <div class="row"><strong>JavaScript IIFE</strong><span data-i18n="tech_iife">Kapalı scope ile state'in cheat'e karşı korunması</span></div>
+      <div class="row"><strong>Web Audio API</strong><span data-i18n="tech_audio">Tüm ses efektleri runtime'da sentezlenir, ses dosyası yok</span></div>
+      <div class="row"><strong>Fisher-Yates Shuffle</strong><span data-i18n="tech_shuffle">Görsel destesinin tarafsız karıştırılması</span></div>
+      <div class="row"><strong>XOR + Base64</strong><span data-i18n="tech_xor">images.json etiketlerinin obfuscation'ı</span></div>
+      <div class="row"><strong>localStorage</strong><span data-i18n="tech_storage">Skor tablosu ve ayarların cihaza yerel kaydı</span></div>
+      <div class="row"><strong>Service Worker</strong><span data-i18n="tech_sw">Offline çalışma + stale-while-revalidate cache</span></div>
+      <div class="row"><strong>Web App Manifest</strong><span data-i18n="tech_pwa">PWA olarak ana ekrana eklenebilirlik</span></div>
+      <div class="row"><strong>Pollinations.ai</strong><span data-i18n="tech_pollinations">AI görsel üretimi (FLUX / Sana modelleri)</span></div>
+      <div class="row"><strong>Picsum.photos</strong><span data-i18n="tech_picsum">Unsplash tabanlı rastgele gerçek fotoğraflar</span></div>
+      <div class="row"><strong>GitHub Pages</strong><span data-i18n="tech_pages">Statik site barındırma</span></div>
     </div>
   </div>
 </div>
@@ -987,7 +1038,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v15';        // her push'ta bump et
+const BUILD = 'v16';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -1064,6 +1115,20 @@ const I18N = {
     statCorrect:'DOĞRU',
     statStreak: 'EN UZUN SERİ',
     statAccuracy:'DOĞRULUK',
+    tech:       'TEKNİK',
+    tech_html:  'Tek dosya, gömülü stil ve script',
+    tech_cq:    'Sahne genişliğine göre yazı tipinin adaptif ölçeklenmesi',
+    tech_vars:  '5 meyve teması için değişken tabanlı renk sistemi',
+    tech_iife:  "Kapalı scope ile state'in cheat'e karşı korunması",
+    tech_audio: "Tüm ses efektleri runtime'da sentezlenir, ses dosyası yok",
+    tech_shuffle:'Görsel destesinin tarafsız karıştırılması',
+    tech_xor:   "images.json etiketlerinin obfuscation'ı",
+    tech_storage:'Skor tablosu ve ayarların cihaza yerel kaydı',
+    tech_sw:    'Offline çalışma + stale-while-revalidate cache',
+    tech_pwa:   'PWA olarak ana ekrana eklenebilirlik',
+    tech_pollinations:'AI görsel üretimi (FLUX / Sana modelleri)',
+    tech_picsum:'Unsplash tabanlı rastgele gerçek fotoğraflar',
+    tech_pages: 'Statik site barındırma',
   },
   en: {
     tagline:    'AI &nbsp;·&nbsp; OR REAL',
@@ -1099,6 +1164,20 @@ const I18N = {
     statCorrect:'CORRECT',
     statStreak: 'BEST STREAK',
     statAccuracy:'ACCURACY',
+    tech:       'TECHNICAL',
+    tech_html:  'Single file, inline styles and scripts',
+    tech_cq:    'Adaptive font scaling via stage width',
+    tech_vars:  'Variable-based color system for 5 fruit themes',
+    tech_iife:  'Closed scope protects state from cheating',
+    tech_audio: 'All sound effects synthesized at runtime, no audio files',
+    tech_shuffle:'Unbiased shuffling of the image deck',
+    tech_xor:   'Obfuscation of labels in images.json',
+    tech_storage:'Leaderboard + settings saved locally to device',
+    tech_sw:    'Offline play + stale-while-revalidate cache',
+    tech_pwa:   'Installable as a PWA on home screen',
+    tech_pollinations:'AI image generation (FLUX / Sana models)',
+    tech_picsum:'Random real photos from Unsplash via Picsum',
+    tech_pages: 'Static site hosting',
   }
 };
 
@@ -1835,6 +1914,8 @@ function openSettings() {
   document.getElementById('settings-modal').classList.add('shown');
   document.getElementById('settings-content').classList.remove('hidden');
   document.getElementById('credits-content').classList.remove('shown');
+  document.getElementById('tech-content').classList.remove('shown');
+  document.getElementById('modal-back').classList.remove('shown');
   document.getElementById('modal-title').setAttribute('data-i18n', 'settings');
   applyLang();
   updateSoundToggle();
@@ -1846,8 +1927,18 @@ function closeSettings() {
 
 function showCredits() {
   document.getElementById('settings-content').classList.add('hidden');
+  document.getElementById('tech-content').classList.remove('shown');
   document.getElementById('credits-content').classList.add('shown');
+  document.getElementById('modal-back').classList.remove('shown');
   document.getElementById('modal-title').setAttribute('data-i18n', 'credits');
+  applyLang();
+}
+
+function showTech() {
+  document.getElementById('credits-content').classList.remove('shown');
+  document.getElementById('tech-content').classList.add('shown');
+  document.getElementById('modal-back').classList.add('shown');
+  document.getElementById('modal-title').setAttribute('data-i18n', 'tech');
   applyLang();
 }
 
@@ -1880,6 +1971,8 @@ document.querySelectorAll('.theme-btn').forEach(b => {
   });
 });
 document.getElementById('open-credits').addEventListener('click', () => { sfx.click(); showCredits(); });
+document.getElementById('open-tech').addEventListener('click', () => { sfx.click(); showTech(); });
+document.getElementById('modal-back').addEventListener('click', () => { sfx.click(); showCredits(); });
 
 // =========================================================
 // INIT + SW
