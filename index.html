@@ -359,10 +359,92 @@ html, body {
   border-color: #fff;
   animation: glowBreathe 0.3s ease-in-out infinite;
 }
+.image-stage[data-tier="2048"] {
+  box-shadow:
+    0 0 calc(380px * var(--glow-mul)) rgba(180, 60, 255, 1),
+    0 0 calc(240px * var(--glow-mul)) rgba(100, 80, 255, 1),
+    0 0 calc(140px * var(--glow-mul)) rgba(255, 100, 220, 0.95),
+    0 0 calc(80px  * var(--glow-mul)) rgba(0, 220, 255, 0.9),
+    0 0 calc(36px  * var(--glow-mul)) rgba(255, 100, 255, 1);
+  border-color: rgba(180, 80, 255, 1);
+  animation: glowBreathe 0.25s ease-in-out infinite;
+}
+.image-stage[data-tier="4096"] {
+  box-shadow:
+    0 0 calc(440px * var(--glow-mul)) rgba(255, 255, 255, 1),
+    0 0 calc(280px * var(--glow-mul)) rgba(255, 80, 255, 1),
+    0 0 calc(180px * var(--glow-mul)) rgba(0, 255, 255, 1),
+    0 0 calc(100px * var(--glow-mul)) rgba(255, 220, 0, 1),
+    0 0 calc(50px  * var(--glow-mul)) rgba(255, 100, 100, 1),
+    0 0 calc(20px  * var(--glow-mul)) rgba(255, 255, 255, 1);
+  border-color: #fff;
+  animation: glowBreathe 0.2s ease-in-out infinite;
+}
 
 @keyframes glowBreathe {
   0%, 100% { --glow-mul: 1; }
   50%      { --glow-mul: 1.28; }
+}
+
+/* Butonlar tier'a göre yanar — sahneyle bağlı görünsün */
+.game-frame { --glow-mul: 1; }
+.game-frame[data-tier="2"] .btn-choice {
+  border-color: rgba(var(--accent-rgb), 0.45);
+  box-shadow: 0 0 calc(12px * var(--glow-mul)) rgba(var(--accent-rgb), 0.3);
+}
+.game-frame[data-tier="4"] .btn-choice {
+  border-color: rgba(var(--accent-rgb), 0.6);
+  box-shadow: 0 0 calc(16px * var(--glow-mul)) rgba(var(--accent-rgb), 0.4);
+}
+.game-frame[data-tier="8"] .btn-choice {
+  border-color: rgba(255, 200, 60, 0.65);
+  box-shadow: 0 0 calc(20px * var(--glow-mul)) rgba(255, 200, 60, 0.5);
+  animation: glowBreathe 1.7s ease-in-out infinite;
+}
+.game-frame[data-tier="16"] .btn-choice {
+  border-color: rgba(255, 130, 40, 0.75);
+  box-shadow: 0 0 calc(28px * var(--glow-mul)) rgba(255, 130, 40, 0.6);
+  animation: glowBreathe 1.3s ease-in-out infinite;
+}
+.game-frame[data-tier="32"] .btn-choice {
+  border-color: rgba(255, 80, 20, 0.9);
+  box-shadow: 0 0 calc(36px * var(--glow-mul)) rgba(255, 80, 20, 0.7);
+  animation: glowBreathe 0.9s ease-in-out infinite;
+}
+.game-frame[data-tier="64"] .btn-choice {
+  border-color: rgba(255, 40, 5, 1);
+  box-shadow: 0 0 calc(48px * var(--glow-mul)) rgba(255, 40, 5, 0.8), 0 0 calc(20px * var(--glow-mul)) rgba(255, 100, 0, 0.6);
+  animation: glowBreathe 0.6s ease-in-out infinite;
+}
+.game-frame[data-tier="128"] .btn-choice {
+  border-color: rgba(255, 200, 0, 1);
+  box-shadow: 0 0 calc(60px * var(--glow-mul)) rgba(255, 100, 0, 0.85), 0 0 calc(28px * var(--glow-mul)) rgba(255, 200, 0, 0.7);
+  animation: glowBreathe 0.45s ease-in-out infinite;
+}
+.game-frame[data-tier="256"] .btn-choice {
+  border-color: rgba(220, 240, 255, 1);
+  box-shadow: 0 0 calc(72px * var(--glow-mul)) rgba(180, 230, 255, 0.9), 0 0 calc(32px * var(--glow-mul)) rgba(255, 255, 255, 0.75);
+  animation: glowBreathe 0.4s ease-in-out infinite;
+}
+.game-frame[data-tier="512"] .btn-choice {
+  border-color: rgba(255, 150, 255, 1);
+  box-shadow: 0 0 calc(84px * var(--glow-mul)) rgba(220, 100, 255, 0.92), 0 0 calc(36px * var(--glow-mul)) rgba(255, 100, 255, 0.75);
+  animation: glowBreathe 0.35s ease-in-out infinite;
+}
+.game-frame[data-tier="1024"] .btn-choice {
+  border-color: #fff;
+  box-shadow: 0 0 calc(96px * var(--glow-mul)) rgba(255, 100, 200, 0.95), 0 0 calc(48px * var(--glow-mul)) rgba(100, 200, 255, 0.85), 0 0 calc(20px * var(--glow-mul)) #fff;
+  animation: glowBreathe 0.3s ease-in-out infinite;
+}
+.game-frame[data-tier="2048"] .btn-choice {
+  border-color: rgba(180, 80, 255, 1);
+  box-shadow: 0 0 calc(112px * var(--glow-mul)) rgba(180, 60, 255, 0.95), 0 0 calc(56px * var(--glow-mul)) rgba(0, 220, 255, 0.8), 0 0 calc(24px * var(--glow-mul)) rgba(255, 100, 220, 0.85);
+  animation: glowBreathe 0.25s ease-in-out infinite;
+}
+.game-frame[data-tier="4096"] .btn-choice {
+  border-color: #fff;
+  box-shadow: 0 0 calc(140px * var(--glow-mul)) rgba(255, 80, 255, 1), 0 0 calc(70px * var(--glow-mul)) rgba(0, 255, 255, 0.95), 0 0 calc(32px * var(--glow-mul)) rgba(255, 220, 0, 0.9), 0 0 10px #fff;
+  animation: glowBreathe 0.2s ease-in-out infinite;
 }
 
 .image-stage img {
@@ -480,6 +562,33 @@ html, body {
     0 0 8px #fff;
   animation: comboCosmic 0.5s linear infinite, comboShift 0.8s linear infinite, comboFlicker 0.08s steps(2) infinite;
 }
+.combo-badge[data-tier="2048"] {
+  background: linear-gradient(135deg, #fff 0%, #b864ff 18%, #4080ff 45%, #00ddff 70%, #ff64b8);
+  background-size: 250% 250%;
+  color: #fff;
+  text-shadow: 0 0 0.4em #fff, 0 0 0.7em #b864ff;
+  box-shadow:
+    0 0 240px rgba(180, 60, 255, 1),
+    0 0 140px rgba(100, 80, 255, 1),
+    0 0 80px rgba(0, 220, 255, 0.95),
+    0 0 36px rgba(255, 100, 220, 0.9),
+    0 0 12px #fff;
+  animation: comboCosmic 0.4s linear infinite, comboShift 0.7s linear infinite, comboFlicker 0.07s steps(2) infinite;
+}
+.combo-badge[data-tier="4096"] {
+  background: linear-gradient(135deg, #fff 0%, #fff 8%, #ff64ff 22%, #ffea64 38%, #64ff64 54%, #64ffff 70%, #ff64b8 86%, #fff);
+  background-size: 400% 400%;
+  color: #fff;
+  text-shadow: 0 0 0.5em #fff, 0 0 0.8em #fff, 0 0 1.2em #ff64ff;
+  box-shadow:
+    0 0 320px rgba(255, 255, 255, 1),
+    0 0 200px rgba(255, 80, 255, 1),
+    0 0 130px rgba(100, 255, 200, 1),
+    0 0 80px rgba(255, 220, 0, 1),
+    0 0 40px rgba(0, 255, 255, 1),
+    0 0 14px #fff;
+  animation: comboCosmic 0.3s linear infinite, comboShift 0.5s linear infinite, comboFlicker 0.06s steps(2) infinite;
+}
 
 @keyframes comboPulse {
   0%, 100% { transform: scale(1) translateY(0); filter: brightness(1); }
@@ -587,7 +696,9 @@ html, body {
 .streak-banner.size-ultimate  { font-size: clamp(60px, 23cqi, 190px); color: #fff;     text-shadow: 0 0 0.3em #fff, 0 0 0.7em #ffea00, 0 0 1.2em #ff6000, 0 0 1.8em rgba(255, 0, 0, 1); }
 .streak-banner.size-godlike   { font-size: clamp(68px, 25cqi, 210px); color: #d4eeff; text-shadow: 0 0 0.3em #fff, 0 0 0.7em #88d0ff, 0 0 1.4em rgba(0, 128, 255, 1); }
 .streak-banner.size-mythic    { font-size: clamp(76px, 27cqi, 230px); color: #ff80ff; text-shadow: 0 0 0.3em #fff, 0 0 0.7em #ff00ff, 0 0 1.4em rgba(150, 0, 255, 1); }
-.streak-banner.size-infinite  { font-size: clamp(86px, 30cqi, 260px); color: #fff;     text-shadow: 0 0 0.3em #fff, 0 0 0.6em #ff00ff, 0 0 1em #00ffff, 0 0 1.5em #ffff00, 0 0 2em #ff0000; }
+.streak-banner.size-infinite     { font-size: clamp(86px, 30cqi, 260px); color: #fff;     text-shadow: 0 0 0.3em #fff, 0 0 0.6em #ff00ff, 0 0 1em #00ffff, 0 0 1.5em #ffff00, 0 0 2em #ff0000; }
+.streak-banner.size-transcendent { font-size: clamp(96px, 33cqi, 290px); color: #c898ff; text-shadow: 0 0 0.3em #fff, 0 0 0.7em #b864ff, 0 0 1.4em rgba(180, 60, 255, 1), 0 0 2em rgba(0, 220, 255, 0.8); }
+.streak-banner.size-omega        { font-size: clamp(110px, 36cqi, 320px); color: #fff;    text-shadow: 0 0 0.3em #fff, 0 0 0.6em #ff80ff, 0 0 1em #00ffff, 0 0 1.5em #ffea00, 0 0 2em #ff4040, 0 0 2.5em #fff; }
 .streak-banner.fire { animation: streakBanner 1000ms cubic-bezier(.22,1,.36,1) forwards; }
 @keyframes streakBanner {
   0%   { transform: translate(-50%, -50%) scale(0.3) rotate(-10deg); opacity: 0; }
@@ -1282,7 +1393,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v23';        // her push'ta bump et
+const BUILD = 'v24';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -1292,7 +1403,7 @@ const SPEED_BONUS_WINDOW_MS = 2000;
 const WRONG_SCORE_PENALTY   = -50;
 const WRONG_TIME_PENALTY_MS = 3000;
 const COMBO_TIER_SIZE       = 5;
-const COMBO_TIERS           = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024];  // streak/5 → çarpan
+const COMBO_TIERS           = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096];  // streak/5 → çarpan
 const LEADERBOARD_SIZE      = 5;
 const LB_STORAGE_KEY        = 'aiornot_leaderboard_v1';
 const SETTINGS_STORAGE_KEY  = 'aiornot_settings_v1';
@@ -1574,6 +1685,22 @@ const sfx = (() => {
     osc.start(t0);
     osc.stop(t0 + dur + 0.02);
   }
+  function noise(dur, vol) {
+    const c = ensure(); if (!c) return;
+    const buf = c.createBuffer(1, Math.max(1, Math.floor(c.sampleRate * dur)), c.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1);
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    const g = c.createGain();
+    const t0 = c.currentTime;
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(vol, t0 + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    src.connect(g).connect(c.destination);
+    src.start(t0);
+    src.stop(t0 + dur + 0.02);
+  }
   function sweep(f1, f2, dur, type, vol) {
     const c = ensure(); if (!c) return;
     const t0 = c.currentTime;
@@ -1712,6 +1839,36 @@ const sfx = (() => {
         tone(30, 1.8, 'sine', 0.28);
         tone(12, 1.8, 'sine', 0.25);
       }, 1180);
+    },
+    // ×2048: transcendent — 9 katman drone + 40 nota + dev orkestral akor
+    streakTranscendent() {
+      [8, 15, 30, 60, 120, 240, 480, 960, 1920].forEach((f, i) => {
+        setTimeout(() => tone(f, 2.5 - i * 0.15, i < 3 ? 'sine' : i < 6 ? 'triangle' : 'square', 0.38 - i * 0.02), i * 18);
+      });
+      const climb = [];
+      for (let i = 0; i < 40; i++) climb.push(40 * Math.pow(2, i / 6));
+      climb.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.10, 'square', 0.30), 220 + i * 22));
+      setTimeout(() => {
+        sweep(3520, 7040, 2.5, 'sawtooth', 0.38);
+        [1318, 1568, 1976, 2349, 2960, 3520, 4435, 5274].forEach((f, i) => tone(f, 2.5, i % 2 ? 'sine' : 'triangle', 0.22 - i * 0.018));
+        [10, 20, 40].forEach(f => tone(f, 2.5, 'sine', 0.30));
+      }, 1380);
+    },
+    // ×4096: omega — 10 katman + white noise boom + 50 nota + ultimate akor
+    streakOmega() {
+      [5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560].forEach((f, i) => {
+        setTimeout(() => tone(f, 2.8 - i * 0.18, i < 3 ? 'sine' : i < 6 ? 'triangle' : 'square', 0.40 - i * 0.025), i * 16);
+      });
+      setTimeout(() => noise(0.4, 0.25), 100);
+      const climb = [];
+      for (let i = 0; i < 50; i++) climb.push(30 * Math.pow(2, i / 7));
+      climb.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.09, 'square', 0.32), 260 + i * 20));
+      setTimeout(() => {
+        sweep(4435, 8870, 2.8, 'sawtooth', 0.40);
+        [1568, 1976, 2349, 2960, 3520, 4435, 5274, 6272, 7459].forEach((f, i) => tone(f, 2.8, i % 2 ? 'sine' : 'triangle', 0.24 - i * 0.016));
+        [5, 10, 20, 40].forEach(f => tone(f, 2.8, 'sine', 0.32));
+        noise(0.6, 0.18);
+      }, 1560);
     },
     // ×1024: infinite — her şey katmanlı, evrensel patlama
     streakInfinite() {
@@ -1895,8 +2052,10 @@ function hideDebugLabel() {
 function fireStreakBanner(mult) {
   const b = document.getElementById('streak-banner');
   b.textContent = 'STREAK ×' + mult;
-  b.classList.remove('fire', 'size-mid', 'size-big', 'size-huge', 'size-insane', 'size-legendary', 'size-ultimate', 'size-godlike', 'size-mythic', 'size-infinite');
-  if      (mult >= 1024) b.classList.add('size-infinite');
+  b.classList.remove('fire', 'size-mid', 'size-big', 'size-huge', 'size-insane', 'size-legendary', 'size-ultimate', 'size-godlike', 'size-mythic', 'size-infinite', 'size-transcendent', 'size-omega');
+  if      (mult >= 4096) b.classList.add('size-omega');
+  else if (mult >= 2048) b.classList.add('size-transcendent');
+  else if (mult >= 1024) b.classList.add('size-infinite');
   else if (mult >= 512)  b.classList.add('size-mythic');
   else if (mult >= 256)  b.classList.add('size-godlike');
   else if (mult >= 128)  b.classList.add('size-ultimate');
@@ -1912,8 +2071,14 @@ function fireStreakBanner(mult) {
 function updateStageTier() {
   const mult = comboMultiplier();
   const stage = document.getElementById('image-stage');
-  if (mult > 1) stage.setAttribute('data-tier', String(mult));
-  else stage.removeAttribute('data-tier');
+  const frame = document.querySelector('.game-frame');
+  if (mult > 1) {
+    stage.setAttribute('data-tier', String(mult));
+    frame.setAttribute('data-tier', String(mult));
+  } else {
+    stage.removeAttribute('data-tier');
+    frame.removeAttribute('data-tier');
+  }
 }
 
 // =========================================================
@@ -2067,7 +2232,9 @@ function handleChoice(choice) {
 
     if (tierUp && newMult > 1) {
       fireStreakBanner(newMult);
-      if      (newMult >= 1024) sfx.streakInfinite();
+      if      (newMult >= 4096) sfx.streakOmega();
+      else if (newMult >= 2048) sfx.streakTranscendent();
+      else if (newMult >= 1024) sfx.streakInfinite();
       else if (newMult >= 512)  sfx.streakMythic();
       else if (newMult >= 256)  sfx.streakGodlike();
       else if (newMult >= 128)  sfx.streakUltimate();
