@@ -265,6 +265,39 @@ html, body {
   border: 1px solid var(--border);
   background: var(--bg-elevated);
   container-type: inline-size;  /* cqi → stage genişliğine göre ölçek */
+  transition: box-shadow 500ms ease, border-color 500ms ease;
+}
+
+/* ============ FIRE / COMBO TIER VISUAL ============ */
+.image-stage[data-tier="2"] {
+  box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.4);
+}
+.image-stage[data-tier="4"] {
+  box-shadow: 0 0 32px rgba(var(--accent-rgb), 0.55), 0 0 14px rgba(var(--accent-rgb), 0.3);
+}
+.image-stage[data-tier="8"] {
+  box-shadow: 0 0 40px rgba(255, 200, 60, 0.65), 0 0 18px rgba(255, 180, 50, 0.45);
+  border-color: rgba(255, 200, 60, 0.55);
+}
+.image-stage[data-tier="16"] {
+  box-shadow: 0 0 52px rgba(255, 130, 40, 0.78), 0 0 26px rgba(255, 100, 30, 0.6);
+  border-color: rgba(255, 130, 40, 0.75);
+  animation: fireBreathe 1.4s ease-in-out infinite;
+}
+.image-stage[data-tier="32"] {
+  box-shadow: 0 0 72px rgba(255, 80, 20, 0.88), 0 0 36px rgba(255, 50, 10, 0.65), 0 0 14px rgba(255, 20, 0, 0.5);
+  border-color: rgba(255, 80, 20, 0.88);
+  animation: fireBreathe 1.0s ease-in-out infinite;
+}
+.image-stage[data-tier="64"] {
+  box-shadow: 0 0 96px rgba(255, 40, 5, 0.96), 0 0 52px rgba(255, 20, 0, 0.78), 0 0 22px rgba(255, 0, 0, 0.65);
+  border-color: rgba(255, 40, 5, 0.96);
+  animation: fireBreathe 0.65s ease-in-out infinite;
+}
+
+@keyframes fireBreathe {
+  0%, 100% { filter: brightness(1) saturate(1); }
+  50%      { filter: brightness(1.2) saturate(1.18); }
 }
 
 .image-stage img {
@@ -379,9 +412,11 @@ html, body {
   white-space: nowrap;
   z-index: 5;
 }
-.streak-banner.size-mid  { font-size: clamp(32px, 12cqi, 96px); }
-.streak-banner.size-big  { font-size: clamp(36px, 14cqi, 110px); text-shadow: 0 0 0.5em var(--gold), 0 0 1em rgba(255, 210, 63, 0.7); }
-.streak-banner.size-huge { font-size: clamp(40px, 16cqi, 130px); text-shadow: 0 0 0.6em var(--gold), 0 0 1.2em rgba(255, 210, 63, 0.85); }
+.streak-banner.size-mid       { font-size: clamp(32px, 12cqi, 96px); }
+.streak-banner.size-big       { font-size: clamp(36px, 14cqi, 110px); text-shadow: 0 0 0.5em var(--gold), 0 0 1em rgba(255, 210, 63, 0.7); }
+.streak-banner.size-huge      { font-size: clamp(40px, 16cqi, 130px); text-shadow: 0 0 0.6em var(--gold), 0 0 1.2em rgba(255, 210, 63, 0.85); }
+.streak-banner.size-insane    { font-size: clamp(46px, 18cqi, 145px); color: #ff9040; text-shadow: 0 0 0.6em #ff8030, 0 0 1.3em rgba(255, 100, 30, 0.85); }
+.streak-banner.size-legendary { font-size: clamp(52px, 20cqi, 160px); color: #ff5020; text-shadow: 0 0 0.7em #ff4010, 0 0 1.6em rgba(255, 50, 10, 0.95), 0 0 0.4em #fff; }
 .streak-banner.fire { animation: streakBanner 1000ms cubic-bezier(.22,1,.36,1) forwards; }
 @keyframes streakBanner {
   0%   { transform: translate(-50%, -50%) scale(0.3) rotate(-10deg); opacity: 0; }
@@ -551,7 +586,12 @@ html, body {
 
 .name-input-row.shown { display: flex; }
 
-.name-input {
+.name-boxes {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+.name-box {
   background: var(--bg-elevated);
   color: var(--accent);
   border: 2px solid var(--border);
@@ -559,17 +599,17 @@ html, body {
   font-size: 56px;
   font-weight: 800;
   text-align: center;
-  letter-spacing: 16px;
-  width: 240px;
-  padding: 16px 16px 16px 32px;
+  width: 84px;
+  height: 104px;
+  padding: 0;
   text-transform: uppercase;
   border-radius: 4px;
   outline: none;
   caret-color: var(--accent);
+  transition: border-color var(--transition), color var(--transition), transform var(--transition);
 }
-
-.name-input:focus { border-color: var(--accent); }
-.name-input.blocked { border-color: var(--danger); color: var(--danger); }
+.name-box:focus { border-color: var(--accent); transform: translateY(-2px); }
+.name-box.blocked { border-color: var(--danger); color: var(--danger); }
 
 .name-error {
   display: none;
@@ -954,7 +994,11 @@ html, body {
     </div>
     <div class="name-input-row" id="name-row">
       <div class="end-label" data-i18n="enterName">TOP 5'E GİRDİN · İSMİNİ GİR</div>
-      <input class="name-input" id="name-input" maxlength="3" autocomplete="off" inputmode="text">
+      <div class="name-boxes">
+        <input class="name-box" maxlength="1" data-pos="0" autocomplete="off" inputmode="text" autocapitalize="characters">
+        <input class="name-box" maxlength="1" data-pos="1" autocomplete="off" inputmode="text" autocapitalize="characters">
+        <input class="name-box" maxlength="1" data-pos="2" autocomplete="off" inputmode="text" autocapitalize="characters">
+      </div>
       <div class="name-error" id="name-error" data-i18n="nameBlocked">Bu isim leaderboard'a eklenemez</div>
     </div>
     <button class="btn-secondary" id="btn-restart" data-i18n="playAgain">TEKRAR OYNA</button>
@@ -1067,7 +1111,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v18';        // her push'ta bump et
+const BUILD = 'v19';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -1077,7 +1121,7 @@ const SPEED_BONUS_WINDOW_MS = 2000;
 const WRONG_SCORE_PENALTY   = -50;
 const WRONG_TIME_PENALTY_MS = 3000;
 const COMBO_TIER_SIZE       = 5;
-const COMBO_TIERS           = [1, 2, 4, 8, 16];  // streak/5 → çarpan
+const COMBO_TIERS           = [1, 2, 4, 8, 16, 32, 64];  // streak/5 → çarpan
 const LEADERBOARD_SIZE      = 5;
 const LB_STORAGE_KEY        = 'aiornot_leaderboard_v1';
 const SETTINGS_STORAGE_KEY  = 'aiornot_settings_v1';
@@ -1418,6 +1462,40 @@ const sfx = (() => {
         tone(1318, 0.75, 'sine', 0.13);
       }, 600);
     },
+    // ×32: çılgın — 4 katman bass + 12-nota tırmanış + 5 sesli akor
+    streakInsane() {
+      tone(40, 1.1, 'sine', 0.27);
+      setTimeout(() => tone(80, 0.85, 'sine', 0.22), 25);
+      setTimeout(() => tone(160, 0.65, 'triangle', 0.18), 50);
+      setTimeout(() => tone(320, 0.50, 'triangle', 0.16), 75);
+      const notes = [130, 165, 196, 247, 294, 370, 440, 523, 659, 784, 988, 1175];
+      notes.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.13, 'square', 0.20), 100 + i * 48));
+      setTimeout(() => {
+        sweep(1568, 3136, 0.85, 'sawtooth', 0.26);
+        tone(784, 0.85, 'triangle', 0.18);
+        tone(1047, 0.85, 'triangle', 0.16);
+        tone(1318, 0.85, 'sine', 0.14);
+        tone(1976, 0.85, 'sine', 0.12);
+      }, 720);
+    },
+    // ×64: efsane — patlama + 16-nota tırmanış 5 oktav + dev finale
+    streakLegendary() {
+      tone(30, 1.3, 'sine', 0.30);
+      setTimeout(() => tone(60, 1.0, 'sine', 0.25), 30);
+      setTimeout(() => tone(120, 0.8, 'sine', 0.22), 60);
+      setTimeout(() => tone(240, 0.6, 'triangle', 0.18), 90);
+      const notes = [98, 130, 165, 196, 247, 294, 370, 440, 523, 659, 784, 988, 1175, 1397, 1661, 1976];
+      notes.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.13, 'square', 0.22), 120 + i * 40));
+      setTimeout(() => {
+        sweep(2349, 4699, 1.1, 'sawtooth', 0.28);
+        tone(987, 1.1, 'triangle', 0.18);
+        tone(1318, 1.1, 'triangle', 0.16);
+        tone(1976, 1.1, 'sine', 0.14);
+        tone(2349, 1.1, 'sine', 0.12);
+        tone(60, 1.1, 'sawtooth', 0.20);
+        tone(40, 1.1, 'sine', 0.22);
+      }, 880);
+    },
     tick()     { tone(1100, 0.05, 'sine', 0.10); },
     countdown(){ tone(620, 0.08, 'triangle', 0.14); },
     go()       { sweep(440, 880, 0.22, 'triangle', 0.20); },
@@ -1556,12 +1634,21 @@ function hideDebugLabel() {
 function fireStreakBanner(mult) {
   const b = document.getElementById('streak-banner');
   b.textContent = 'STREAK ×' + mult;
-  b.classList.remove('fire', 'size-mid', 'size-big', 'size-huge');
-  if      (mult >= 16) b.classList.add('size-huge');
+  b.classList.remove('fire', 'size-mid', 'size-big', 'size-huge', 'size-insane', 'size-legendary');
+  if      (mult >= 64) b.classList.add('size-legendary');
+  else if (mult >= 32) b.classList.add('size-insane');
+  else if (mult >= 16) b.classList.add('size-huge');
   else if (mult >= 8)  b.classList.add('size-big');
   else if (mult >= 4)  b.classList.add('size-mid');
   void b.offsetWidth;
   b.classList.add('fire');
+}
+
+function updateStageTier() {
+  const mult = comboMultiplier();
+  const stage = document.getElementById('image-stage');
+  if (mult > 1) stage.setAttribute('data-tier', String(mult));
+  else stage.removeAttribute('data-tier');
 }
 
 // =========================================================
@@ -1605,6 +1692,7 @@ async function startGame() {
   updateScore();
   updateTimer();
   updateComboBadge(false);
+  updateStageTier();
   setChoicesDisabled(true);
 
   showScreen('game');
@@ -1714,13 +1802,16 @@ function handleChoice(choice) {
 
     if (tierUp && newMult > 1) {
       fireStreakBanner(newMult);
-      if      (newMult >= 16) sfx.streakHuge();
+      if      (newMult >= 64) sfx.streakLegendary();
+      else if (newMult >= 32) sfx.streakInsane();
+      else if (newMult >= 16) sfx.streakHuge();
       else if (newMult >= 8)  sfx.streakBig();
       else if (newMult >= 4)  sfx.streakMid();
       else                    sfx.streakSmall();
     } else {
       sfx.correct();
     }
+    updateStageTier();
     popClass = newMult > 1 ? 'pop-combo' : 'pop-good';
   } else {
     delta = WRONG_SCORE_PENALTY;
@@ -1729,6 +1820,7 @@ function handleChoice(choice) {
     state.streak = 0;
     state.wrongCount++;
     updateComboBadge(false);
+    updateStageTier();
     updateTimer();
     sfx.wrong();
 
@@ -1803,9 +1895,9 @@ function endGame() {
   if (qualifies) {
     sfx.highScore();
     nameRow.classList.add('shown');
-    const ni = document.getElementById('name-input');
-    ni.value = '';
-    setTimeout(() => ni.focus(), 350);
+    clearNameBoxes();
+    showNameError(false);
+    setTimeout(() => focusBox(0), 350);
   } else {
     sfx.end();
     nameRow.classList.remove('shown');
@@ -1887,11 +1979,31 @@ function renderLeaderboard() {
   list.innerHTML = rows.join('');
 }
 
+function getNameBoxes() {
+  return Array.from(document.querySelectorAll('.name-box'));
+}
+
+function getNameFromBoxes() {
+  return getNameBoxes().map(b => b.value).join('').toUpperCase();
+}
+
+function clearNameBoxes() {
+  getNameBoxes().forEach(b => b.value = '');
+}
+
+function focusBox(i) {
+  const boxes = getNameBoxes();
+  if (i >= 0 && i < boxes.length) {
+    boxes[i].focus();
+    try { boxes[i].select(); } catch (e) {}
+  }
+}
+
 async function submitScoreIfNeeded() {
   const nameRow = document.getElementById('name-row');
   if (!nameRow.classList.contains('shown')) return true;
 
-  const raw = document.getElementById('name-input').value;
+  const raw = getNameFromBoxes();
   const clean = sanitizeName(raw);
 
   if (clean.length > 0 && isBlockedName(clean)) {
@@ -1908,7 +2020,7 @@ async function submitScoreIfNeeded() {
 
 function showNameError(on) {
   document.getElementById('name-error').classList.toggle('shown', on);
-  document.getElementById('name-input').classList.toggle('blocked', on);
+  getNameBoxes().forEach(b => b.classList.toggle('blocked', on));
 }
 
 async function resetLeaderboard() {
@@ -1934,10 +2046,38 @@ document.getElementById('btn-restart').addEventListener('click', async () => {
   showScreen('welcome');
 });
 
-document.getElementById('name-input').addEventListener('input', (e) => {
-  e.target.value = sanitizeName(e.target.value);
-  // live blocklist feedback
-  showNameError(e.target.value.length > 0 && isBlockedName(e.target.value));
+// 3-kutu isim girişi: auto-advance + backspace geri + canlı blocklist
+getNameBoxes().forEach((box, idx) => {
+  box.addEventListener('input', (e) => {
+    let v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (v.length > 1) {
+      // birden fazla karakter girildi → kutulara dağıt
+      const boxes = getNameBoxes();
+      for (let i = idx, j = 0; i < boxes.length && j < v.length; i++, j++) {
+        boxes[i].value = v[j];
+      }
+      focusBox(Math.min(boxes.length - 1, idx + v.length));
+    } else {
+      e.target.value = v;
+      if (v.length === 1 && idx < 2) focusBox(idx + 1);
+    }
+    const full = getNameFromBoxes();
+    showNameError(full.length > 0 && isBlockedName(full));
+  });
+
+  box.addEventListener('keydown', (e) => {
+    if (e.key === 'Backspace' && !box.value && idx > 0) {
+      e.preventDefault();
+      const prev = getNameBoxes()[idx - 1];
+      prev.value = '';
+      focusBox(idx - 1);
+      showNameError(false);
+    } else if (e.key === 'ArrowLeft' && idx > 0) {
+      e.preventDefault(); focusBox(idx - 1);
+    } else if (e.key === 'ArrowRight' && idx < 2) {
+      e.preventDefault(); focusBox(idx + 1);
+    }
+  });
 });
 
 // reset: logo'ya 5 tıkla (3sn içinde) → onay → temizle
