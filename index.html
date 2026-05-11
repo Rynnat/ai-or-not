@@ -379,8 +379,9 @@ html, body {
   white-space: nowrap;
   z-index: 5;
 }
-.streak-banner.size-mid { font-size: clamp(32px, 12cqi, 96px); }
-.streak-banner.size-big { font-size: clamp(36px, 14cqi, 110px); text-shadow: 0 0 0.5em var(--gold), 0 0 1em rgba(255, 210, 63, 0.7); }
+.streak-banner.size-mid  { font-size: clamp(32px, 12cqi, 96px); }
+.streak-banner.size-big  { font-size: clamp(36px, 14cqi, 110px); text-shadow: 0 0 0.5em var(--gold), 0 0 1em rgba(255, 210, 63, 0.7); }
+.streak-banner.size-huge { font-size: clamp(40px, 16cqi, 130px); text-shadow: 0 0 0.6em var(--gold), 0 0 1.2em rgba(255, 210, 63, 0.85); }
 .streak-banner.fire { animation: streakBanner 1000ms cubic-bezier(.22,1,.36,1) forwards; }
 @keyframes streakBanner {
   0%   { transform: translate(-50%, -50%) scale(0.3) rotate(-10deg); opacity: 0; }
@@ -825,17 +826,17 @@ html, body {
 }
 .credits-btn:active { transform: scale(0.96); border-color: var(--accent); color: var(--accent); }
 
-.credits-content, .tech-content { display: none; }
-.credits-content.shown, .tech-content.shown { display: block; }
-.credits-content .row, .tech-content .row {
+.credits-content, .tech-content, .fn-content { display: none; }
+.credits-content.shown, .tech-content.shown, .fn-content.shown { display: block; }
+.credits-content .row, .tech-content .row, .fn-content .row {
   padding: 8px 0;
   font-size: 13px;
   color: var(--fg-muted);
   letter-spacing: 1px;
   border-bottom: 1px dashed var(--border);
 }
-.credits-content .row:last-child, .tech-content .row:last-child { border-bottom: none; }
-.credits-content .row strong, .tech-content .row strong {
+.credits-content .row:last-child, .tech-content .row:last-child, .fn-content .row:last-child { border-bottom: none; }
+.credits-content .row strong, .tech-content .row strong, .fn-content .row strong {
   color: var(--accent);
   display: block;
   font-size: 11px;
@@ -994,6 +995,25 @@ html, body {
       <div class="row"><strong data-i18n="cr_sound">SES</strong>WebAudio synthesis</div>
       <div class="row"><strong data-i18n="cr_font">FONT</strong>JetBrains Mono</div>
       <button class="tech-cta" id="open-tech" data-i18n="tech">TEKNİK</button>
+      <button class="tech-cta" id="open-fn" data-i18n="functions" style="margin-top: 8px;">FONKSİYONLAR</button>
+    </div>
+    <div class="fn-content" id="fn-content">
+      <div class="row"><strong data-i18n="fn_combo_t">KOMBO SİSTEMİ</strong><span data-i18n="fn_combo">5 doğruda ×2, sonra ×4, ×8, ×16 katlamalı</span></div>
+      <div class="row"><strong data-i18n="fn_speed_t">HIZ BONUSU</strong><span data-i18n="fn_speed">2 saniye içinde cevapta +100, lineer azalma</span></div>
+      <div class="row"><strong data-i18n="fn_wrong_t">YANLIŞ CEZASI</strong><span data-i18n="fn_wrong">−50 puan + kalan süreden −3 saniye</span></div>
+      <div class="row"><strong data-i18n="fn_cd_t">3-2-1 GERİ SAYIM</strong><span data-i18n="fn_cd">Hazırlık için oyun başında bekleme</span></div>
+      <div class="row"><strong data-i18n="fn_low_t">SON 5 SANİYE UYARISI</strong><span data-i18n="fn_low">Sayaç kırmızıya döner, ritmik pulse + tik sesi</span></div>
+      <div class="row"><strong data-i18n="fn_streak_t">STREAK BANNER</strong><span data-i18n="fn_streak">Tier-up'ta altın yazı + tier'a özel ses katmanı</span></div>
+      <div class="row"><strong data-i18n="fn_hs_t">HIGH SCORE KUTLAMASI</strong><span data-i18n="fn_hs">Top 5'e girince C major arpejyo + sürdürülen finale</span></div>
+      <div class="row"><strong data-i18n="fn_censor_t">İSİM SANSÜRÜ</strong><span data-i18n="fn_censor">70+ uygunsuz 3 harf engellenir + canlı uyarı</span></div>
+      <div class="row"><strong data-i18n="fn_reset_t">LEADERBOARD RESET</strong><span data-i18n="fn_reset">Welcome logosuna 5 tık → onaylı sıfırlama</span></div>
+      <div class="row"><strong data-i18n="fn_top5_t">TOP 5 LEADERBOARD</strong><span data-i18n="fn_top5">Skor tablosu, yerel veya online (JSONBin)</span></div>
+      <div class="row"><strong data-i18n="fn_themes_t">5 TEMA</strong><span data-i18n="fn_themes">Yeşil elma, üzüm, kiraz, yaban mersini, limon</span></div>
+      <div class="row"><strong data-i18n="fn_lang_t">TR / EN DİL</strong><span data-i18n="fn_lang">Tüm metinler anlık tercüme</span></div>
+      <div class="row"><strong data-i18n="fn_sound_t">SES KONTROLÜ</strong><span data-i18n="fn_sound">Tüm efektleri tek tıkla kes</span></div>
+      <div class="row"><strong data-i18n="fn_stats_t">END İSTATİSTİKLERİ</strong><span data-i18n="fn_stats">Doğru/yanlış, en uzun seri, doğruluk %</span></div>
+      <div class="row"><strong data-i18n="fn_offline_t">OFFLINE / PWA</strong><span data-i18n="fn_offline">İnternet yokken bile çalışır, ana ekrana eklenebilir</span></div>
+      <div class="row"><strong data-i18n="fn_stage_t">4:3 SAHNE</strong><span data-i18n="fn_stage">Her tablette merkez kolon, yan gutters</span></div>
     </div>
     <div class="tech-content" id="tech-content">
       <div class="row"><strong>HTML5 + CSS3</strong><span data-i18n="tech_html">Tek dosya, gömülü stil ve script</span></div>
@@ -1038,7 +1058,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v16';        // her push'ta bump et
+const BUILD = 'v17';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -1048,7 +1068,7 @@ const SPEED_BONUS_WINDOW_MS = 2000;
 const WRONG_SCORE_PENALTY   = -50;
 const WRONG_TIME_PENALTY_MS = 3000;
 const COMBO_TIER_SIZE       = 5;
-const COMBO_TIERS           = [1, 2, 4, 8];  // streak/5 → çarpan
+const COMBO_TIERS           = [1, 2, 4, 8, 16];  // streak/5 → çarpan
 const LEADERBOARD_SIZE      = 5;
 const LB_STORAGE_KEY        = 'aiornot_leaderboard_v1';
 const SETTINGS_STORAGE_KEY  = 'aiornot_settings_v1';
@@ -1116,6 +1136,23 @@ const I18N = {
     statStreak: 'EN UZUN SERİ',
     statAccuracy:'DOĞRULUK',
     tech:       'TEKNİK',
+    functions:  'FONKSİYONLAR',
+    fn_combo_t: 'KOMBO SİSTEMİ',          fn_combo:   '5 doğruda ×2, sonra ×4, ×8, ×16 katlamalı',
+    fn_speed_t: 'HIZ BONUSU',             fn_speed:   '2 saniye içinde cevapta +100, lineer azalma',
+    fn_wrong_t: 'YANLIŞ CEZASI',          fn_wrong:   '−50 puan + kalan süreden −3 saniye',
+    fn_cd_t:    '3-2-1 GERİ SAYIM',       fn_cd:      'Hazırlık için oyun başında bekleme',
+    fn_low_t:   'SON 5 SANİYE UYARISI',   fn_low:     'Sayaç kırmızıya döner, ritmik pulse + tik sesi',
+    fn_streak_t:'STREAK BANNER',          fn_streak:  "Tier-up'ta altın yazı + tier'a özel ses katmanı",
+    fn_hs_t:    'HIGH SCORE KUTLAMASI',   fn_hs:      "Top 5'e girince C major arpejyo + sürdürülen finale",
+    fn_censor_t:'İSİM SANSÜRÜ',           fn_censor:  '70+ uygunsuz 3 harf engellenir + canlı uyarı',
+    fn_reset_t: 'LEADERBOARD RESET',      fn_reset:   'Welcome logosuna 5 tık → onaylı sıfırlama',
+    fn_top5_t:  'TOP 5 LEADERBOARD',      fn_top5:    'Skor tablosu, yerel veya online (JSONBin)',
+    fn_themes_t:'5 TEMA',                 fn_themes:  'Yeşil elma, üzüm, kiraz, yaban mersini, limon',
+    fn_lang_t:  'TR / EN DİL',            fn_lang:    'Tüm metinler anlık tercüme',
+    fn_sound_t: 'SES KONTROLÜ',           fn_sound:   'Tüm efektleri tek tıkla kes',
+    fn_stats_t: 'END İSTATİSTİKLERİ',     fn_stats:   'Doğru/yanlış, en uzun seri, doğruluk %',
+    fn_offline_t:'OFFLINE / PWA',         fn_offline: 'İnternet yokken bile çalışır, ana ekrana eklenebilir',
+    fn_stage_t: '4:3 SAHNE',              fn_stage:   'Her tablette merkez kolon, yan gutters',
     tech_html:  'Tek dosya, gömülü stil ve script',
     tech_cq:    'Sahne genişliğine göre yazı tipinin adaptif ölçeklenmesi',
     tech_vars:  '5 meyve teması için değişken tabanlı renk sistemi',
@@ -1165,6 +1202,23 @@ const I18N = {
     statStreak: 'BEST STREAK',
     statAccuracy:'ACCURACY',
     tech:       'TECHNICAL',
+    functions:  'FEATURES',
+    fn_combo_t: 'COMBO SYSTEM',           fn_combo:   '5 correct → ×2, then ×4, ×8, ×16 multiplier',
+    fn_speed_t: 'SPEED BONUS',            fn_speed:   'Up to +100 if answered within 2 seconds, linear decay',
+    fn_wrong_t: 'WRONG PENALTY',          fn_wrong:   '−50 points + −3 seconds from remaining time',
+    fn_cd_t:    '3-2-1 COUNTDOWN',        fn_cd:      'Preparation pause before round starts',
+    fn_low_t:   'LAST 5 SECONDS WARNING', fn_low:     'Timer turns red, rhythmic pulse + tick sound',
+    fn_streak_t:'STREAK BANNER',          fn_streak:  'Tier-up shows gold text + tier-specific sound layer',
+    fn_hs_t:    'HIGH SCORE FANFARE',     fn_hs:      'C major arpeggio + sustained finale on top 5 entry',
+    fn_censor_t:'NAME CENSORSHIP',        fn_censor:  '70+ inappropriate 3-letter codes blocked + live warning',
+    fn_reset_t: 'LEADERBOARD RESET',      fn_reset:   '5 taps on welcome logo → confirmed reset',
+    fn_top5_t:  'TOP 5 LEADERBOARD',      fn_top5:    'Score table, local or online (JSONBin)',
+    fn_themes_t:'5 THEMES',               fn_themes:  'Apple, grape, cherry, blueberry, lemon',
+    fn_lang_t:  'TR / EN',                fn_lang:    'All text translates instantly',
+    fn_sound_t: 'SOUND TOGGLE',           fn_sound:   'Mute all effects with one tap',
+    fn_stats_t: 'END SCREEN STATS',       fn_stats:   'Correct/wrong, best streak, accuracy %',
+    fn_offline_t:'OFFLINE / PWA',         fn_offline: 'Works offline, installable to home screen',
+    fn_stage_t: '4:3 STAGE',              fn_stage:   'Centered column with side gutters on any tablet',
     tech_html:  'Single file, inline styles and scripts',
     tech_cq:    'Adaptive font scaling via stage width',
     tech_vars:  'Variable-based color system for 5 fruit themes',
@@ -1341,6 +1395,20 @@ const sfx = (() => {
         tone(1047, 0.55, 'triangle', 0.12);
       }, 500);
     },
+    // ×16: epik — 3 oktav tırmanış + 4 katmanlı finale
+    streakHuge() {
+      tone(50, 0.95, 'sine', 0.25);
+      setTimeout(() => tone(100, 0.75, 'sine', 0.20), 25);
+      setTimeout(() => tone(200, 0.60, 'triangle', 0.17), 50);
+      const notes = [196, 261, 329, 392, 523, 659, 784, 1047, 1568];
+      notes.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.13, 'square', 0.19), 80 + i * 55));
+      setTimeout(() => {
+        sweep(1568, 3136, 0.75, 'sawtooth', 0.24);
+        tone(784, 0.75, 'triangle', 0.16);
+        tone(1047, 0.75, 'triangle', 0.14);
+        tone(1318, 0.75, 'sine', 0.13);
+      }, 600);
+    },
     tick()     { tone(1100, 0.05, 'sine', 0.10); },
     countdown(){ tone(620, 0.08, 'triangle', 0.14); },
     go()       { sweep(440, 880, 0.22, 'triangle', 0.20); },
@@ -1479,9 +1547,10 @@ function hideDebugLabel() {
 function fireStreakBanner(mult) {
   const b = document.getElementById('streak-banner');
   b.textContent = 'STREAK ×' + mult;
-  b.classList.remove('fire', 'size-mid', 'size-big');
-  if      (mult >= 8) b.classList.add('size-big');
-  else if (mult >= 4) b.classList.add('size-mid');
+  b.classList.remove('fire', 'size-mid', 'size-big', 'size-huge');
+  if      (mult >= 16) b.classList.add('size-huge');
+  else if (mult >= 8)  b.classList.add('size-big');
+  else if (mult >= 4)  b.classList.add('size-mid');
   void b.offsetWidth;
   b.classList.add('fire');
 }
@@ -1620,6 +1689,7 @@ function handleChoice(choice) {
   const elapsed = performance.now() - state.questionStart;
 
   let delta, popClass;
+  let tierUp = false;
   if (correct) {
     const bonus = Math.max(0, SPEED_BONUS_MAX - elapsed / (SPEED_BONUS_WINDOW_MS / SPEED_BONUS_MAX));
     const base = BASE_SCORE + bonus;
@@ -1630,14 +1700,15 @@ function handleChoice(choice) {
     const newMult = comboMultiplier();
     delta = Math.round(base * newMult);
 
-    const tierUp = newMult > prevMult;
+    tierUp = newMult > prevMult;
     updateComboBadge(tierUp || newMult > 1);
 
     if (tierUp && newMult > 1) {
       fireStreakBanner(newMult);
-      if      (newMult >= 8) sfx.streakBig();
-      else if (newMult >= 4) sfx.streakMid();
-      else                   sfx.streakSmall();
+      if      (newMult >= 16) sfx.streakHuge();
+      else if (newMult >= 8)  sfx.streakBig();
+      else if (newMult >= 4)  sfx.streakMid();
+      else                    sfx.streakSmall();
     } else {
       sfx.correct();
     }
@@ -1661,7 +1732,8 @@ function handleChoice(choice) {
 
   state.score += delta;
   updateScore();
-  flashFeedback(correct, delta, popClass);
+  // tier-up'ta sadece streak banner gösterilsin, +delta popup'ı suppress et (üst üste binmesin)
+  flashFeedback(correct, delta, popClass, !tierUp);
 
   state.busy = true;
   setChoicesDisabled(true);
@@ -1675,11 +1747,13 @@ function handleChoice(choice) {
   }, FEEDBACK_HOLD_MS);
 }
 
-function flashFeedback(correct, delta, popClass) {
+function flashFeedback(correct, delta, popClass, showPop) {
   const flash = document.getElementById('flash');
   flash.classList.remove('flash-correct', 'flash-wrong');
   void flash.offsetWidth;
   flash.classList.add(correct ? 'flash-correct' : 'flash-wrong');
+
+  if (showPop === false) return;
 
   const stage = document.getElementById('image-stage');
   const pop = document.createElement('div');
@@ -1689,7 +1763,7 @@ function flashFeedback(correct, delta, popClass) {
   const absD = Math.abs(delta);
   const stageW = stage.clientWidth || 600;
   const desired = 90 + absD * 0.32;
-  const cap = stageW * 0.32;  // stage'in %32'sinden büyük olmasın
+  const cap = stageW * 0.32;
   const size = Math.max(40, Math.min(280, desired, cap));
   pop.style.fontSize = size + 'px';
   stage.appendChild(pop);
@@ -1910,11 +1984,17 @@ function updateSoundToggle() {
   labelSpan.setAttribute('data-i18n', state.soundEnabled ? 'on' : 'off');
 }
 
-function openSettings() {
-  document.getElementById('settings-modal').classList.add('shown');
-  document.getElementById('settings-content').classList.remove('hidden');
+function _resetModalPanes() {
+  document.getElementById('settings-content').classList.add('hidden');
   document.getElementById('credits-content').classList.remove('shown');
   document.getElementById('tech-content').classList.remove('shown');
+  document.getElementById('fn-content').classList.remove('shown');
+}
+
+function openSettings() {
+  document.getElementById('settings-modal').classList.add('shown');
+  _resetModalPanes();
+  document.getElementById('settings-content').classList.remove('hidden');
   document.getElementById('modal-back').classList.remove('shown');
   document.getElementById('modal-title').setAttribute('data-i18n', 'settings');
   applyLang();
@@ -1926,8 +2006,7 @@ function closeSettings() {
 }
 
 function showCredits() {
-  document.getElementById('settings-content').classList.add('hidden');
-  document.getElementById('tech-content').classList.remove('shown');
+  _resetModalPanes();
   document.getElementById('credits-content').classList.add('shown');
   document.getElementById('modal-back').classList.remove('shown');
   document.getElementById('modal-title').setAttribute('data-i18n', 'credits');
@@ -1935,10 +2014,18 @@ function showCredits() {
 }
 
 function showTech() {
-  document.getElementById('credits-content').classList.remove('shown');
+  _resetModalPanes();
   document.getElementById('tech-content').classList.add('shown');
   document.getElementById('modal-back').classList.add('shown');
   document.getElementById('modal-title').setAttribute('data-i18n', 'tech');
+  applyLang();
+}
+
+function showFunctions() {
+  _resetModalPanes();
+  document.getElementById('fn-content').classList.add('shown');
+  document.getElementById('modal-back').classList.add('shown');
+  document.getElementById('modal-title').setAttribute('data-i18n', 'functions');
   applyLang();
 }
 
@@ -1972,6 +2059,7 @@ document.querySelectorAll('.theme-btn').forEach(b => {
 });
 document.getElementById('open-credits').addEventListener('click', () => { sfx.click(); showCredits(); });
 document.getElementById('open-tech').addEventListener('click', () => { sfx.click(); showTech(); });
+document.getElementById('open-fn').addEventListener('click', () => { sfx.click(); showFunctions(); });
 document.getElementById('modal-back').addEventListener('click', () => { sfx.click(); showCredits(); });
 
 // =========================================================
