@@ -176,18 +176,24 @@ html, body {
 .edge-toggle.left  { left: 0;  border-left:  none; border-radius: 0 8px 8px 0; }
 
 @media (max-width: 720px) {
-  #welcome { overflow: hidden; padding: 32px 0; }
+  #welcome {
+    overflow: hidden;
+    padding: 32px 0;
+    align-items: flex-start;  /* center yapınca 200% wide grid taşıyordu */
+  }
   .welcome-grid {
     grid-template-columns: 1fr 1fr;
     width: 200%;
+    max-width: none;
     gap: 0;
-    max-width: 200%;
+    height: 100%;
     transition: transform 320ms cubic-bezier(.22,1,.36,1);
   }
   .welcome-left, .welcome-right {
     display: flex;
     width: 100%;
     padding: 0 32px;
+    justify-content: center;
   }
   #welcome.board-shown .welcome-grid { transform: translateX(-50%); }
 
@@ -1771,7 +1777,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v38';        // her push'ta bump et
+const BUILD = 'v39';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
