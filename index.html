@@ -306,10 +306,53 @@ html, body {
   border-color: rgba(255, 200, 0, 1);
   animation: fireBreathe 0.45s ease-in-out infinite, fireShake 0.22s ease-in-out infinite;
 }
+.image-stage[data-tier="256"] {
+  box-shadow:
+    0 0 200px rgba(180, 230, 255, 1),
+    0 0 120px rgba(255, 255, 255, 0.95),
+    0 0 60px rgba(255, 150, 50, 0.85),
+    0 0 24px rgba(255, 255, 200, 0.8),
+    inset 0 0 100px rgba(200, 240, 255, 0.5);
+  border-color: rgba(220, 240, 255, 1);
+  animation: starHeat 0.4s ease-in-out infinite, fireShake 0.18s ease-in-out infinite;
+}
+.image-stage[data-tier="512"] {
+  box-shadow:
+    0 0 240px rgba(220, 100, 255, 1),
+    0 0 140px rgba(150, 220, 255, 0.95),
+    0 0 80px rgba(255, 100, 255, 0.9),
+    0 0 36px rgba(255, 255, 255, 0.8),
+    inset 0 0 120px rgba(220, 150, 255, 0.55);
+  border-color: rgba(255, 150, 255, 1);
+  animation: plasma 1.2s linear infinite, fireShake 0.15s ease-in-out infinite;
+}
+.image-stage[data-tier="1024"] {
+  box-shadow:
+    0 0 320px rgba(255, 255, 255, 1),
+    0 0 200px rgba(255, 100, 200, 1),
+    0 0 120px rgba(100, 200, 255, 1),
+    0 0 60px rgba(255, 255, 0, 1),
+    0 0 24px rgba(255, 255, 255, 1),
+    inset 0 0 160px rgba(255, 255, 255, 0.6);
+  border-color: #fff;
+  animation: cosmic 0.6s linear infinite, fireShake 0.1s ease-in-out infinite;
+}
 
 @keyframes fireBreathe {
   0%, 100% { filter: brightness(1) saturate(1); }
   50%      { filter: brightness(1.28) saturate(1.25); }
+}
+@keyframes starHeat {
+  0%, 100% { filter: brightness(1.1) saturate(1.2); }
+  50%      { filter: brightness(1.42) saturate(1.45); }
+}
+@keyframes plasma {
+  0%   { filter: brightness(1.15) saturate(1.3) hue-rotate(0deg); }
+  100% { filter: brightness(1.15) saturate(1.3) hue-rotate(360deg); }
+}
+@keyframes cosmic {
+  0%   { filter: brightness(1.3) saturate(1.6) hue-rotate(0deg); }
+  100% { filter: brightness(1.45) saturate(1.6) hue-rotate(360deg); }
 }
 @keyframes fireShake {
   0%, 100% { translate: 0 0; }
@@ -397,6 +440,42 @@ html, body {
     0 0 4px #fff;
   animation: comboPulse 0.45s ease-in-out infinite, comboFlicker 0.12s steps(2) infinite, comboShift 1.8s linear infinite;
 }
+.combo-badge[data-tier="256"] {
+  background: linear-gradient(135deg, #fff 0%, #d4eeff 30%, #66c3ff 60%, #0080ff 100%);
+  color: #001830;
+  text-shadow: 0 0 0.3em #fff, 0 0 0.6em #88d0ff;
+  box-shadow:
+    0 0 180px rgba(100, 200, 255, 1),
+    0 0 100px rgba(255, 255, 255, 0.95),
+    0 0 50px rgba(255, 200, 100, 0.75),
+    0 0 8px #fff;
+  animation: comboStarPulse 0.4s ease-in-out infinite, comboFlicker 0.1s steps(2) infinite;
+}
+.combo-badge[data-tier="512"] {
+  background: linear-gradient(135deg, #ff00ff 0%, #ff80ff 25%, #c080ff 55%, #80c0ff 85%, #00ffff);
+  background-size: 200% 200%;
+  color: #fff;
+  text-shadow: 0 0 0.3em #fff, 0 0 0.5em #ff80ff;
+  box-shadow:
+    0 0 220px rgba(255, 0, 255, 1),
+    0 0 130px rgba(150, 100, 255, 0.95),
+    0 0 70px rgba(100, 200, 255, 0.9),
+    0 0 8px #fff;
+  animation: comboPlasma 1.0s linear infinite, comboFlicker 0.09s steps(2) infinite, comboShift 1.4s linear infinite;
+}
+.combo-badge[data-tier="1024"] {
+  background: linear-gradient(135deg, #fff 0%, #ff00ff 18%, #ff8000 36%, #ffff00 54%, #00ff80 72%, #00ffff 90%, #fff);
+  background-size: 300% 300%;
+  color: #fff;
+  text-shadow: 0 0 0.4em #fff, 0 0 0.7em #fff, 0 0 1em rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 0 280px rgba(255, 255, 255, 1),
+    0 0 170px rgba(255, 0, 255, 1),
+    0 0 100px rgba(100, 255, 200, 1),
+    0 0 50px rgba(255, 255, 100, 1),
+    0 0 8px #fff;
+  animation: comboCosmic 0.5s linear infinite, comboShift 0.8s linear infinite, comboFlicker 0.08s steps(2) infinite;
+}
 
 @keyframes comboPulse {
   0%, 100% { transform: scale(1) translateY(0); filter: brightness(1); }
@@ -409,6 +488,20 @@ html, body {
 @keyframes comboShift {
   0%   { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
+}
+@keyframes comboStarPulse {
+  0%, 100% { transform: scale(1) translateY(0); filter: brightness(1.1) saturate(1.2); }
+  50%      { transform: scale(1.15) translateY(-3px); filter: brightness(1.4) saturate(1.4); }
+}
+@keyframes comboPlasma {
+  0%   { transform: scale(1) translateY(0); filter: brightness(1.15) hue-rotate(0deg); }
+  50%  { transform: scale(1.12) translateY(-3px); filter: brightness(1.35) hue-rotate(180deg); }
+  100% { transform: scale(1) translateY(0); filter: brightness(1.15) hue-rotate(360deg); }
+}
+@keyframes comboCosmic {
+  0%   { transform: scale(1) translateY(0); filter: brightness(1.3) saturate(1.5) hue-rotate(0deg); }
+  50%  { transform: scale(1.18) translateY(-4px); filter: brightness(1.55) saturate(1.6) hue-rotate(180deg); }
+  100% { transform: scale(1) translateY(0); filter: brightness(1.3) saturate(1.5) hue-rotate(360deg); }
 }
 @keyframes comboBump {
   0%   { transform: scale(1) rotate(0); }
@@ -488,6 +581,9 @@ html, body {
 .streak-banner.size-insane    { font-size: clamp(46px, 18cqi, 145px); color: #ff9040; text-shadow: 0 0 0.6em #ff8030, 0 0 1.3em rgba(255, 100, 30, 0.85); }
 .streak-banner.size-legendary { font-size: clamp(52px, 20cqi, 160px); color: #ff5020; text-shadow: 0 0 0.7em #ff4010, 0 0 1.6em rgba(255, 50, 10, 0.95), 0 0 0.4em #fff; }
 .streak-banner.size-ultimate  { font-size: clamp(60px, 23cqi, 190px); color: #fff;     text-shadow: 0 0 0.3em #fff, 0 0 0.7em #ffea00, 0 0 1.2em #ff6000, 0 0 1.8em rgba(255, 0, 0, 1); }
+.streak-banner.size-godlike   { font-size: clamp(68px, 25cqi, 210px); color: #d4eeff; text-shadow: 0 0 0.3em #fff, 0 0 0.7em #88d0ff, 0 0 1.4em rgba(0, 128, 255, 1); }
+.streak-banner.size-mythic    { font-size: clamp(76px, 27cqi, 230px); color: #ff80ff; text-shadow: 0 0 0.3em #fff, 0 0 0.7em #ff00ff, 0 0 1.4em rgba(150, 0, 255, 1); }
+.streak-banner.size-infinite  { font-size: clamp(86px, 30cqi, 260px); color: #fff;     text-shadow: 0 0 0.3em #fff, 0 0 0.6em #ff00ff, 0 0 1em #00ffff, 0 0 1.5em #ffff00, 0 0 2em #ff0000; }
 .streak-banner.fire { animation: streakBanner 1000ms cubic-bezier(.22,1,.36,1) forwards; }
 @keyframes streakBanner {
   0%   { transform: translate(-50%, -50%) scale(0.3) rotate(-10deg); opacity: 0; }
@@ -1182,7 +1278,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v21';        // her push'ta bump et
+const BUILD = 'v22';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -1192,7 +1288,7 @@ const SPEED_BONUS_WINDOW_MS = 2000;
 const WRONG_SCORE_PENALTY   = -50;
 const WRONG_TIME_PENALTY_MS = 3000;
 const COMBO_TIER_SIZE       = 5;
-const COMBO_TIERS           = [1, 2, 4, 8, 16, 32, 64, 128];  // streak/5 → çarpan
+const COMBO_TIERS           = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024];  // streak/5 → çarpan
 const LEADERBOARD_SIZE      = 5;
 const LB_STORAGE_KEY        = 'aiornot_leaderboard_v1';
 const SETTINGS_STORAGE_KEY  = 'aiornot_settings_v1';
@@ -1567,6 +1663,73 @@ const sfx = (() => {
         tone(40, 1.1, 'sine', 0.22);
       }, 880);
     },
+    // ×256: godlike — 6 katman drone + 24-nota patlama + 7-sesli akor
+    streakGodlike() {
+      tone(15, 1.8, 'sine', 0.34);
+      setTimeout(() => tone(30, 1.5, 'sine', 0.30), 25);
+      setTimeout(() => tone(60, 1.2, 'sine', 0.26), 50);
+      setTimeout(() => tone(120, 1.0, 'triangle', 0.22), 75);
+      setTimeout(() => tone(240, 0.8, 'triangle', 0.19), 100);
+      setTimeout(() => tone(480, 0.6, 'triangle', 0.17), 125);
+      const notes = [73, 98, 110, 130, 165, 196, 220, 247, 294, 329, 392, 440, 523, 587, 659, 784, 880, 988, 1175, 1397, 1568, 1976, 2349, 2637];
+      notes.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.11, 'square', 0.26), 150 + i * 30));
+      setTimeout(() => {
+        sweep(2349, 4699, 1.6, 'sawtooth', 0.32);
+        tone(987, 1.6, 'triangle', 0.22);
+        tone(1318, 1.6, 'triangle', 0.20);
+        tone(1976, 1.6, 'sine', 0.18);
+        tone(2349, 1.6, 'sine', 0.16);
+        tone(2637, 1.6, 'sine', 0.14);
+        tone(3136, 1.6, 'sine', 0.12);
+        tone(60, 1.6, 'sawtooth', 0.24);
+        tone(40, 1.6, 'sine', 0.26);
+        tone(20, 1.6, 'sine', 0.24);
+      }, 1050);
+    },
+    // ×512: mythic — disonant cluster + paralel arpejyolar + iki katman finale
+    streakMythic() {
+      tone(12, 2.0, 'sine', 0.36);
+      setTimeout(() => tone(25, 1.7, 'sine', 0.32), 25);
+      setTimeout(() => tone(50, 1.4, 'sine', 0.28), 50);
+      setTimeout(() => tone(100, 1.1, 'triangle', 0.24), 75);
+      setTimeout(() => tone(200, 0.9, 'triangle', 0.20), 100);
+      // alien dissonant cluster
+      setTimeout(() => { tone(370, 0.4, 'sawtooth', 0.18); tone(392, 0.4, 'sawtooth', 0.16); tone(415, 0.4, 'sawtooth', 0.14); }, 130);
+      const climb = [65, 87, 110, 130, 165, 196, 220, 247, 277, 311, 349, 392, 466, 523, 587, 622, 698, 784, 880, 988, 1109, 1244, 1397, 1568, 1760, 1976];
+      climb.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.10, 'square', 0.27), 200 + i * 28));
+      setTimeout(() => {
+        sweep(2637, 5274, 1.8, 'sawtooth', 0.34);
+        tone(1109, 1.8, 'triangle', 0.22);
+        tone(1397, 1.8, 'triangle', 0.20);
+        tone(1976, 1.8, 'sine', 0.18);
+        tone(2349, 1.8, 'sine', 0.16);
+        tone(2793, 1.8, 'sine', 0.14);
+        tone(50, 1.8, 'sawtooth', 0.26);
+        tone(30, 1.8, 'sine', 0.28);
+        tone(12, 1.8, 'sine', 0.25);
+      }, 1180);
+    },
+    // ×1024: infinite — her şey katmanlı, evrensel patlama
+    streakInfinite() {
+      // 8-katman drone
+      [10, 20, 40, 80, 160, 320, 640, 1280].forEach((f, i) => setTimeout(() => tone(f, 2.2 - i * 0.15, i < 3 ? 'sine' : 'triangle', 0.35 - i * 0.025), i * 20));
+      // 32-nota MEGA climb
+      const climb = [55, 73, 87, 110, 123, 147, 165, 196, 220, 247, 277, 311, 349, 392, 440, 494, 523, 587, 659, 740, 831, 932, 988, 1109, 1244, 1397, 1568, 1760, 1976, 2217, 2489, 2794];
+      climb.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.10, 'square', 0.28), 250 + i * 25));
+      // EXPLOSIVE finale: rich harmonic stack
+      setTimeout(() => {
+        sweep(3136, 6272, 2.2, 'sawtooth', 0.36);
+        tone(1175, 2.2, 'triangle', 0.24);
+        tone(1568, 2.2, 'triangle', 0.22);
+        tone(1976, 2.2, 'sine', 0.20);
+        tone(2489, 2.2, 'sine', 0.18);
+        tone(2960, 2.2, 'sine', 0.16);
+        tone(3520, 2.2, 'sine', 0.14);
+        tone(40, 2.2, 'sawtooth', 0.28);
+        tone(25, 2.2, 'sine', 0.30);
+        tone(15, 2.2, 'sine', 0.26);
+      }, 1300);
+    },
     // ×128: ultimate — 5 katman drone + 20-nota patlama + dev akor cadansı
     streakUltimate() {
       tone(20, 1.6, 'sine', 0.32);
@@ -1728,13 +1891,16 @@ function hideDebugLabel() {
 function fireStreakBanner(mult) {
   const b = document.getElementById('streak-banner');
   b.textContent = 'STREAK ×' + mult;
-  b.classList.remove('fire', 'size-mid', 'size-big', 'size-huge', 'size-insane', 'size-legendary', 'size-ultimate');
-  if      (mult >= 128) b.classList.add('size-ultimate');
-  else if (mult >= 64)  b.classList.add('size-legendary');
-  else if (mult >= 32)  b.classList.add('size-insane');
-  else if (mult >= 16)  b.classList.add('size-huge');
-  else if (mult >= 8)   b.classList.add('size-big');
-  else if (mult >= 4)   b.classList.add('size-mid');
+  b.classList.remove('fire', 'size-mid', 'size-big', 'size-huge', 'size-insane', 'size-legendary', 'size-ultimate', 'size-godlike', 'size-mythic', 'size-infinite');
+  if      (mult >= 1024) b.classList.add('size-infinite');
+  else if (mult >= 512)  b.classList.add('size-mythic');
+  else if (mult >= 256)  b.classList.add('size-godlike');
+  else if (mult >= 128)  b.classList.add('size-ultimate');
+  else if (mult >= 64)   b.classList.add('size-legendary');
+  else if (mult >= 32)   b.classList.add('size-insane');
+  else if (mult >= 16)   b.classList.add('size-huge');
+  else if (mult >= 8)    b.classList.add('size-big');
+  else if (mult >= 4)    b.classList.add('size-mid');
   void b.offsetWidth;
   b.classList.add('fire');
 }
@@ -1897,13 +2063,16 @@ function handleChoice(choice) {
 
     if (tierUp && newMult > 1) {
       fireStreakBanner(newMult);
-      if      (newMult >= 128) sfx.streakUltimate();
-      else if (newMult >= 64)  sfx.streakLegendary();
-      else if (newMult >= 32)  sfx.streakInsane();
-      else if (newMult >= 16)  sfx.streakHuge();
-      else if (newMult >= 8)   sfx.streakBig();
-      else if (newMult >= 4)   sfx.streakMid();
-      else                     sfx.streakSmall();
+      if      (newMult >= 1024) sfx.streakInfinite();
+      else if (newMult >= 512)  sfx.streakMythic();
+      else if (newMult >= 256)  sfx.streakGodlike();
+      else if (newMult >= 128)  sfx.streakUltimate();
+      else if (newMult >= 64)   sfx.streakLegendary();
+      else if (newMult >= 32)   sfx.streakInsane();
+      else if (newMult >= 16)   sfx.streakHuge();
+      else if (newMult >= 8)    sfx.streakBig();
+      else if (newMult >= 4)    sfx.streakMid();
+      else                      sfx.streakSmall();
     } else {
       sfx.correct();
     }
