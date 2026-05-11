@@ -1729,7 +1729,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v31';        // her push'ta bump et
+const BUILD = 'v32';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -2841,7 +2841,8 @@ function endGame() {
     }
   }
 
-  const qualifies = leaderboardQualifies(state.score) && state.score > 0;
+  // endless modu leaderboard'a girmez — direkt skor görür, sonra welcome
+  const qualifies = state.mode !== 'endless' && leaderboardQualifies(state.score) && state.score > 0;
   const nameRow = document.getElementById('name-row');
   if (isPerfection || qualifies) {
     nameRow.classList.add('shown');
