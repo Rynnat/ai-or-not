@@ -1777,7 +1777,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v40';        // her push'ta bump et
+const BUILD = 'v41';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -3023,7 +3023,10 @@ async function submitScoreIfNeeded() {
     return false;
   }
 
-  const name = clean.length > 0 ? clean.padEnd(3, '-') : '---';
+  // isim girilmediyse leaderboard'a ekleme
+  if (clean.length === 0) return true;
+
+  const name = clean.padEnd(3, '-');
   const entry = { name, score: state.score };
   if (state.perfectionAchieved) entry.perfection = true;
   if (state.mode === 'endless')  entry.endless = true;
