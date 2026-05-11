@@ -109,7 +109,47 @@ html, body {
 #welcome {
   align-items: center;
   justify-content: center;
-  gap: 28px;
+}
+
+.welcome-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 64px;
+  width: 100%;
+  max-width: 1000px;
+}
+.welcome-left, .welcome-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+.btn-endless {
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 5px;
+  padding: 18px 48px;
+  min-height: 64px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: transform var(--transition), background var(--transition), color var(--transition), box-shadow var(--transition);
+}
+.btn-endless:active {
+  transform: scale(0.97);
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 24px rgba(var(--accent-rgb), 0.5);
+}
+.btn-endless .infinity {
+  font-size: 24px;
+  display: inline-block;
+  margin-right: 6px;
 }
 
 .logo {
@@ -237,6 +277,23 @@ html, body {
   text-transform: uppercase;
   font-weight: 700;
 }
+
+/* lives — sonsuz modu için */
+.lives {
+  display: none;
+  align-items: flex-end;
+  font-size: 56px;
+  letter-spacing: 12px;
+  color: var(--danger);
+  line-height: 1;
+  text-shadow: 0 0 0.3em rgba(255, 56, 96, 0.6);
+}
+.lives span.lost {
+  opacity: 0.18;
+  text-shadow: none;
+}
+#game.mode-endless .timer { display: none; }
+#game.mode-endless .lives { display: flex; }
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
@@ -380,6 +437,72 @@ html, body {
   border-color: #fff;
   animation: glowBreathe 0.2s ease-in-out infinite;
 }
+.image-stage[data-tier="8192"] {
+  box-shadow:
+    0 0 calc(520px * var(--glow-mul)) rgba(255, 255, 255, 1),
+    0 0 calc(340px * var(--glow-mul)) rgba(150, 60, 255, 1),
+    0 0 calc(210px * var(--glow-mul)) rgba(0, 255, 200, 1),
+    0 0 calc(120px * var(--glow-mul)) rgba(255, 150, 0, 1),
+    0 0 calc(60px  * var(--glow-mul)) rgba(255, 100, 100, 1),
+    0 0 calc(22px  * var(--glow-mul)) #fff;
+  border-color: #fff;
+  animation: glowBreathe 0.17s ease-in-out infinite;
+}
+.image-stage[data-tier="16384"] {
+  box-shadow:
+    0 0 calc(600px * var(--glow-mul)) rgba(255, 255, 255, 1),
+    0 0 calc(400px * var(--glow-mul)) rgba(255, 80, 200, 1),
+    0 0 calc(250px * var(--glow-mul)) rgba(100, 220, 255, 1),
+    0 0 calc(140px * var(--glow-mul)) rgba(255, 220, 100, 1),
+    0 0 calc(70px  * var(--glow-mul)) rgba(180, 255, 100, 1),
+    0 0 calc(24px  * var(--glow-mul)) #fff;
+  border-color: #fff;
+  animation: glowBreathe 0.15s ease-in-out infinite;
+}
+.image-stage[data-tier="32768"] {
+  box-shadow:
+    0 0 calc(680px * var(--glow-mul)) rgba(255, 255, 255, 1),
+    0 0 calc(460px * var(--glow-mul)) rgba(180, 60, 255, 1),
+    0 0 calc(290px * var(--glow-mul)) rgba(0, 255, 255, 1),
+    0 0 calc(160px * var(--glow-mul)) rgba(255, 180, 0, 1),
+    0 0 calc(80px  * var(--glow-mul)) rgba(255, 80, 180, 1),
+    0 0 calc(26px  * var(--glow-mul)) #fff;
+  border-color: #fff;
+  animation: glowBreathe 0.13s ease-in-out infinite;
+}
+.image-stage[data-tier="65536"] {
+  box-shadow:
+    0 0 calc(760px * var(--glow-mul)) rgba(255, 255, 255, 1),
+    0 0 calc(520px * var(--glow-mul)) rgba(255, 0, 200, 1),
+    0 0 calc(340px * var(--glow-mul)) rgba(0, 200, 255, 1),
+    0 0 calc(190px * var(--glow-mul)) rgba(255, 200, 0, 1),
+    0 0 calc(95px  * var(--glow-mul)) rgba(255, 100, 100, 1),
+    0 0 calc(28px  * var(--glow-mul)) #fff;
+  border-color: #fff;
+  animation: glowBreathe 0.12s ease-in-out infinite;
+}
+.image-stage[data-tier="131072"] {
+  box-shadow:
+    0 0 calc(840px * var(--glow-mul)) rgba(255, 255, 255, 1),
+    0 0 calc(580px * var(--glow-mul)) rgba(255, 50, 255, 1),
+    0 0 calc(390px * var(--glow-mul)) rgba(100, 255, 200, 1),
+    0 0 calc(220px * var(--glow-mul)) rgba(255, 220, 0, 1),
+    0 0 calc(110px * var(--glow-mul)) rgba(255, 120, 60, 1),
+    0 0 calc(30px  * var(--glow-mul)) #fff;
+  border-color: #fff;
+  animation: glowBreathe 0.11s ease-in-out infinite;
+}
+.image-stage[data-tier="262144"] {
+  box-shadow:
+    0 0 calc(940px * var(--glow-mul)) rgba(255, 255, 255, 1),
+    0 0 calc(640px * var(--glow-mul)) rgba(255, 80, 255, 1),
+    0 0 calc(440px * var(--glow-mul)) rgba(64, 255, 255, 1),
+    0 0 calc(250px * var(--glow-mul)) rgba(255, 80, 80, 1),
+    0 0 calc(130px * var(--glow-mul)) rgba(255, 220, 0, 1),
+    0 0 calc(32px  * var(--glow-mul)) #fff;
+  border-color: #fff;
+  animation: glowBreathe 0.1s ease-in-out infinite;
+}
 
 @keyframes glowBreathe {
   0%, 100% { --glow-mul: 1; }
@@ -446,6 +569,12 @@ html, body {
   box-shadow: 0 0 calc(140px * var(--glow-mul)) rgba(255, 80, 255, 1), 0 0 calc(70px * var(--glow-mul)) rgba(0, 255, 255, 0.95), 0 0 calc(32px * var(--glow-mul)) rgba(255, 220, 0, 0.9), 0 0 10px #fff;
   animation: glowBreathe 0.2s ease-in-out infinite;
 }
+.game-frame[data-tier="8192"]   .btn-choice { border-color: #fff; box-shadow: 0 0 calc(160px * var(--glow-mul)) rgba(150, 60, 255, 1), 0 0 calc(80px * var(--glow-mul)) rgba(0, 255, 200, 0.95), 0 0 calc(36px * var(--glow-mul)) rgba(255, 150, 0, 0.9), 0 0 10px #fff; animation: glowBreathe 0.17s ease-in-out infinite; }
+.game-frame[data-tier="16384"]  .btn-choice { border-color: #fff; box-shadow: 0 0 calc(180px * var(--glow-mul)) rgba(255, 80, 200, 1), 0 0 calc(90px * var(--glow-mul)) rgba(100, 220, 255, 0.95), 0 0 calc(40px * var(--glow-mul)) rgba(255, 220, 100, 0.9), 0 0 12px #fff; animation: glowBreathe 0.15s ease-in-out infinite; }
+.game-frame[data-tier="32768"]  .btn-choice { border-color: #fff; box-shadow: 0 0 calc(200px * var(--glow-mul)) rgba(180, 60, 255, 1), 0 0 calc(100px * var(--glow-mul)) rgba(0, 255, 255, 0.95), 0 0 calc(44px * var(--glow-mul)) rgba(255, 180, 0, 0.9), 0 0 12px #fff; animation: glowBreathe 0.13s ease-in-out infinite; }
+.game-frame[data-tier="65536"]  .btn-choice { border-color: #fff; box-shadow: 0 0 calc(220px * var(--glow-mul)) rgba(255, 0, 200, 1), 0 0 calc(110px * var(--glow-mul)) rgba(0, 200, 255, 0.95), 0 0 calc(48px * var(--glow-mul)) rgba(255, 200, 0, 0.9), 0 0 14px #fff; animation: glowBreathe 0.12s ease-in-out infinite; }
+.game-frame[data-tier="131072"] .btn-choice { border-color: #fff; box-shadow: 0 0 calc(240px * var(--glow-mul)) rgba(255, 50, 255, 1), 0 0 calc(120px * var(--glow-mul)) rgba(100, 255, 200, 0.95), 0 0 calc(52px * var(--glow-mul)) rgba(255, 220, 0, 0.9), 0 0 14px #fff; animation: glowBreathe 0.11s ease-in-out infinite; }
+.game-frame[data-tier="262144"] .btn-choice { border-color: #fff; box-shadow: 0 0 calc(260px * var(--glow-mul)) rgba(255, 80, 255, 1), 0 0 calc(130px * var(--glow-mul)) rgba(64, 255, 255, 0.95), 0 0 calc(56px * var(--glow-mul)) rgba(255, 80, 80, 0.9), 0 0 16px #fff; animation: glowBreathe 0.1s ease-in-out infinite; }
 
 .image-stage img {
   max-width: 100%;
@@ -589,6 +718,24 @@ html, body {
     0 0 14px #fff;
   animation: comboCosmic 0.3s linear infinite, comboShift 0.5s linear infinite, comboFlicker 0.06s steps(2) infinite;
 }
+.combo-badge[data-tier="8192"],
+.combo-badge[data-tier="16384"],
+.combo-badge[data-tier="32768"],
+.combo-badge[data-tier="65536"],
+.combo-badge[data-tier="131072"],
+.combo-badge[data-tier="262144"] {
+  background: linear-gradient(135deg, #fff 0%, #ff80ff 14%, #ffea64 28%, #64ff64 42%, #64ffff 56%, #ff80c8 70%, #fff 84%, #ff80ff);
+  background-size: 500% 500%;
+  color: #fff;
+  text-shadow: 0 0 0.5em #fff, 0 0 0.9em #fff, 0 0 1.3em #ff64ff;
+  animation: comboCosmic 0.25s linear infinite, comboShift 0.4s linear infinite, comboFlicker 0.05s steps(2) infinite;
+}
+.combo-badge[data-tier="8192"]   { box-shadow: 0 0 360px rgba(255, 255, 255, 1), 0 0 220px rgba(150, 60, 255, 1), 0 0 140px rgba(0, 255, 200, 1), 0 0 80px rgba(255, 150, 0, 1), 0 0 36px rgba(255, 100, 100, 1), 0 0 14px #fff; }
+.combo-badge[data-tier="16384"]  { box-shadow: 0 0 400px rgba(255, 255, 255, 1), 0 0 240px rgba(255, 80, 200, 1), 0 0 160px rgba(100, 220, 255, 1), 0 0 90px rgba(255, 220, 100, 1), 0 0 40px rgba(180, 255, 100, 1), 0 0 16px #fff; }
+.combo-badge[data-tier="32768"]  { box-shadow: 0 0 440px rgba(255, 255, 255, 1), 0 0 260px rgba(180, 60, 255, 1), 0 0 180px rgba(0, 255, 255, 1), 0 0 100px rgba(255, 180, 0, 1), 0 0 44px rgba(255, 80, 180, 1), 0 0 18px #fff; }
+.combo-badge[data-tier="65536"]  { box-shadow: 0 0 480px rgba(255, 255, 255, 1), 0 0 290px rgba(255, 0, 200, 1), 0 0 200px rgba(0, 200, 255, 1), 0 0 110px rgba(255, 200, 0, 1), 0 0 48px rgba(255, 100, 100, 1), 0 0 20px #fff; animation: comboCosmic 0.2s linear infinite, comboShift 0.35s linear infinite, comboFlicker 0.04s steps(2) infinite; }
+.combo-badge[data-tier="131072"] { box-shadow: 0 0 520px rgba(255, 255, 255, 1), 0 0 320px rgba(255, 50, 255, 1), 0 0 220px rgba(100, 255, 200, 1), 0 0 120px rgba(255, 220, 0, 1), 0 0 52px rgba(255, 120, 60, 1), 0 0 22px #fff; animation: comboCosmic 0.18s linear infinite, comboShift 0.3s linear infinite, comboFlicker 0.04s steps(2) infinite; }
+.combo-badge[data-tier="262144"] { box-shadow: 0 0 560px rgba(255, 255, 255, 1), 0 0 360px rgba(255, 80, 255, 1), 0 0 240px rgba(64, 255, 255, 1), 0 0 140px rgba(255, 80, 80, 1), 0 0 64px rgba(255, 220, 0, 1), 0 0 24px #fff; animation: comboCosmic 0.16s linear infinite, comboShift 0.25s linear infinite, comboFlicker 0.04s steps(2) infinite; }
 
 @keyframes comboPulse {
   0%, 100% { transform: scale(1) translateY(0); filter: brightness(1); }
@@ -699,6 +846,12 @@ html, body {
 .streak-banner.size-infinite     { font-size: clamp(86px, 30cqi, 260px); color: #fff;     text-shadow: 0 0 0.3em #fff, 0 0 0.6em #ff00ff, 0 0 1em #00ffff, 0 0 1.5em #ffff00, 0 0 2em #ff0000; }
 .streak-banner.size-transcendent { font-size: clamp(96px, 33cqi, 290px); color: #c898ff; text-shadow: 0 0 0.3em #fff, 0 0 0.7em #b864ff, 0 0 1.4em rgba(180, 60, 255, 1), 0 0 2em rgba(0, 220, 255, 0.8); }
 .streak-banner.size-omega        { font-size: clamp(110px, 36cqi, 320px); color: #fff;    text-shadow: 0 0 0.3em #fff, 0 0 0.6em #ff80ff, 0 0 1em #00ffff, 0 0 1.5em #ffea00, 0 0 2em #ff4040, 0 0 2.5em #fff; }
+.streak-banner.size-8k           { font-size: clamp(120px, 38cqi, 340px); color: #fff;    text-shadow: 0 0 0.3em #fff, 0 0 0.6em #9647ff, 0 0 1.1em #00ffd0, 0 0 1.6em #ff9000, 0 0 2.5em #fff; }
+.streak-banner.size-16k          { font-size: clamp(132px, 40cqi, 360px); color: #fff;    text-shadow: 0 0 0.3em #fff, 0 0 0.7em #ff50d0, 0 0 1.2em #50d0ff, 0 0 1.8em #ffd050, 0 0 2.5em #fff; }
+.streak-banner.size-32k          { font-size: clamp(144px, 42cqi, 380px); color: #fff;    text-shadow: 0 0 0.3em #fff, 0 0 0.7em #b040ff, 0 0 1.2em #00ffff, 0 0 1.8em #ffb000, 0 0 2.5em #fff; }
+.streak-banner.size-64k          { font-size: clamp(156px, 44cqi, 400px); color: #fff;    text-shadow: 0 0 0.3em #fff, 0 0 0.7em #ff00b0, 0 0 1.2em #00b0ff, 0 0 1.8em #ffb000, 0 0 2.5em #fff; }
+.streak-banner.size-128k         { font-size: clamp(168px, 46cqi, 420px); color: #fff;    text-shadow: 0 0 0.3em #fff, 0 0 0.7em #ff30ff, 0 0 1.2em #50ffb0, 0 0 1.8em #ffd000, 0 0 2.5em #fff; }
+.streak-banner.size-256k         { font-size: clamp(180px, 48cqi, 440px); color: #fff;    text-shadow: 0 0 0.3em #fff, 0 0 0.8em #ff80ff, 0 0 1.3em #40ffff, 0 0 1.9em #ff4040, 0 0 3em #fff; }
 .streak-banner.fire { animation: streakBanner 1000ms cubic-bezier(.22,1,.36,1) forwards; }
 @keyframes streakBanner {
   0%   { transform: translate(-50%, -50%) scale(0.3) rotate(-10deg); opacity: 0; }
@@ -885,6 +1038,11 @@ html, body {
 .leaderboard-mini .row.perfect .rank::after {
   content: ' ★';
   font-size: 11px;
+}
+.leaderboard-mini .row.endless-mark .rank::before {
+  content: '∞ ';
+  color: var(--accent);
+  font-size: 13px;
 }
 
 .stats-grid {
@@ -1281,12 +1439,19 @@ html, body {
     <button class="gear-btn" id="btn-settings" aria-label="settings">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
-    <div class="logo">AI <span class="or">or</span> NOT</div>
-    <div class="tagline" data-i18n="tagline">YAPAY ZEKA mı &nbsp;·&nbsp; GERÇEK mi</div>
-    <button class="btn-primary" id="btn-start" data-i18n="start">BAŞLA</button>
-    <div class="leaderboard-mini">
-      <h3 data-i18n="top5">TOP 5</h3>
-      <div id="leaderboard-list"></div>
+    <div class="welcome-grid">
+      <div class="welcome-left">
+        <div class="logo">AI <span class="or">or</span> NOT</div>
+        <div class="tagline" data-i18n="tagline">YAPAY ZEKA mı &nbsp;·&nbsp; GERÇEK mi</div>
+        <button class="btn-primary" id="btn-start" data-i18n="start">BAŞLA</button>
+        <button class="btn-endless" id="btn-endless"><span class="infinity">∞</span><span data-i18n="endless">SONSUZ MOD</span></button>
+      </div>
+      <div class="welcome-right">
+        <div class="leaderboard-mini">
+          <h3 data-i18n="top5">TOP 5</h3>
+          <div id="leaderboard-list"></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1295,6 +1460,7 @@ html, body {
     <div class="game-frame">
       <div class="hud">
         <div class="timer" id="timer-box"><span id="timer">60</span><span class="unit" data-i18n="sec">sn</span></div>
+        <div class="lives" id="lives-box"></div>
         <div class="score-display">
           <span class="label" data-i18n="score">SKOR</span>
           <span class="value" id="score">0</span>
@@ -1454,7 +1620,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v25';        // her push'ta bump et
+const BUILD = 'v26';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -1464,7 +1630,8 @@ const SPEED_BONUS_WINDOW_MS = 2000;
 const WRONG_SCORE_PENALTY   = -50;
 const WRONG_TIME_PENALTY_MS = 3000;
 const COMBO_TIER_SIZE       = 5;
-const COMBO_TIERS           = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096];  // streak/5 → çarpan
+const COMBO_TIERS           = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144];  // streak/5 → çarpan
+const ENDLESS_LIVES         = 3;
 const LEADERBOARD_SIZE      = 5;
 const LB_STORAGE_KEY        = 'aiornot_leaderboard_v1';
 const SETTINGS_STORAGE_KEY  = 'aiornot_settings_v1';
@@ -1500,6 +1667,7 @@ const I18N = {
   tr: {
     tagline:    'YAPAY ZEKA mı &nbsp;·&nbsp; GERÇEK mi',
     start:      'BAŞLA',
+    endless:    'SONSUZ MOD',
     top5:       'TOP 5',
     choice_ai:  'YAPAY ZEKA',
     choice_real:'GERÇEK',
@@ -1568,6 +1736,7 @@ const I18N = {
   en: {
     tagline:    'AI &nbsp;·&nbsp; OR REAL',
     start:      'START',
+    endless:    'ENDLESS',
     top5:       'TOP 5',
     choice_ai:  'AI',
     choice_real:'REAL',
@@ -1688,6 +1857,8 @@ const state = {
   soundEnabled:  true,
   theme:         'apple',
   perfectionAchieved: false,
+  mode:          'classic',  // 'classic' | 'endless'
+  lives:         ENDLESS_LIVES,
 };
 
 const VALID_THEMES = ['apple', 'grape', 'cherry', 'blueberry', 'lemon'];
@@ -1991,6 +2162,39 @@ const sfx = (() => {
         tone(2093, 0.55, 'sine', 0.10);
       }, 540);
     },
+    // ×8192-32768: beyond — omega'dan daha uzun, daha ezici
+    streakBeyond() {
+      [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096].forEach((f, i) => {
+        setTimeout(() => tone(f, 3.0 - i * 0.18, i < 3 ? 'sine' : i < 6 ? 'triangle' : 'square', 0.40 - i * 0.02), i * 14);
+      });
+      setTimeout(() => noise(0.5, 0.28), 100);
+      const climb = [];
+      for (let i = 0; i < 60; i++) climb.push(25 * Math.pow(2, i / 7.5));
+      climb.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.08, 'square', 0.34), 280 + i * 18));
+      setTimeout(() => {
+        sweep(5274, 10548, 3.0, 'sawtooth', 0.42);
+        [1976, 2349, 2960, 3520, 4435, 5274, 6272, 7459, 8870].forEach((f, i) => tone(f, 3.0, i % 2 ? 'sine' : 'triangle', 0.26 - i * 0.018));
+        [4, 8, 16, 32].forEach(f => tone(f, 3.0, 'sine', 0.34));
+        noise(0.7, 0.20);
+      }, 1700);
+    },
+    // ×65536-262144: infinity — en uzun, en yoğun
+    streakInfinityPlus() {
+      [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096].forEach((f, i) => {
+        setTimeout(() => tone(f, 3.5 - i * 0.2, i < 3 ? 'sine' : i < 6 ? 'triangle' : 'square', 0.42 - i * 0.022), i * 12);
+      });
+      setTimeout(() => noise(0.6, 0.30), 100);
+      setTimeout(() => noise(0.4, 0.22), 800);
+      const climb = [];
+      for (let i = 0; i < 70; i++) climb.push(20 * Math.pow(2, i / 8));
+      climb.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.07, 'square', 0.36), 300 + i * 16));
+      setTimeout(() => {
+        sweep(6272, 12544, 3.5, 'sawtooth', 0.44);
+        [2349, 2960, 3520, 4435, 5274, 6272, 7459, 8870, 10548].forEach((f, i) => tone(f, 3.5, i % 2 ? 'sine' : 'triangle', 0.28 - i * 0.018));
+        [2, 4, 8, 16, 32].forEach(f => tone(f, 3.5, 'sine', 0.36));
+        noise(0.8, 0.22);
+      }, 1900);
+    },
     // PERFECTION jackpot: bass hit + coin shower + fanfare + victory chord
     jackpot() {
       // big bass intro
@@ -2144,18 +2348,24 @@ function hideDebugLabel() {
 function fireStreakBanner(mult) {
   const b = document.getElementById('streak-banner');
   b.textContent = 'STREAK ×' + mult;
-  b.classList.remove('fire', 'size-mid', 'size-big', 'size-huge', 'size-insane', 'size-legendary', 'size-ultimate', 'size-godlike', 'size-mythic', 'size-infinite', 'size-transcendent', 'size-omega');
-  if      (mult >= 4096) b.classList.add('size-omega');
-  else if (mult >= 2048) b.classList.add('size-transcendent');
-  else if (mult >= 1024) b.classList.add('size-infinite');
-  else if (mult >= 512)  b.classList.add('size-mythic');
-  else if (mult >= 256)  b.classList.add('size-godlike');
-  else if (mult >= 128)  b.classList.add('size-ultimate');
-  else if (mult >= 64)   b.classList.add('size-legendary');
-  else if (mult >= 32)   b.classList.add('size-insane');
-  else if (mult >= 16)   b.classList.add('size-huge');
-  else if (mult >= 8)    b.classList.add('size-big');
-  else if (mult >= 4)    b.classList.add('size-mid');
+  [...b.classList].forEach(c => { if (c.startsWith('size-') || c === 'fire') b.classList.remove(c); });
+  if      (mult >= 262144) b.classList.add('size-256k');
+  else if (mult >= 131072) b.classList.add('size-128k');
+  else if (mult >= 65536)  b.classList.add('size-64k');
+  else if (mult >= 32768)  b.classList.add('size-32k');
+  else if (mult >= 16384)  b.classList.add('size-16k');
+  else if (mult >= 8192)   b.classList.add('size-8k');
+  else if (mult >= 4096)   b.classList.add('size-omega');
+  else if (mult >= 2048)   b.classList.add('size-transcendent');
+  else if (mult >= 1024)   b.classList.add('size-infinite');
+  else if (mult >= 512)    b.classList.add('size-mythic');
+  else if (mult >= 256)    b.classList.add('size-godlike');
+  else if (mult >= 128)    b.classList.add('size-ultimate');
+  else if (mult >= 64)     b.classList.add('size-legendary');
+  else if (mult >= 32)     b.classList.add('size-insane');
+  else if (mult >= 16)     b.classList.add('size-huge');
+  else if (mult >= 8)      b.classList.add('size-big');
+  else if (mult >= 4)      b.classList.add('size-mid');
   void b.offsetWidth;
   b.classList.add('fire');
 }
@@ -2176,7 +2386,13 @@ function updateStageTier() {
 // =========================================================
 // GAME LOOP
 // =========================================================
-async function startGame() {
+async function startGame(mode) {
+  state.mode = mode === 'endless' ? 'endless' : 'classic';
+  state.lives = ENDLESS_LIVES;
+  document.getElementById('game').classList.toggle('mode-endless', state.mode === 'endless');
+  document.getElementById('game').classList.toggle('mode-classic', state.mode === 'classic');
+  updateLives();
+
   sfx.prime();
   sfx.click();
 
@@ -2230,8 +2446,11 @@ async function startGame() {
   updateDebugLabel();
   setChoicesDisabled(false);
 
-  state.lastFrameTime = performance.now();
-  state.rafId = requestAnimationFrame(tick);
+  // classic'te zamanı sayacak raf — endless'ta gerek yok
+  if (state.mode === 'classic') {
+    state.lastFrameTime = performance.now();
+    state.rafId = requestAnimationFrame(tick);
+  }
 }
 
 async function runCountdown() {
@@ -2281,6 +2500,14 @@ function updateScore() {
   document.getElementById('score').textContent = state.score;
 }
 
+function updateLives() {
+  const html = [];
+  for (let i = 0; i < ENDLESS_LIVES; i++) {
+    html.push('<span' + (i < state.lives ? '' : ' class="lost"') + '>&hearts;</span>');
+  }
+  document.getElementById('lives-box').innerHTML = html.join('');
+}
+
 function showNextQuestion() {
   pickNext();
   const img = document.getElementById('image');
@@ -2326,18 +2553,20 @@ function handleChoice(choice) {
 
     if (tierUp && newMult > 1) {
       fireStreakBanner(newMult);
-      if      (newMult >= 4096) sfx.streakOmega();
-      else if (newMult >= 2048) sfx.streakTranscendent();
-      else if (newMult >= 1024) sfx.streakInfinite();
-      else if (newMult >= 512)  sfx.streakMythic();
-      else if (newMult >= 256)  sfx.streakGodlike();
-      else if (newMult >= 128)  sfx.streakUltimate();
-      else if (newMult >= 64)   sfx.streakLegendary();
-      else if (newMult >= 32)   sfx.streakInsane();
-      else if (newMult >= 16)   sfx.streakHuge();
-      else if (newMult >= 8)    sfx.streakBig();
-      else if (newMult >= 4)    sfx.streakMid();
-      else                      sfx.streakSmall();
+      if      (newMult >= 65536) sfx.streakInfinityPlus();
+      else if (newMult >= 8192)  sfx.streakBeyond();
+      else if (newMult >= 4096)  sfx.streakOmega();
+      else if (newMult >= 2048)  sfx.streakTranscendent();
+      else if (newMult >= 1024)  sfx.streakInfinite();
+      else if (newMult >= 512)   sfx.streakMythic();
+      else if (newMult >= 256)   sfx.streakGodlike();
+      else if (newMult >= 128)   sfx.streakUltimate();
+      else if (newMult >= 64)    sfx.streakLegendary();
+      else if (newMult >= 32)    sfx.streakInsane();
+      else if (newMult >= 16)    sfx.streakHuge();
+      else if (newMult >= 8)     sfx.streakBig();
+      else if (newMult >= 4)     sfx.streakMid();
+      else                       sfx.streakSmall();
     } else {
       sfx.correct();
     }
@@ -2345,13 +2574,18 @@ function handleChoice(choice) {
     popClass = newMult > 1 ? 'pop-combo' : 'pop-good';
   } else {
     delta = WRONG_SCORE_PENALTY;
-    state.timeLeftMs = Math.max(0, state.timeLeftMs - WRONG_TIME_PENALTY_MS);
-    state.prevSec = Math.ceil(state.timeLeftMs / 1000);
+    if (state.mode === 'endless') {
+      state.lives = Math.max(0, state.lives - 1);
+      updateLives();
+    } else {
+      state.timeLeftMs = Math.max(0, state.timeLeftMs - WRONG_TIME_PENALTY_MS);
+      state.prevSec = Math.ceil(state.timeLeftMs / 1000);
+      updateTimer();
+    }
     state.streak = 0;
     state.wrongCount++;
     updateComboBadge(false);
     updateStageTier();
-    updateTimer();
     sfx.wrong();
 
     const stage = document.getElementById('image-stage');
@@ -2372,7 +2606,12 @@ function handleChoice(choice) {
   state.pendingNextId = setTimeout(() => {
     state.pendingNextId = null;
     state.busy = false;
-    if (state.screen !== 'game' || state.timeLeftMs <= 0) return;
+    if (state.screen !== 'game') return;
+    if (state.mode === 'endless') {
+      if (state.lives <= 0) { endGame(); return; }
+    } else {
+      if (state.timeLeftMs <= 0) return;  // raf will end
+    }
     setChoicesDisabled(false);
     showNextQuestion();
   }, FEEDBACK_HOLD_MS);
@@ -2419,8 +2658,8 @@ function endGame() {
   document.getElementById('stat-streak').textContent   = state.maxStreak;
   document.getElementById('stat-accuracy').textContent = acc + '%';
 
-  // PERFECTION: 60 doğru + 0 yanlış
-  const isPerfection = state.correctCount >= 60 && state.wrongCount === 0;
+  // PERFECTION: classic modda 60 doğru + 0 yanlış
+  const isPerfection = state.mode === 'classic' && state.correctCount >= 60 && state.wrongCount === 0;
   state.perfectionAchieved = isPerfection;
   document.getElementById('end').classList.toggle('perfection', isPerfection);
 
@@ -2509,7 +2748,7 @@ function renderLeaderboard() {
     const e = state.leaderboard[i];
     const name  = e ? e.name  : '---';
     const score = e ? e.score : 0;
-    const cls   = e && e.perfection ? ' perfect' : '';
+    const cls   = e ? ((e.perfection ? ' perfect' : '') + (e.endless ? ' endless-mark' : '')) : '';
     rows.push(
       '<div class="row' + cls + '">' +
         '<span class="rank">' + (i + 1) + '</span>' +
@@ -2556,6 +2795,7 @@ async function submitScoreIfNeeded() {
   const name = clean.length > 0 ? clean.padEnd(3, '-') : '---';
   const entry = { name, score: state.score };
   if (state.perfectionAchieved) entry.perfection = true;
+  if (state.mode === 'endless')  entry.endless = true;
   state.leaderboard.push(entry);
   state.leaderboard = sortAndCut(state.leaderboard);
   await saveLeaderboard();
@@ -2576,7 +2816,8 @@ async function resetLeaderboard() {
 // =========================================================
 // WIRING
 // =========================================================
-document.getElementById('btn-start').addEventListener('click', startGame);
+document.getElementById('btn-start').addEventListener('click', () => startGame('classic'));
+document.getElementById('btn-endless').addEventListener('click', () => startGame('endless'));
 
 document.querySelectorAll('.btn-choice').forEach(btn => {
   btn.addEventListener('click', () => handleChoice(btn.dataset.choice));
