@@ -828,6 +828,65 @@ html, body {
   text-shadow: 0 0 0.22em rgba(var(--accent-rgb), 0.35);
 }
 
+/* ============ PERFECTION ============ */
+.perfection-label, .perfection-sub { display: none; }
+#end.perfection .end-label.timeup { display: none; }
+#end.perfection .perfection-label {
+  display: block;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 12px;
+  color: transparent;
+  background: linear-gradient(135deg, #fff 0%, #ff80ff 20%, #ffea64 40%, #64ffea 60%, #ff80ff 80%, #fff 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: perfectionShift 2s linear infinite;
+  text-transform: uppercase;
+}
+#end.perfection .perfection-sub {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 5px;
+  color: var(--gold);
+  text-transform: uppercase;
+  text-shadow: 0 0 0.4em rgba(255, 210, 63, 0.7);
+}
+#end.perfection .final-score {
+  background: linear-gradient(135deg, #fff 0%, #ff80ff 20%, #ffea64 40%, #64ffea 60%, #ff80ff 80%, #fff 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 0.25em rgba(255, 255, 255, 0.85));
+  animation: perfectionShift 2s linear infinite;
+}
+
+@keyframes perfectionShift {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+/* leaderboard satırı perfection ise gökkuşağı */
+.leaderboard-mini .row.perfect .name,
+.leaderboard-mini .row.perfect .score {
+  background: linear-gradient(135deg, #fff, #ff80ff, #ffea64, #64ff64, #64ffff, #fff);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: perfectionShift 3s linear infinite;
+}
+.leaderboard-mini .row.perfect .rank {
+  color: var(--gold);
+}
+.leaderboard-mini .row.perfect .rank::after {
+  content: ' ★';
+  font-size: 11px;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1258,7 +1317,9 @@ html, body {
 
   <!-- ============ END ============ -->
   <section id="end" class="screen">
-    <div class="end-label" data-i18n="timeUp">SÜRE BİTTİ</div>
+    <div class="end-label timeup" data-i18n="timeUp">SÜRE BİTTİ</div>
+    <div class="end-label perfection-label" data-i18n="perfection">PERFECTION</div>
+    <div class="end-label perfection-sub" data-i18n="perfectionSub">60/60 · TÜM CEVAPLAR DOĞRU</div>
     <div class="final-score" id="final-score">0</div>
     <div class="stats-grid">
       <div class="stat-card">
@@ -1393,7 +1454,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v24';        // her push'ta bump et
+const BUILD = 'v25';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -1470,6 +1531,8 @@ const I18N = {
     statCorrect:'DOĞRU',
     statStreak: 'EN UZUN SERİ',
     statAccuracy:'DOĞRULUK',
+    perfection: 'PERFECTION',
+    perfectionSub:'60/60 · TÜM CEVAPLAR DOĞRU',
     tech:       'TEKNİK',
     functions:  'FONKSİYONLAR',
     fn_combo_t: 'KOMBO SİSTEMİ',          fn_combo:   '5 doğruda ×2, sonra ×4, ×8, ×16 katlamalı',
@@ -1536,6 +1599,8 @@ const I18N = {
     statCorrect:'CORRECT',
     statStreak: 'BEST STREAK',
     statAccuracy:'ACCURACY',
+    perfection: 'PERFECTION',
+    perfectionSub:'60/60 · ALL CORRECT',
     tech:       'TECHNICAL',
     functions:  'FEATURES',
     fn_combo_t: 'COMBO SYSTEM',           fn_combo:   '5 correct → ×2, then ×4, ×8, ×16 multiplier',
@@ -1622,6 +1687,7 @@ const state = {
   lang:          'tr',
   soundEnabled:  true,
   theme:         'apple',
+  perfectionAchieved: false,
 };
 
 const VALID_THEMES = ['apple', 'grape', 'cherry', 'blueberry', 'lemon'];
@@ -1925,6 +1991,32 @@ const sfx = (() => {
         tone(2093, 0.55, 'sine', 0.10);
       }, 540);
     },
+    // PERFECTION jackpot: bass hit + coin shower + fanfare + victory chord
+    jackpot() {
+      // big bass intro
+      tone(60, 1.8, 'sine', 0.32);
+      tone(120, 1.5, 'sine', 0.26);
+      tone(240, 1.0, 'triangle', 0.20);
+      // 40 random bell-coin pings
+      for (let i = 0; i < 40; i++) {
+        setTimeout(() => {
+          const f = 1500 + Math.random() * 2500;
+          tone(f, 0.07 + Math.random() * 0.05, 'sine', 0.16 + Math.random() * 0.05);
+        }, 80 + i * 38);
+      }
+      // ascending fanfare arpejyo
+      setTimeout(() => {
+        const notes = [261, 329, 392, 523, 659, 784, 1047, 1318, 1568, 1976];
+        notes.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.14, 'triangle', 0.24), i * 90));
+      }, 1700);
+      // sustained victory chord
+      setTimeout(() => {
+        [523, 659, 784, 1047, 1318, 1568, 1976, 2349].forEach((f, i) => tone(f, 2.6, i % 2 ? 'sine' : 'triangle', 0.22 - i * 0.012));
+        tone(40, 2.6, 'sine', 0.30);
+        tone(20, 2.6, 'sine', 0.24);
+        noise(0.4, 0.16);
+      }, 2700);
+    },
   };
 })();
 
@@ -2098,7 +2190,9 @@ async function startGame() {
   state.maxStreak    = 0;
   state.correctCount = 0;
   state.wrongCount   = 0;
+  state.perfectionAchieved = false;
   state.timeLeftMs   = ROUND_DURATION_MS;
+  document.getElementById('end').classList.remove('perfection');
   state.prevSec     = Math.ceil(ROUND_DURATION_MS / 1000);
   state.busy        = false;
 
@@ -2325,10 +2419,21 @@ function endGame() {
   document.getElementById('stat-streak').textContent   = state.maxStreak;
   document.getElementById('stat-accuracy').textContent = acc + '%';
 
+  // PERFECTION: 60 doğru + 0 yanlış
+  const isPerfection = state.correctCount >= 60 && state.wrongCount === 0;
+  state.perfectionAchieved = isPerfection;
+  document.getElementById('end').classList.toggle('perfection', isPerfection);
+
   const qualifies = leaderboardQualifies(state.score) && state.score > 0;
   const nameRow = document.getElementById('name-row');
 
-  if (qualifies) {
+  if (isPerfection) {
+    sfx.jackpot();
+    nameRow.classList.add('shown');
+    clearNameBoxes();
+    showNameError(false);
+    setTimeout(() => focusBox(0), 350);
+  } else if (qualifies) {
     sfx.highScore();
     nameRow.classList.add('shown');
     clearNameBoxes();
@@ -2404,8 +2509,9 @@ function renderLeaderboard() {
     const e = state.leaderboard[i];
     const name  = e ? e.name  : '---';
     const score = e ? e.score : 0;
+    const cls   = e && e.perfection ? ' perfect' : '';
     rows.push(
-      '<div class="row">' +
+      '<div class="row' + cls + '">' +
         '<span class="rank">' + (i + 1) + '</span>' +
         '<span class="name">' + name + '</span>' +
         '<span class="score">' + score + '</span>' +
@@ -2448,7 +2554,9 @@ async function submitScoreIfNeeded() {
   }
 
   const name = clean.length > 0 ? clean.padEnd(3, '-') : '---';
-  state.leaderboard.push({ name, score: state.score });
+  const entry = { name, score: state.score };
+  if (state.perfectionAchieved) entry.perfection = true;
+  state.leaderboard.push(entry);
   state.leaderboard = sortAndCut(state.leaderboard);
   await saveLeaderboard();
   return true;
