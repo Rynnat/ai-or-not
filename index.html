@@ -333,13 +333,48 @@ html, body {
   border-radius: 6px;
   opacity: 0;
   transform: scale(0.4);
-  transition: opacity 200ms, transform 200ms;
+  transition: opacity 200ms, transform 200ms, box-shadow 400ms, background 400ms, color 400ms;
   pointer-events: none;
   box-shadow: 0 0 28px rgba(var(--accent-rgb), 0.55);
   z-index: 3;
 }
 .combo-badge.shown { opacity: 1; transform: scale(1); }
 .combo-badge.bump  { animation: comboBump 480ms cubic-bezier(.22,1,.36,1); }
+
+/* tier yangını — kutuda da */
+.combo-badge[data-tier="4"]  { box-shadow: 0 0 36px rgba(var(--accent-rgb), 0.7), 0 0 14px rgba(var(--accent-rgb), 0.4); }
+.combo-badge[data-tier="8"] {
+  background: linear-gradient(135deg, #ffd23f, #ff9040);
+  color: #1a0a00;
+  box-shadow: 0 0 42px rgba(255, 200, 60, 0.8), 0 0 18px rgba(255, 160, 50, 0.55);
+}
+.combo-badge[data-tier="16"] {
+  background: linear-gradient(135deg, #ff9040, #ff5020);
+  color: #1a0a00;
+  box-shadow: 0 0 50px rgba(255, 100, 30, 0.88), 0 0 22px rgba(255, 70, 15, 0.65);
+  animation: comboPulse 1.4s ease-in-out infinite;
+}
+.combo-badge[data-tier="32"] {
+  background: linear-gradient(135deg, #ff5020, #ff2010);
+  color: #1a0a00;
+  box-shadow: 0 0 60px rgba(255, 60, 10, 0.92), 0 0 28px rgba(255, 30, 0, 0.75), 0 0 12px rgba(255, 0, 0, 0.55);
+  animation: comboPulse 1.0s ease-in-out infinite;
+}
+.combo-badge[data-tier="64"] {
+  background: linear-gradient(135deg, #ff2010, #ff0000 50%, #ffaa00);
+  color: #fff;
+  box-shadow: 0 0 80px rgba(255, 30, 0, 0.98), 0 0 40px rgba(255, 0, 0, 0.85), 0 0 18px rgba(255, 80, 0, 0.7);
+  animation: comboPulse 0.65s ease-in-out infinite, comboFlicker 0.18s steps(2) infinite;
+}
+
+@keyframes comboPulse {
+  0%, 100% { transform: scale(1) translateY(0); filter: brightness(1); }
+  50%      { transform: scale(1.1) translateY(-2px); filter: brightness(1.2); }
+}
+@keyframes comboFlicker {
+  0%   { filter: brightness(1) hue-rotate(0deg); }
+  100% { filter: brightness(1.08) hue-rotate(-8deg); }
+}
 @keyframes comboBump {
   0%   { transform: scale(1) rotate(0); }
   25%  { transform: scale(1.5) rotate(-6deg); }
@@ -1111,7 +1146,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v19';        // her push'ta bump et
+const BUILD = 'v20';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -1607,6 +1642,7 @@ function updateComboBadge(bump) {
   if (mult > 1) {
     badge.textContent = '×' + mult;
     badge.classList.add('shown');
+    badge.setAttribute('data-tier', String(mult));
     if (bump) {
       badge.classList.remove('bump');
       void badge.offsetWidth;
@@ -1614,6 +1650,7 @@ function updateComboBadge(bump) {
     }
   } else {
     badge.classList.remove('shown', 'bump');
+    badge.removeAttribute('data-tier');
   }
 }
 
