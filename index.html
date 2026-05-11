@@ -279,12 +279,43 @@ html, body {
 .game-frame {
   flex: 1 1 auto;
   width: 100%;
-  max-width: min(1100px, calc((100vh - 240px) * 4 / 3));
+  max-width: min(1100px, calc((100dvh - 240px) * 4 / 3));
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
   justify-content: center;
+}
+
+/* Mobil portrait: stage tüm dikey alanı doldursun, max-width yok */
+@media (orientation: portrait) and (max-width: 720px) {
+  .game-frame {
+    max-width: 100%;
+  }
+  .image-stage {
+    aspect-ratio: auto;
+    flex: 1 1 0;
+    min-height: 0;
+  }
+  .btn-choice {
+    font-size: 18px;
+    letter-spacing: 3px;
+    min-height: 80px;
+    padding: 0 4px;
+  }
+  .hud {
+    margin-bottom: 4px;
+  }
+  .timer { font-size: clamp(40px, 12vw, 56px); }
+  .score-display .value { font-size: clamp(24px, 7vw, 32px); }
+  .stats-grid {
+    gap: 14px;
+    max-width: 100%;
+  }
+  .stat-value { font-size: clamp(22px, 6vw, 32px); }
+  .stat-label { font-size: 9px; letter-spacing: 3px; }
+  .name-box { width: 64px; height: 80px; font-size: 40px; padding: 0 0 0 16px; letter-spacing: 12px; }
+  .final-score { font-size: clamp(64px, 22vw, 120px); }
 }
 
 .hud {
@@ -1735,7 +1766,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v33';        // her push'ta bump et
+const BUILD = 'v34';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
