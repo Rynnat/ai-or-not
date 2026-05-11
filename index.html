@@ -176,14 +176,19 @@ html, body {
 .edge-toggle.left  { left: 0;  border-left:  none; border-radius: 0 8px 8px 0; }
 
 @media (max-width: 720px) {
-  #welcome { overflow: hidden; }
+  #welcome { overflow: hidden; padding: 32px 0; }
   .welcome-grid {
-    grid-template-columns: 100% 100%;
+    grid-template-columns: 1fr 1fr;
     width: 200%;
     gap: 0;
+    max-width: 200%;
     transition: transform 320ms cubic-bezier(.22,1,.36,1);
   }
-  .welcome-left, .welcome-right { display: flex; width: 100%; }
+  .welcome-left, .welcome-right {
+    display: flex;
+    width: 100%;
+    padding: 0 32px;
+  }
   #welcome.board-shown .welcome-grid { transform: translateX(-50%); }
 
   .edge-toggle.right { display: flex; }
@@ -1766,7 +1771,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v36';        // her push'ta bump et
+const BUILD = 'v37';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
