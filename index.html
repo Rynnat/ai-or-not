@@ -981,6 +981,78 @@ html, body {
   text-shadow: 0 0 0.22em rgba(var(--accent-rgb), 0.35);
 }
 
+/* ============ VICTORY TIERS ============ */
+.victory-label { display: none; }
+#end[data-vtier] .timeup { display: none; }
+#end[data-vtier] .victory-label {
+  display: block;
+  font-size: clamp(22px, 4vw, 32px);
+  font-weight: 800;
+  letter-spacing: 10px;
+  text-transform: uppercase;
+}
+#end.perfection .timeup,
+#end.perfection .victory-label { display: none; }
+
+/* solid color tiers */
+#end[data-vtier="v_notbad"]      .victory-label { color: var(--fg-muted); }
+#end[data-vtier="v_notbad"]      .final-score   { color: var(--fg-muted); text-shadow: none; }
+#end[data-vtier="v_nice"]        .victory-label { color: var(--accent-dim); }
+#end[data-vtier="v_nice"]        .final-score   { color: var(--accent-dim); }
+#end[data-vtier="v_good"]        .victory-label { color: var(--accent); }
+#end[data-vtier="v_great"]       .victory-label { color: #b8e040; }
+#end[data-vtier="v_great"]       .final-score   { color: #b8e040; text-shadow: 0 0 0.22em rgba(184, 224, 64, 0.4); }
+#end[data-vtier="v_impressive"]  .victory-label { color: var(--gold); text-shadow: 0 0 0.4em rgba(255, 210, 63, 0.5); }
+#end[data-vtier="v_impressive"]  .final-score   { color: var(--gold); text-shadow: 0 0 0.22em rgba(255, 210, 63, 0.55); }
+#end[data-vtier="v_awesome"]     .victory-label { color: #ffae00; text-shadow: 0 0 0.5em rgba(255, 174, 0, 0.55); }
+#end[data-vtier="v_awesome"]     .final-score   { color: #ffae00; text-shadow: 0 0 0.3em rgba(255, 174, 0, 0.6); }
+#end[data-vtier="v_outstanding"] .victory-label { color: #ff8030; text-shadow: 0 0 0.5em rgba(255, 128, 48, 0.65); }
+#end[data-vtier="v_outstanding"] .final-score   { color: #ff8030; text-shadow: 0 0 0.3em rgba(255, 128, 48, 0.75); }
+#end[data-vtier="v_incredible"]  .victory-label { color: #ff5040; text-shadow: 0 0 0.5em rgba(255, 80, 64, 0.75); }
+#end[data-vtier="v_incredible"]  .final-score   { color: #ff5040; text-shadow: 0 0 0.3em rgba(255, 80, 64, 0.85); }
+
+/* gradient tiers */
+#end[data-vtier="v_phenomenal"] .victory-label,
+#end[data-vtier="v_phenomenal"] .final-score,
+#end[data-vtier="v_legendary"]  .victory-label,
+#end[data-vtier="v_legendary"]  .final-score,
+#end[data-vtier="v_mythic"]     .victory-label,
+#end[data-vtier="v_mythic"]     .final-score,
+#end[data-vtier="v_godlike"]    .victory-label,
+#end[data-vtier="v_godlike"]    .final-score {
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  animation: perfectionShift 2.5s linear infinite;
+}
+#end[data-vtier="v_phenomenal"] .victory-label,
+#end[data-vtier="v_phenomenal"] .final-score {
+  background: linear-gradient(135deg, #ff3060 0%, #ff80b0 50%, #ff3060 100%);
+  background-size: 200% 200%;
+  filter: drop-shadow(0 0 0.25em rgba(255, 48, 96, 0.55));
+}
+#end[data-vtier="v_legendary"] .victory-label,
+#end[data-vtier="v_legendary"] .final-score {
+  background: linear-gradient(135deg, #c060ff 0%, #ff60c0 50%, #c060ff 100%);
+  background-size: 200% 200%;
+  filter: drop-shadow(0 0 0.3em rgba(192, 96, 255, 0.6));
+}
+#end[data-vtier="v_mythic"] .victory-label,
+#end[data-vtier="v_mythic"] .final-score {
+  background: linear-gradient(135deg, #50d0ff 0%, #c060ff 35%, #ff60c0 65%, #50d0ff 100%);
+  background-size: 250% 250%;
+  filter: drop-shadow(0 0 0.3em rgba(192, 96, 255, 0.7));
+  animation: perfectionShift 2s linear infinite;
+}
+#end[data-vtier="v_godlike"] .victory-label,
+#end[data-vtier="v_godlike"] .final-score {
+  background: linear-gradient(135deg, #fff 0%, #ff80c8 25%, #ffea64 50%, #64ffea 75%, #fff 100%);
+  background-size: 300% 300%;
+  filter: drop-shadow(0 0 0.3em rgba(255, 255, 255, 0.7));
+  animation: perfectionShift 1.8s linear infinite;
+}
+
 /* ============ PERFECTION ============ */
 .perfection-label, .perfection-sub { display: none; }
 #end.perfection .end-label.timeup { display: none; }
@@ -1484,6 +1556,7 @@ html, body {
   <!-- ============ END ============ -->
   <section id="end" class="screen">
     <div class="end-label timeup" data-i18n="timeUp">SÜRE BİTTİ</div>
+    <div class="end-label victory-label" id="victory-label"></div>
     <div class="end-label perfection-label" data-i18n="perfection">PERFECTION</div>
     <div class="end-label perfection-sub" data-i18n="perfectionSub">60/60 · TÜM CEVAPLAR DOĞRU</div>
     <div class="final-score" id="final-score">0</div>
@@ -1620,7 +1693,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v27';        // her push'ta bump et
+const BUILD = 'v28';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -1632,7 +1705,26 @@ const WRONG_TIME_PENALTY_MS = 3000;
 const COMBO_TIER_SIZE       = 5;
 const COMBO_TIERS           = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144];  // streak/5 → çarpan
 const ENDLESS_LIVES         = 3;
-const LEADERBOARD_SIZE      = 5;
+const LEADERBOARD_SIZE      = 10;
+
+// Skor → bitiş ekranı tier'ı. Yüksekten alçağa sıralı, ilk eşleşen kazanır.
+const VICTORY_TIERS = [
+  { threshold: 1500000, key: 'v_godlike',     sound: 'streakMythic'    },
+  { threshold: 750000,  key: 'v_mythic',      sound: 'streakGodlike'   },
+  { threshold: 300000,  key: 'v_legendary',   sound: 'streakUltimate'  },
+  { threshold: 150000,  key: 'v_phenomenal',  sound: 'streakLegendary' },
+  { threshold: 75000,   key: 'v_incredible',  sound: 'streakInsane'    },
+  { threshold: 30000,   key: 'v_outstanding', sound: 'streakHuge'      },
+  { threshold: 15000,   key: 'v_awesome',     sound: 'streakBig'       },
+  { threshold: 7500,    key: 'v_impressive',  sound: 'streakMid'       },
+  { threshold: 3000,    key: 'v_great',       sound: 'streakSmall'     },
+  { threshold: 1500,    key: 'v_good',        sound: 'highScore'       },
+  { threshold: 500,     key: 'v_nice',        sound: 'highScore'       },
+  { threshold: 100,     key: 'v_notbad',      sound: 'end'             },
+];
+function getVictoryTier(score) {
+  return VICTORY_TIERS.find(t => score >= t.threshold) || null;
+}
 const LB_STORAGE_KEY        = 'aiornot_leaderboard_v1';
 const SETTINGS_STORAGE_KEY  = 'aiornot_settings_v1';
 
@@ -1668,7 +1760,19 @@ const I18N = {
     tagline:    'YAPAY ZEKA mı &nbsp;·&nbsp; GERÇEK mi',
     start:      'BAŞLA',
     endless:    'SONSUZ MOD',
-    top5:       'TOP 5',
+    top5:       'TOP 10',
+    v_notbad:     'FENA DEĞİL!',
+    v_nice:       'İYİ!',
+    v_good:       'GÜZEL!',
+    v_great:      'HARİKA!',
+    v_impressive: 'ETKİLEYİCİ!',
+    v_awesome:    'MUHTEŞEM!',
+    v_outstanding:'OLAĞANÜSTÜ!',
+    v_incredible: 'İNANILMAZ!',
+    v_phenomenal: 'FENOMENAL!',
+    v_legendary:  'EFSANEVÎ!',
+    v_mythic:     'MİTİK!',
+    v_godlike:    'TANRISAL!',
     choice_ai:  'YAPAY ZEKA',
     choice_real:'GERÇEK',
     score:      'SKOR',
@@ -1737,7 +1841,19 @@ const I18N = {
     tagline:    'AI &nbsp;·&nbsp; OR REAL',
     start:      'START',
     endless:    'ENDLESS',
-    top5:       'TOP 5',
+    top5:       'TOP 10',
+    v_notbad:     'NOT BAD!',
+    v_nice:       'NICE!',
+    v_good:       'GOOD!',
+    v_great:      'GREAT!',
+    v_impressive: 'IMPRESSIVE!',
+    v_awesome:    'AWESOME!',
+    v_outstanding:'OUTSTANDING!',
+    v_incredible: 'INCREDIBLE!',
+    v_phenomenal: 'PHENOMENAL!',
+    v_legendary:  'LEGENDARY!',
+    v_mythic:     'MYTHIC!',
+    v_godlike:    'GODLIKE!',
     choice_ai:  'AI',
     choice_real:'REAL',
     score:      'SCORE',
@@ -2663,28 +2779,38 @@ function endGame() {
   document.getElementById('stat-streak').textContent   = state.maxStreak;
   document.getElementById('stat-accuracy').textContent = acc + '%';
 
+  const endEl = document.getElementById('end');
+  endEl.classList.remove('perfection');
+  endEl.removeAttribute('data-vtier');
+
   // PERFECTION: classic modda 60 doğru + 0 yanlış
   const isPerfection = state.mode === 'classic' && state.correctCount >= 60 && state.wrongCount === 0;
   state.perfectionAchieved = isPerfection;
-  document.getElementById('end').classList.toggle('perfection', isPerfection);
+
+  if (isPerfection) {
+    endEl.classList.add('perfection');
+    sfx.jackpot();
+  } else {
+    const vt = getVictoryTier(state.score);
+    if (vt) {
+      endEl.setAttribute('data-vtier', vt.key);
+      document.getElementById('victory-label').setAttribute('data-i18n', vt.key);
+      applyLang();
+      const fn = sfx[vt.sound];
+      if (typeof fn === 'function') fn(); else sfx.end();
+    } else {
+      sfx.end();
+    }
+  }
 
   const qualifies = leaderboardQualifies(state.score) && state.score > 0;
   const nameRow = document.getElementById('name-row');
-
-  if (isPerfection) {
-    sfx.jackpot();
-    nameRow.classList.add('shown');
-    clearNameBoxes();
-    showNameError(false);
-    setTimeout(() => focusBox(0), 350);
-  } else if (qualifies) {
-    sfx.highScore();
+  if (isPerfection || qualifies) {
     nameRow.classList.add('shown');
     clearNameBoxes();
     showNameError(false);
     setTimeout(() => focusBox(0), 350);
   } else {
-    sfx.end();
     nameRow.classList.remove('shown');
   }
   showScreen('end');
