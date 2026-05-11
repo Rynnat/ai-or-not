@@ -152,6 +152,40 @@ html, body {
   margin-right: 6px;
 }
 
+/* mobil scoreboard toggle — sadece dar ekranda görünür */
+.mobile-toggle {
+  display: none;
+  background: transparent;
+  color: var(--fg-muted);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all var(--transition);
+}
+.mobile-toggle:active {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: scale(0.96);
+}
+
+@media (max-width: 720px) {
+  .welcome-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .welcome-left { display: flex; }
+  .welcome-right { display: none; }
+  .welcome-grid.show-board .welcome-left { display: none; }
+  .welcome-grid.show-board .welcome-right { display: flex; }
+  .mobile-toggle { display: inline-flex; align-items: center; gap: 6px; }
+}
+
 .logo {
   font-size: clamp(48px, 12vw, 96px);
   font-weight: 800;
@@ -1511,16 +1545,18 @@ html, body {
     <button class="gear-btn" id="btn-settings" aria-label="settings">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
-    <div class="welcome-grid">
+    <div class="welcome-grid" id="welcome-grid">
       <div class="welcome-left">
         <div class="logo">AI <span class="or">or</span> NOT</div>
         <div class="tagline" data-i18n="tagline">YAPAY ZEKA mı &nbsp;·&nbsp; GERÇEK mi</div>
         <button class="btn-primary" id="btn-start" data-i18n="start">BAŞLA</button>
         <button class="btn-endless" id="btn-endless"><span class="infinity">∞</span><span data-i18n="endless">SONSUZ MOD</span></button>
+        <button class="mobile-toggle" id="show-board-btn"><span data-i18n="top5">TOP 10</span><span>→</span></button>
       </div>
       <div class="welcome-right">
+        <button class="mobile-toggle" id="back-from-board"><span>←</span><span data-i18n="back">GERİ</span></button>
         <div class="leaderboard-mini">
-          <h3 data-i18n="top5">TOP 5</h3>
+          <h3 data-i18n="top5">TOP 10</h3>
           <div id="leaderboard-list"></div>
         </div>
       </div>
@@ -1693,7 +1729,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v28';        // her push'ta bump et
+const BUILD = 'v29';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -1773,6 +1809,7 @@ const I18N = {
     v_legendary:  'EFSANEVÎ!',
     v_mythic:     'MİTİK!',
     v_godlike:    'TANRISAL!',
+    back:         'GERİ',
     choice_ai:  'YAPAY ZEKA',
     choice_real:'GERÇEK',
     score:      'SKOR',
@@ -1854,6 +1891,7 @@ const I18N = {
     v_legendary:  'LEGENDARY!',
     v_mythic:     'MYTHIC!',
     v_godlike:    'GODLIKE!',
+    back:         'BACK',
     choice_ai:  'AI',
     choice_real:'REAL',
     score:      'SCORE',
@@ -2835,7 +2873,7 @@ async function loadLeaderboard() {
         const record = data && (data.record !== undefined ? data.record : data);
         const entries = Array.isArray(record) ? record : (Array.isArray(record?.entries) ? record.entries : null);
         if (Array.isArray(entries)) {
-          state.leaderboard = sortAndCut(entries);
+          state.leaderboard = sortAndCut(ensureSeed(entries));
           try { localStorage.setItem(LB_STORAGE_KEY, JSON.stringify(state.leaderboard)); } catch (e) {}
           return;
         }
@@ -2846,9 +2884,9 @@ async function loadLeaderboard() {
   }
   try {
     const local = JSON.parse(localStorage.getItem(LB_STORAGE_KEY) || '[]');
-    state.leaderboard = sortAndCut(Array.isArray(local) ? local : []);
+    state.leaderboard = sortAndCut(ensureSeed(Array.isArray(local) ? local : []));
   } catch (e) {
-    state.leaderboard = [];
+    state.leaderboard = sortAndCut(ensureSeed([]));
   }
 }
 
@@ -2870,6 +2908,19 @@ function sortAndCut(arr) {
     .filter(e => e && typeof e.score === 'number' && typeof e.name === 'string')
     .sort((a, b) => b.score - a.score)
     .slice(0, LEADERBOARD_SIZE);
+}
+
+// "House" / seed kayıt — geçilebilen ama her zaman var olan tepe skor
+const SEED_ENTRIES = [
+  { name: 'KRY', score: 2961641, seed: true }
+];
+function ensureSeed(arr) {
+  const list = Array.isArray(arr) ? arr.slice() : [];
+  SEED_ENTRIES.forEach(s => {
+    const dup = list.some(e => e && e.name === s.name && e.score === s.score);
+    if (!dup) list.push({ ...s });
+  });
+  return list;
 }
 
 function renderLeaderboard() {
@@ -2939,7 +2990,7 @@ function showNameError(on) {
 }
 
 async function resetLeaderboard() {
-  state.leaderboard = [];
+  state.leaderboard = sortAndCut(ensureSeed([]));
   await saveLeaderboard();
   renderLeaderboard();
 }
@@ -2949,6 +3000,15 @@ async function resetLeaderboard() {
 // =========================================================
 document.getElementById('btn-start').addEventListener('click', () => startGame('classic'));
 document.getElementById('btn-endless').addEventListener('click', () => startGame('endless'));
+
+// mobil scoreboard toggle
+(function () {
+  const grid = document.getElementById('welcome-grid');
+  const showBtn = document.getElementById('show-board-btn');
+  const backBtn = document.getElementById('back-from-board');
+  if (showBtn) showBtn.addEventListener('click', () => { sfx.click(); grid.classList.add('show-board'); });
+  if (backBtn) backBtn.addEventListener('click', () => { sfx.click(); grid.classList.remove('show-board'); });
+})();
 
 document.querySelectorAll('.btn-choice').forEach(btn => {
   btn.addEventListener('click', () => handleChoice(btn.dataset.choice));
