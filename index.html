@@ -270,34 +270,52 @@ html, body {
 
 /* ============ FIRE / COMBO TIER VISUAL ============ */
 .image-stage[data-tier="2"] {
-  box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.4);
+  box-shadow: 0 0 28px rgba(var(--accent-rgb), 0.5), 0 0 12px rgba(var(--accent-rgb), 0.3);
 }
 .image-stage[data-tier="4"] {
-  box-shadow: 0 0 32px rgba(var(--accent-rgb), 0.55), 0 0 14px rgba(var(--accent-rgb), 0.3);
+  box-shadow: 0 0 42px rgba(var(--accent-rgb), 0.7), 0 0 20px rgba(var(--accent-rgb), 0.45);
+  border-color: rgba(var(--accent-rgb), 0.55);
 }
 .image-stage[data-tier="8"] {
-  box-shadow: 0 0 40px rgba(255, 200, 60, 0.65), 0 0 18px rgba(255, 180, 50, 0.45);
-  border-color: rgba(255, 200, 60, 0.55);
+  box-shadow: 0 0 56px rgba(255, 200, 60, 0.85), 0 0 28px rgba(255, 170, 50, 0.6), inset 0 0 22px rgba(255, 160, 40, 0.18);
+  border-color: rgba(255, 200, 60, 0.8);
+  animation: fireBreathe 1.7s ease-in-out infinite;
 }
 .image-stage[data-tier="16"] {
-  box-shadow: 0 0 52px rgba(255, 130, 40, 0.78), 0 0 26px rgba(255, 100, 30, 0.6);
-  border-color: rgba(255, 130, 40, 0.75);
-  animation: fireBreathe 1.4s ease-in-out infinite;
+  box-shadow: 0 0 72px rgba(255, 130, 40, 0.95), 0 0 40px rgba(255, 90, 25, 0.75), inset 0 0 36px rgba(255, 100, 30, 0.28);
+  border-color: rgba(255, 130, 40, 0.95);
+  animation: fireBreathe 1.3s ease-in-out infinite;
 }
 .image-stage[data-tier="32"] {
-  box-shadow: 0 0 72px rgba(255, 80, 20, 0.88), 0 0 36px rgba(255, 50, 10, 0.65), 0 0 14px rgba(255, 20, 0, 0.5);
-  border-color: rgba(255, 80, 20, 0.88);
-  animation: fireBreathe 1.0s ease-in-out infinite;
+  box-shadow: 0 0 96px rgba(255, 80, 20, 1), 0 0 52px rgba(255, 50, 10, 0.85), 0 0 22px rgba(255, 20, 0, 0.7), inset 0 0 48px rgba(255, 70, 15, 0.35);
+  border-color: rgba(255, 80, 20, 1);
+  animation: fireBreathe 0.9s ease-in-out infinite, fireShake 0.4s ease-in-out infinite;
 }
 .image-stage[data-tier="64"] {
-  box-shadow: 0 0 96px rgba(255, 40, 5, 0.96), 0 0 52px rgba(255, 20, 0, 0.78), 0 0 22px rgba(255, 0, 0, 0.65);
-  border-color: rgba(255, 40, 5, 0.96);
-  animation: fireBreathe 0.65s ease-in-out infinite;
+  box-shadow: 0 0 128px rgba(255, 40, 5, 1), 0 0 72px rgba(255, 20, 0, 0.95), 0 0 36px rgba(255, 0, 0, 0.85), inset 0 0 64px rgba(255, 30, 0, 0.4);
+  border-color: rgba(255, 40, 5, 1);
+  animation: fireBreathe 0.6s ease-in-out infinite, fireShake 0.3s ease-in-out infinite;
+}
+.image-stage[data-tier="128"] {
+  box-shadow:
+    0 0 160px rgba(255, 30, 0, 1),
+    0 0 100px rgba(255, 80, 0, 0.95),
+    0 0 56px rgba(255, 200, 0, 0.9),
+    0 0 24px rgba(255, 255, 100, 0.7),
+    inset 0 0 88px rgba(255, 60, 0, 0.5);
+  border-color: rgba(255, 200, 0, 1);
+  animation: fireBreathe 0.45s ease-in-out infinite, fireShake 0.22s ease-in-out infinite;
 }
 
 @keyframes fireBreathe {
   0%, 100% { filter: brightness(1) saturate(1); }
-  50%      { filter: brightness(1.2) saturate(1.18); }
+  50%      { filter: brightness(1.28) saturate(1.25); }
+}
+@keyframes fireShake {
+  0%, 100% { translate: 0 0; }
+  25%      { translate: -1px 1px; }
+  50%      { translate: 1px -1px; }
+  75%      { translate: 1px 1px; }
 }
 
 .image-stage img {
@@ -342,38 +360,55 @@ html, body {
 .combo-badge.bump  { animation: comboBump 480ms cubic-bezier(.22,1,.36,1); }
 
 /* tier yangını — kutuda da */
-.combo-badge[data-tier="4"]  { box-shadow: 0 0 36px rgba(var(--accent-rgb), 0.7), 0 0 14px rgba(var(--accent-rgb), 0.4); }
+.combo-badge[data-tier="4"]  { box-shadow: 0 0 42px rgba(var(--accent-rgb), 0.8), 0 0 18px rgba(var(--accent-rgb), 0.5); }
 .combo-badge[data-tier="8"] {
   background: linear-gradient(135deg, #ffd23f, #ff9040);
   color: #1a0a00;
-  box-shadow: 0 0 42px rgba(255, 200, 60, 0.8), 0 0 18px rgba(255, 160, 50, 0.55);
+  box-shadow: 0 0 52px rgba(255, 200, 60, 0.9), 0 0 24px rgba(255, 160, 50, 0.65);
+  animation: comboPulse 1.7s ease-in-out infinite;
 }
 .combo-badge[data-tier="16"] {
   background: linear-gradient(135deg, #ff9040, #ff5020);
   color: #1a0a00;
-  box-shadow: 0 0 50px rgba(255, 100, 30, 0.88), 0 0 22px rgba(255, 70, 15, 0.65);
-  animation: comboPulse 1.4s ease-in-out infinite;
+  box-shadow: 0 0 64px rgba(255, 100, 30, 0.95), 0 0 30px rgba(255, 70, 15, 0.75), 0 0 12px rgba(255, 40, 0, 0.55);
+  animation: comboPulse 1.3s ease-in-out infinite;
 }
 .combo-badge[data-tier="32"] {
   background: linear-gradient(135deg, #ff5020, #ff2010);
   color: #1a0a00;
-  box-shadow: 0 0 60px rgba(255, 60, 10, 0.92), 0 0 28px rgba(255, 30, 0, 0.75), 0 0 12px rgba(255, 0, 0, 0.55);
-  animation: comboPulse 1.0s ease-in-out infinite;
+  box-shadow: 0 0 80px rgba(255, 60, 10, 1), 0 0 38px rgba(255, 30, 0, 0.85), 0 0 16px rgba(255, 0, 0, 0.7);
+  animation: comboPulse 0.9s ease-in-out infinite, comboFlicker 0.22s steps(2) infinite;
 }
 .combo-badge[data-tier="64"] {
   background: linear-gradient(135deg, #ff2010, #ff0000 50%, #ffaa00);
   color: #fff;
-  box-shadow: 0 0 80px rgba(255, 30, 0, 0.98), 0 0 40px rgba(255, 0, 0, 0.85), 0 0 18px rgba(255, 80, 0, 0.7);
-  animation: comboPulse 0.65s ease-in-out infinite, comboFlicker 0.18s steps(2) infinite;
+  box-shadow: 0 0 100px rgba(255, 30, 0, 1), 0 0 52px rgba(255, 0, 0, 0.95), 0 0 24px rgba(255, 80, 0, 0.85), 0 0 8px #fff;
+  animation: comboPulse 0.6s ease-in-out infinite, comboFlicker 0.16s steps(2) infinite;
+}
+.combo-badge[data-tier="128"] {
+  background: linear-gradient(135deg, #fff 0%, #ffea00 18%, #ff8000 45%, #ff0000 75%, #800000);
+  color: #fff;
+  text-shadow: 0 0 0.3em #fff, 0 0 0.6em #ffea00;
+  box-shadow:
+    0 0 140px rgba(255, 30, 0, 1),
+    0 0 80px rgba(255, 100, 0, 0.95),
+    0 0 40px rgba(255, 200, 0, 0.85),
+    0 0 16px rgba(255, 255, 100, 0.75),
+    0 0 4px #fff;
+  animation: comboPulse 0.45s ease-in-out infinite, comboFlicker 0.12s steps(2) infinite, comboShift 1.8s linear infinite;
 }
 
 @keyframes comboPulse {
   0%, 100% { transform: scale(1) translateY(0); filter: brightness(1); }
-  50%      { transform: scale(1.1) translateY(-2px); filter: brightness(1.2); }
+  50%      { transform: scale(1.12) translateY(-3px); filter: brightness(1.25); }
 }
 @keyframes comboFlicker {
   0%   { filter: brightness(1) hue-rotate(0deg); }
-  100% { filter: brightness(1.08) hue-rotate(-8deg); }
+  100% { filter: brightness(1.1) hue-rotate(-10deg); }
+}
+@keyframes comboShift {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
 }
 @keyframes comboBump {
   0%   { transform: scale(1) rotate(0); }
@@ -452,6 +487,7 @@ html, body {
 .streak-banner.size-huge      { font-size: clamp(40px, 16cqi, 130px); text-shadow: 0 0 0.6em var(--gold), 0 0 1.2em rgba(255, 210, 63, 0.85); }
 .streak-banner.size-insane    { font-size: clamp(46px, 18cqi, 145px); color: #ff9040; text-shadow: 0 0 0.6em #ff8030, 0 0 1.3em rgba(255, 100, 30, 0.85); }
 .streak-banner.size-legendary { font-size: clamp(52px, 20cqi, 160px); color: #ff5020; text-shadow: 0 0 0.7em #ff4010, 0 0 1.6em rgba(255, 50, 10, 0.95), 0 0 0.4em #fff; }
+.streak-banner.size-ultimate  { font-size: clamp(60px, 23cqi, 190px); color: #fff;     text-shadow: 0 0 0.3em #fff, 0 0 0.7em #ffea00, 0 0 1.2em #ff6000, 0 0 1.8em rgba(255, 0, 0, 1); }
 .streak-banner.fire { animation: streakBanner 1000ms cubic-bezier(.22,1,.36,1) forwards; }
 @keyframes streakBanner {
   0%   { transform: translate(-50%, -50%) scale(0.3) rotate(-10deg); opacity: 0; }
@@ -1146,7 +1182,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v20';        // her push'ta bump et
+const BUILD = 'v21';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -1156,7 +1192,7 @@ const SPEED_BONUS_WINDOW_MS = 2000;
 const WRONG_SCORE_PENALTY   = -50;
 const WRONG_TIME_PENALTY_MS = 3000;
 const COMBO_TIER_SIZE       = 5;
-const COMBO_TIERS           = [1, 2, 4, 8, 16, 32, 64];  // streak/5 → çarpan
+const COMBO_TIERS           = [1, 2, 4, 8, 16, 32, 64, 128];  // streak/5 → çarpan
 const LEADERBOARD_SIZE      = 5;
 const LB_STORAGE_KEY        = 'aiornot_leaderboard_v1';
 const SETTINGS_STORAGE_KEY  = 'aiornot_settings_v1';
@@ -1531,6 +1567,27 @@ const sfx = (() => {
         tone(40, 1.1, 'sine', 0.22);
       }, 880);
     },
+    // ×128: ultimate — 5 katman drone + 20-nota patlama + dev akor cadansı
+    streakUltimate() {
+      tone(20, 1.6, 'sine', 0.32);
+      setTimeout(() => tone(40, 1.3, 'sine', 0.28), 25);
+      setTimeout(() => tone(80, 1.0, 'sine', 0.24), 50);
+      setTimeout(() => tone(160, 0.8, 'triangle', 0.20), 75);
+      setTimeout(() => tone(320, 0.6, 'triangle', 0.17), 100);
+      const notes = [82, 110, 130, 165, 196, 220, 261, 329, 392, 440, 523, 659, 784, 880, 1047, 1175, 1397, 1568, 1976, 2349];
+      notes.forEach((f, i) => setTimeout(() => sweep(f, f * 1.02, 0.12, 'square', 0.23), 130 + i * 35));
+      setTimeout(() => {
+        sweep(2349, 4699, 1.4, 'sawtooth', 0.30);
+        tone(987, 1.4, 'triangle', 0.20);
+        tone(1318, 1.4, 'triangle', 0.18);
+        tone(1976, 1.4, 'sine', 0.16);
+        tone(2349, 1.4, 'sine', 0.14);
+        tone(2637, 1.4, 'sine', 0.12);
+        tone(60, 1.4, 'sawtooth', 0.22);
+        tone(40, 1.4, 'sine', 0.24);
+        tone(30, 1.4, 'sine', 0.20);
+      }, 950);
+    },
     tick()     { tone(1100, 0.05, 'sine', 0.10); },
     countdown(){ tone(620, 0.08, 'triangle', 0.14); },
     go()       { sweep(440, 880, 0.22, 'triangle', 0.20); },
@@ -1671,12 +1728,13 @@ function hideDebugLabel() {
 function fireStreakBanner(mult) {
   const b = document.getElementById('streak-banner');
   b.textContent = 'STREAK ×' + mult;
-  b.classList.remove('fire', 'size-mid', 'size-big', 'size-huge', 'size-insane', 'size-legendary');
-  if      (mult >= 64) b.classList.add('size-legendary');
-  else if (mult >= 32) b.classList.add('size-insane');
-  else if (mult >= 16) b.classList.add('size-huge');
-  else if (mult >= 8)  b.classList.add('size-big');
-  else if (mult >= 4)  b.classList.add('size-mid');
+  b.classList.remove('fire', 'size-mid', 'size-big', 'size-huge', 'size-insane', 'size-legendary', 'size-ultimate');
+  if      (mult >= 128) b.classList.add('size-ultimate');
+  else if (mult >= 64)  b.classList.add('size-legendary');
+  else if (mult >= 32)  b.classList.add('size-insane');
+  else if (mult >= 16)  b.classList.add('size-huge');
+  else if (mult >= 8)   b.classList.add('size-big');
+  else if (mult >= 4)   b.classList.add('size-mid');
   void b.offsetWidth;
   b.classList.add('fire');
 }
@@ -1839,12 +1897,13 @@ function handleChoice(choice) {
 
     if (tierUp && newMult > 1) {
       fireStreakBanner(newMult);
-      if      (newMult >= 64) sfx.streakLegendary();
-      else if (newMult >= 32) sfx.streakInsane();
-      else if (newMult >= 16) sfx.streakHuge();
-      else if (newMult >= 8)  sfx.streakBig();
-      else if (newMult >= 4)  sfx.streakMid();
-      else                    sfx.streakSmall();
+      if      (newMult >= 128) sfx.streakUltimate();
+      else if (newMult >= 64)  sfx.streakLegendary();
+      else if (newMult >= 32)  sfx.streakInsane();
+      else if (newMult >= 16)  sfx.streakHuge();
+      else if (newMult >= 8)   sfx.streakBig();
+      else if (newMult >= 4)   sfx.streakMid();
+      else                     sfx.streakSmall();
     } else {
       sfx.correct();
     }
