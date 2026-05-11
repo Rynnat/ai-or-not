@@ -1620,7 +1620,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v26';        // her push'ta bump et
+const BUILD = 'v27';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -2607,6 +2607,11 @@ function handleChoice(choice) {
     state.pendingNextId = null;
     state.busy = false;
     if (state.screen !== 'game') return;
+    // 60/60 instant perfection (classic): süre kalmadan oyunu bitir
+    if (state.mode === 'classic' && state.correctCount >= 60 && state.wrongCount === 0) {
+      endGame();
+      return;
+    }
     if (state.mode === 'endless') {
       if (state.lives <= 0) { endGame(); return; }
     } else {
