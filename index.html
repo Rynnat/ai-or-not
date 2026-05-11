@@ -152,38 +152,44 @@ html, body {
   margin-right: 6px;
 }
 
-/* mobil scoreboard toggle — sadece dar ekranda görünür */
-.mobile-toggle {
+/* mobil scoreboard toggle — kenar chevron butonları */
+.edge-toggle {
   display: none;
-  background: transparent;
-  color: var(--fg-muted);
-  border: 1px solid var(--border);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 4px;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all var(--transition);
-}
-.mobile-toggle:active {
-  border-color: var(--accent);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px; height: 70px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--accent);
   color: var(--accent);
-  transform: scale(0.96);
+  font-size: 22px;
+  font-weight: 800;
+  cursor: pointer;
+  z-index: 50;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.3);
+  transition: transform var(--transition);
 }
+.edge-toggle:active { transform: translateY(-50%) scale(0.92); }
+.edge-toggle.right { right: 0; border-right: none; border-radius: 8px 0 0 8px; }
+.edge-toggle.left  { left: 0;  border-left:  none; border-radius: 0 8px 8px 0; }
 
 @media (max-width: 720px) {
+  #welcome { overflow: hidden; }
   .welcome-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 100% 100%;
+    width: 200%;
     gap: 0;
+    transition: transform 320ms cubic-bezier(.22,1,.36,1);
   }
-  .welcome-left { display: flex; }
-  .welcome-right { display: none; }
-  .welcome-grid.show-board .welcome-left { display: none; }
-  .welcome-grid.show-board .welcome-right { display: flex; }
-  .mobile-toggle { display: inline-flex; align-items: center; gap: 6px; }
+  .welcome-left, .welcome-right { display: flex; width: 100%; }
+  #welcome.board-shown .welcome-grid { transform: translateX(-50%); }
+
+  .edge-toggle.right { display: flex; }
+  .edge-toggle.left  { display: none; }
+  #welcome.board-shown .edge-toggle.right { display: none; }
+  #welcome.board-shown .edge-toggle.left  { display: flex; }
 }
 
 .logo {
@@ -1545,16 +1551,16 @@ html, body {
     <button class="gear-btn" id="btn-settings" aria-label="settings">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
+    <button class="edge-toggle right" id="show-board-btn" aria-label="scoreboard">▶</button>
+    <button class="edge-toggle left"  id="back-from-board" aria-label="back">◀</button>
     <div class="welcome-grid" id="welcome-grid">
       <div class="welcome-left">
         <div class="logo">AI <span class="or">or</span> NOT</div>
         <div class="tagline" data-i18n="tagline">YAPAY ZEKA mı &nbsp;·&nbsp; GERÇEK mi</div>
         <button class="btn-primary" id="btn-start" data-i18n="start">BAŞLA</button>
         <button class="btn-endless" id="btn-endless"><span class="infinity">∞</span><span data-i18n="endless">SONSUZ MOD</span></button>
-        <button class="mobile-toggle" id="show-board-btn"><span data-i18n="top5">TOP 10</span><span>→</span></button>
       </div>
       <div class="welcome-right">
-        <button class="mobile-toggle" id="back-from-board"><span>←</span><span data-i18n="back">GERİ</span></button>
         <div class="leaderboard-mini">
           <h3 data-i18n="top5">TOP 10</h3>
           <div id="leaderboard-list"></div>
@@ -1729,7 +1735,7 @@ const BIN_URL = '';
 const API_KEY = '';
 const DEBUG_LABEL = false;  // test için true yap, prodda false
 const _OK = 'Xq3#zT';       // label obfuscation key
-const BUILD = 'v32';        // her push'ta bump et
+const BUILD = 'v33';        // her push'ta bump et
 
 const ROUND_DURATION_MS     = 60000;
 const COUNTDOWN_STEP_MS     = 700;
@@ -3002,13 +3008,13 @@ async function resetLeaderboard() {
 document.getElementById('btn-start').addEventListener('click', () => startGame('classic'));
 document.getElementById('btn-endless').addEventListener('click', () => startGame('endless'));
 
-// mobil scoreboard toggle
+// mobil scoreboard slide toggle
 (function () {
-  const grid = document.getElementById('welcome-grid');
+  const welcome = document.getElementById('welcome');
   const showBtn = document.getElementById('show-board-btn');
   const backBtn = document.getElementById('back-from-board');
-  if (showBtn) showBtn.addEventListener('click', () => { sfx.click(); grid.classList.add('show-board'); });
-  if (backBtn) backBtn.addEventListener('click', () => { sfx.click(); grid.classList.remove('show-board'); });
+  if (showBtn) showBtn.addEventListener('click', () => { sfx.click(); welcome.classList.add('board-shown'); });
+  if (backBtn) backBtn.addEventListener('click', () => { sfx.click(); welcome.classList.remove('board-shown'); });
 })();
 
 document.querySelectorAll('.btn-choice').forEach(btn => {
